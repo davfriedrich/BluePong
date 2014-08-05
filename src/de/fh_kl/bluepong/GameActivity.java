@@ -1,24 +1,17 @@
 package de.fh_kl.bluepong;
 
-import de.fh_kl.bluepong.drawables.Paddle;
-import de.fh_kl.bluepong.views.GameView;
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.os.Build;
+import de.fh_kl.bluepong.game.GameEngine;
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements SurfaceHolder.Callback{
+	
+	SurfaceView sv;
+	boolean first = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +21,33 @@ public class GameActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_game);
+       setContentView(R.layout.activity_game);
         
-//        GameView gv = (GameView) findViewById(R.id.TrainingView);
+        sv = (SurfaceView) findViewById(R.id.TrainingView);
         
-//        Canvas canvas = new Canvas();
-//       
-//        new Paddle(100, 20, 1).draw(canvas);
-//        
-//        sv.draw(canvas);
+        sv.getHolder().addCallback(this);
+        
+	}
+
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+		GameEngine gameEngine = new GameEngine(holder);
+		
+		sv.setOnTouchListener(gameEngine);
+		
+	}
+
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+			int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

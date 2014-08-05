@@ -6,7 +6,7 @@
     tools:context="de.fh_kl.bluepong.GameActivity"
     tools:ignore="MergeRootFrame" >
 
-    <de.fh_kl.bluepong.views.GameView
+    <SurfaceView
         android:id="@+id/TrainingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
