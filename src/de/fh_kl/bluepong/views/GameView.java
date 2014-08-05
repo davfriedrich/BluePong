@@ -1,4 +1,4 @@
-package views;
+package de.fh_kl.bluepong.views;
 
 import de.fh_kl.bluepong.drawables.Paddle;
 import android.content.Context;

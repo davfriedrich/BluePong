@@ -1,7 +1,7 @@
 package de.fh_kl.bluepong;
 
-import views.GameView;
 import de.fh_kl.bluepong.drawables.Paddle;
+import de.fh_kl.bluepong.views.GameView;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
