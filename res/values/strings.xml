@@ -14,5 +14,7 @@
     <string name="highscoreButtonString">Highscore ansehen</string>
     <string name="multitouchButtonString">Multitouch</string>
     <string name="bluetoothButtonString">Bluetooth</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

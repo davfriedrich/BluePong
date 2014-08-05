@@ -34,6 +34,11 @@
             android:name="de.fh_kl.bluepong.TournamentActivity"
             android:label="@string/title_activity_tournament" >
         </activity>
+        <activity
+            android:name="de.fh_kl.bluepong.GameActivity"
+            android:label="@string/title_activity_game"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
