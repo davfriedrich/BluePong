@@ -157,7 +157,7 @@ public class GameEngine implements OnTouchListener, Constants {
 			
 			winnable = false;
 			
-			if (x - ball.getWidth()/2 < p1Paddle.right) {
+			if (x - ball.getWidth()/2 < p1Paddle.right && x > p1Paddle.centerX()) {
 				
 				int dx = Math.abs(p1Paddle.right - (x - ball.getWidth()/2));
 				
@@ -168,7 +168,7 @@ public class GameEngine implements OnTouchListener, Constants {
 			}
 			
 			
-			if (x + ball.getWidth()/2 > p1Paddle.left) {
+			if (x + ball.getWidth()/2 > p1Paddle.left && x < p1Paddle.centerX()) {
 				
 				int dx = Math.abs(p1Paddle.left - (x + ball.getWidth()/2));
 				
