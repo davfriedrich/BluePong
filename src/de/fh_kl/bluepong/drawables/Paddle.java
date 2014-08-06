@@ -76,6 +76,10 @@ public class Paddle implements DrawableObject {
 		//prevents paddle from moving around
 		goTo = paddle.centerX();
 	}
+	
+	public Rect getPaddle() {
+		return paddle;
+	}
 
 	public void setTouchBox(Rect touchbox) {
 		this.touchbox = touchbox;

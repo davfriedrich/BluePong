@@ -12,6 +12,14 @@ public class RelativeSizeProvider implements Constants {
 		height = viewHeight;
 	}
 	
+	public int getBallSize() {
+		return (int) (height * BALL_SIZE_RATIO);
+	}
+	
+	public int getBallSpeed() {
+		return (int) (width * BALL_SPEED_RATIO);
+	}
+	
 	public int getPaddleWidth() {
 		return (int) (width * PADDLE_WIDTH_RATIO);
 	}

@@ -1,6 +1,7 @@
 package de.fh_kl.bluepong.drawables;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
 
 public interface DrawableObject {
