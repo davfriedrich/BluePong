@@ -76,7 +76,7 @@ public class GameEngine implements OnTouchListener, Constants {
 		p1.setPosition(p1StartPosition);
 		p1.setTouchBox(new Rect(0, totalHeight/4 * 3, totalWidth, totalHeight));
 		
-		if (gameMode > 0) {
+		if (gameMode > TRAINING_MODE) {
 			p2 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), sizeProvider.getPaddleSpeed());
 			Point p2StartPosition = new Point(totalWidth/2, sizeProvider.getPaddleHeight()/2 + sizeProvider.getPaddlePadding());
 			p2.setPosition(p2StartPosition);
@@ -97,7 +97,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		p1.draw(canvas);
 		
-		if (gameMode > 0) {
+		if (gameMode > TRAINING_MODE) {
 			p2.draw(canvas);
 			drawPlayfield(canvas, false);
 		} else {
@@ -112,6 +112,7 @@ public class GameEngine implements OnTouchListener, Constants {
 	
 	public void gameLogic() {
 		p1.move();
+		p2.move();
 		moveBall();
 	}
 	
@@ -149,18 +150,61 @@ public class GameEngine implements OnTouchListener, Constants {
 		}
 		
 
-		// collision with top wall?
-		if (y - ball.getHeight()/2 < totalHeight/2) {
+		if (gameMode == TRAINING_MODE) {
+			// collision with top wall?
+			if (y - ball.getHeight()/2 < totalHeight/2) {
+
+				int dy = Math.abs(totalHeight/2 - (y - ball.getHeight()/2));
+
+				goToY = totalHeight/2 + dy + ball.getHeight()/2;
+
+				ball.goTo(new Point(x, goToY));
+				ball.setAngle((-1 * ball.getAngle()) % (2*Math.PI));
+			}
+		} else {
+			// collision with paddle 2?
+			Rect p2Paddle = p2.getPaddle();
+			if ((y - ball.getHeight()/2 < p2Paddle.bottom) && (x + ball.getWidth()/2 >= p2Paddle.left) && (x - ball.getWidth()/2 <= p2Paddle.right) && winnable) {
+				
+				int dy = Math.abs(p2Paddle.bottom - (y - ball.getHeight()/2));
+				
+				goToY = p2Paddle.bottom + (dy + ball.getHeight()/2);
+				
+				ball.goTo(new Point(x, goToY));
+				ball.setAngle((-1 * ball.getAngle()) % (2*Math.PI));
 			
-			int dy = Math.abs(totalHeight/2 - (y - ball.getHeight()/2));
-			
-			goToY = totalHeight/2 + dy + ball.getHeight()/2;
-			
-			ball.goTo(new Point(x, goToY));
-			ball.setAngle((-1 * ball.getAngle()) % (2*Math.PI));
+			} else if (y - ball.getHeight()/2 < p2Paddle.bottom){
+				
+				winnable = false;
+				
+				if (x - ball.getWidth()/2 < p2Paddle.right && x > p2Paddle.centerX()) {
+					
+					int dx = Math.abs(p2Paddle.right - (x - ball.getWidth()/2));
+					
+					goToX = p2Paddle.right + dx + ball.getWidth()/2;
+					
+					ball.goTo(new Point(goToX, y));
+					ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+				}
+				
+				
+				if (x + ball.getWidth()/2 > p2Paddle.left && x < p2Paddle.centerX()) {
+					
+					int dx = Math.abs(p2Paddle.left - (x + ball.getWidth()/2));
+					
+					goToX = p2Paddle.left - (dx + ball.getWidth()/2);
+					
+					ball.goTo(new Point(goToX, y));
+					ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+				}
+			}	
+				
+			if (y + ball.getHeight()/2 < 0) {
+				running = false;
+			}
 		}
 		
-		// collision with paddle?
+		// collision with paddle 1?
 		Rect p1Paddle = p1.getPaddle();
 		if ((y + ball.getHeight()/2 > p1Paddle.top) && (x + ball.getWidth()/2 >= p1Paddle.left) && (x - ball.getWidth()/2 <= p1Paddle.right) && winnable) {
 			
@@ -214,11 +258,19 @@ public class GameEngine implements OnTouchListener, Constants {
 		// paddles
 		p1.draw(canvas);
 		
+		if (gameMode > TRAINING_MODE) {
+			p2.draw(canvas);
+			// playfield
+			drawPlayfield(canvas, false);
+		} else {
+
+			drawPlayfield(canvas, true);
+		}
+		
 		// ball
 		ball.draw(canvas);
 		
-		// playfield
-		drawPlayfield(canvas, true);
+		
 		
 		holder.unlockCanvasAndPost(canvas);
 	}
@@ -264,6 +316,10 @@ public class GameEngine implements OnTouchListener, Constants {
 			
 			if (p1.touchInTouchbox(touch)) {
 				p1.goTo(px);
+			}
+			
+			if (p2.touchInTouchbox(touch)) {
+				p2.goTo(px);
 			}
 			
 		} 
