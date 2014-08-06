@@ -7,12 +7,13 @@ import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 import de.fh_kl.bluepong.game.GameEngine;
+import de.fh_kl.bluepong.util.RelativeSizeProvider;
 
 public class GameActivity extends Activity implements SurfaceHolder.Callback{
 	
 	SurfaceView sv;
-	boolean first = true;
-
+	GameEngine gameEngine;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,7 +32,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback{
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		GameEngine gameEngine = new GameEngine(holder);
+		gameEngine = new GameEngine(sv, new RelativeSizeProvider(sv.getWidth(), sv.getHeight()));
 		
 		sv.setOnTouchListener(gameEngine);
 		
@@ -49,5 +50,13 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		gameEngine.stop();
+	}
+	
+	
 	
 }

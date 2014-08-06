@@ -1,6 +1,7 @@
 package de.fh_kl.bluepong.drawables;
 
 import android.graphics.Canvas;
+import android.graphics.Point;
 
 public interface DrawableObject {
 	
@@ -9,6 +10,7 @@ public interface DrawableObject {
 	public int getHeight();
 	public int getWidth();
 	
-	public int[] getPosition();
+	public Point getPosition();
+	public void setPosition(Point newPosition);
 
 }
