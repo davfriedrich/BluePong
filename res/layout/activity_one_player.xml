@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
-        android:onClick="startGameActivity"
+        android:onClick="startTraining"
         android:text="@string/trainingButtonString" />
 
     <Button

@@ -1,6 +1,12 @@
 package de.fh_kl.bluepong.constants;
 
 public interface Constants {
+	final static String GAME_MODE = "GameMode";
+	final static int TRAINING_MODE = 0;
+	final static int SINGLE_MODE = 1;
+	final static int MULTITOUCH_MODE = 2;
+	final static int BLUETOOTH_MODE = 3;
+	
 	
 	static double PADDLE_WIDTH_RATIO = 0.2;
 	static double PADDLE_HEIGHT_RATIO = 0.04;

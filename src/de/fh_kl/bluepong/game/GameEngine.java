@@ -6,6 +6,7 @@ import de.fh_kl.bluepong.drawables.Paddle;
 import de.fh_kl.bluepong.util.RelativeSizeProvider;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
@@ -35,9 +36,12 @@ public class GameEngine implements OnTouchListener, Constants {
 	private boolean running = false;
 	private boolean winnable = true;
 	GameLoop gameLoop;
+	int gameMode;
 	
 	
-	public GameEngine(SurfaceView view, RelativeSizeProvider relativeSizeProvider) {
+	public GameEngine(SurfaceView view, RelativeSizeProvider relativeSizeProvider, int gameMode) {
+		
+		this.gameMode = gameMode;
 		
 		sizeProvider = relativeSizeProvider;
 		
@@ -71,6 +75,13 @@ public class GameEngine implements OnTouchListener, Constants {
 		Point p1StartPosition = new Point(totalWidth/2, totalHeight - sizeProvider.getPaddleHeight()/2 - sizeProvider.getPaddlePadding());
 		p1.setPosition(p1StartPosition);
 		p1.setTouchBox(new Rect(0, totalHeight/4 * 3, totalWidth, totalHeight));
+		
+		if (gameMode > 0) {
+			p2 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), sizeProvider.getPaddleSpeed());
+			Point p2StartPosition = new Point(totalWidth/2, sizeProvider.getPaddleHeight()/2 + sizeProvider.getPaddlePadding());
+			p2.setPosition(p2StartPosition);
+			p2.setTouchBox(new Rect(0, 0, totalWidth, totalHeight/4));
+		}
 	}
 	
 	private void initBall() {
@@ -85,9 +96,16 @@ public class GameEngine implements OnTouchListener, Constants {
 		Canvas canvas = holder.lockCanvas();
 
 		p1.draw(canvas);
+		
+		if (gameMode > 0) {
+			p2.draw(canvas);
+			drawPlayfield(canvas, false);
+		} else {
+			drawPlayfield(canvas, true);
+		}
+		
 		ball.draw(canvas);
 		
-		drawPlayfield(canvas);
 		
 		holder.unlockCanvasAndPost(canvas);
 	}
@@ -205,9 +223,6 @@ public class GameEngine implements OnTouchListener, Constants {
 		holder.unlockCanvasAndPost(canvas);
 	}
 	
-	private void drawPlayfield(Canvas canvas) {
-		drawPlayfield(canvas, false);
-	}
 	
 	private void drawPlayfield(Canvas canvas, boolean training) {
 		
@@ -223,9 +238,10 @@ public class GameEngine implements OnTouchListener, Constants {
 							paint);			
 		} else {
 			
+			paint.setStyle(Style.STROKE);
+			paint.setPathEffect(new DashPathEffect(new float[] {10,10}, 5));
+			canvas.drawLine(0, totalHeight/2, totalWidth, totalHeight/2, paint);
 		}
-		
-		
 	}
 	
 	public void stop() {
