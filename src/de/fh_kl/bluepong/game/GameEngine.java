@@ -1,5 +1,7 @@
 package de.fh_kl.bluepong.game;
 
+import java.util.concurrent.Semaphore;
+
 import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.drawables.Ball;
 import de.fh_kl.bluepong.drawables.Paddle;
@@ -28,14 +30,21 @@ public class GameEngine implements OnTouchListener, Constants {
 	int totalWidth;
 	int totalHeight;
 	
+	Rect controlTouchBox;
+	
 	Paddle p1;
 	Paddle p2;
 	
 	Ball ball;
 	
 	private boolean running = false;
+	private boolean paused = false;
+	private boolean destroyed = false;
 	private boolean winnable = true;
+	
 	GameLoop gameLoop;
+	Semaphore sem;
+	
 	int gameMode;
 	
 	
@@ -51,7 +60,11 @@ public class GameEngine implements OnTouchListener, Constants {
 		totalWidth = view.getWidth();
 		totalHeight = view.getHeight();
 		
-		gameLoop = new GameLoop(this);
+		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
+		
+		sem = new Semaphore(1);
+
+		gameLoop = new GameLoop(this, sem);
 		
 		init();	
 	}
@@ -64,9 +77,9 @@ public class GameEngine implements OnTouchListener, Constants {
 		
 		initialDraw();
 		
-		running = true;
+//		running = true;
 		
-		gameLoop.start();
+//		gameLoop.start();
 	}
 	
 	private void initPaddles(){
@@ -304,6 +317,10 @@ public class GameEngine implements OnTouchListener, Constants {
 		return running;
 	}
 	
+	public void setDestroyed(boolean destroyed) {
+		this.destroyed = destroyed;		
+	}
+	
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -320,6 +337,20 @@ public class GameEngine implements OnTouchListener, Constants {
 			
 			if (p2.touchInTouchbox(touch)) {
 				p2.goTo(px);
+			}
+			if(event.getAction() == MotionEvent.ACTION_DOWN){
+				if (controlTouchBox.contains(px, py)) {
+					if (!running && !destroyed) {
+						running = true;
+						gameLoop.start();
+					} else if (running && !destroyed && !paused) {
+						sem.acquireUninterruptibly();
+						paused = true;
+					} else if (running && !destroyed && paused) {
+						sem.release();
+						paused = false;
+					} 
+				}
 			}
 			
 		} 
