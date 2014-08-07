@@ -238,9 +238,9 @@ public class GameEngine implements OnTouchListener, Constants {
 
             ball.setAngle((-1 * ball.getAngle()));
 
-            if (p2.getDirection() != 0) {
+            if (p1.getDirection() != 0) {
 
-                ball.addSpin(-1*p2.getDirection());
+                ball.addSpin(-1*p1.getDirection());
             }
 
 		} else if(y + ball.getHeight()/2 > p1Paddle.top){
@@ -268,7 +268,10 @@ public class GameEngine implements OnTouchListener, Constants {
 		}
 
 		if (y - ball.getHeight()/2 > totalHeight) {
-            p2.incrementScore();
+
+            if (gameMode != TRAINING_MODE) {
+                p2.incrementScore();
+            }
 			running = false;
 			serve = 2;
 		}
