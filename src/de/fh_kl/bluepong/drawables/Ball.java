@@ -44,7 +44,6 @@ public class Ball implements DrawableObject{
 	}
 	
 	public void move() {
-//		goTo = nextPosition();
 		ball.offsetTo(goTo.x - size/2, goTo.y - size/2);
 	}
 	
