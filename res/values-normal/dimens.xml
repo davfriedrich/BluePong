@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="titleText">32dp</dimen>
+    <dimen name="subTitleText">24dp</dimen>
+    <dimen name="buttonText">16dp</dimen>
+</resources>

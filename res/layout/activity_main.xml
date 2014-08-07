@@ -5,47 +5,53 @@
     tools:context="${packageName}.${activityClass}" >
 
     <Button
-            android:id="@+id/settingsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tournamentButton"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="68dp"
-            android:background="?android:selectableItemBackground"
-            android:onClick="showSettings"
-            android:text="@string/btn_settings" />
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:onClick="showSettings"
+        android:text="@string/btn_settings"
+        android:layout_marginTop="32dp" android:layout_below="@+id/tournamentButton"
+        android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/tournamentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/twoPlayerButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
         android:background="@android:color/transparent"
         android:onClick="tournamentMode"
-        android:text="@string/tournamentButtonSring" />
+        android:text="@string/tournamentButtonSring"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/twoPlayerButton" android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/twoPlayerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/onePlayerButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
         android:background="@android:color/transparent"
         android:onClick="twoPlayer"
-        android:text="@string/twoPlayerButtonString" />
+        android:text="@string/twoPlayerButtonString"
+        android:layout_below="@+id/onePlayerButton" android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/onePlayerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:onClick="onePlayer"
+        android:text="@string/onePlayerButtonString" android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
+
+    <TextView
+        android:id="@+id/gameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
-       	android:background="@android:color/transparent"
-        android:onClick="onePlayer"
-        android:text="@string/onePlayerButtonString" />
+        android:layout_marginTop="100dp"
+        android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/titleText" android:textColor="#ff31c2ff"/>
 
 </RelativeLayout>

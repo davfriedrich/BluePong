@@ -3,15 +3,15 @@
 
     <string name="app_name">BluePong</string>
     <string name="hello_world">Hello world!</string>
-    <string name="onePlayerButtonString">1-Spieler</string>
-    <string name="twoPlayerButtonString">2-Spieler</string>
-    <string name="tournamentButtonSring">Turniermodus</string>
-    <string name="title_activity_one_player">1-Spieler</string>
-    <string name="title_activity_two_player">2-Spieler</string>
-    <string name="title_activity_tournament">Turnier</string>
+    <string name="onePlayerButtonString">1 Player</string>
+    <string name="twoPlayerButtonString">2 Player</string>
+    <string name="tournamentButtonSring">Tournament</string>
+    <string name="title_activity_one_player">1 Player</string>
+    <string name="title_activity_two_player">2 Player</string>
+    <string name="title_activity_tournament">Tournament</string>
     <string name="trainingButtonString">Training</string>
-    <string name="aiButtonString">Gegen Computer</string>
-    <string name="highscoreButtonString">Highscore ansehen</string>
+    <string name="aiButtonString">Player VS. AI</string>
+    <string name="highscoreButtonString">Highscore</string>
     <string name="multitouchButtonString">Multitouch</string>
     <string name="bluetoothButtonString">Bluetooth</string>
     <string name="title_activity_game">GameActivity</string>
