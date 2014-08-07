@@ -22,4 +22,11 @@ public class OnePlayerActivity extends Activity implements Constants {
 		
 		startActivity(intent);
 	}
+
+    public void startAiMatch(View v) {
+		Intent intent = new Intent(this, GameActivity.class);
+		intent.putExtra(GAME_MODE, SINGLE_MODE);
+
+		startActivity(intent);
+	}
 }

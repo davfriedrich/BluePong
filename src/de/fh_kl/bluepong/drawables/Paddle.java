@@ -8,7 +8,8 @@ import android.graphics.Point;
 import android.graphics.Rect;
 
 public class Paddle implements DrawableObject {
-	
+
+    private boolean human;
 	private int width;
 	private int height;
 	private int speed;
@@ -24,8 +25,18 @@ public class Paddle implements DrawableObject {
 		this.width = width;
 		this.height = height;
 		this.speed = speed;
+        human = false;
 		paddle = new Rect(0,  0, width, height);
 	}
+
+    public Paddle(int width, int height, int speed, boolean isHuman) {
+        super();
+        this.width = width;
+        this.height = height;
+        this.speed = speed;
+        human = isHuman;
+        paddle = new Rect(0,  0, width, height);
+    }
 
 	@Override
 	public void draw(Canvas canvas) {
@@ -118,8 +129,10 @@ public class Paddle implements DrawableObject {
                 return 1;
             }
         }
+    }
 
-
+    public boolean isHuman() {
+        return isHuman();
     }
 
 	

@@ -1,6 +1,5 @@
 package de.fh_kl.bluepong.game;
 
-import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 import android.content.SharedPreferences;
@@ -85,7 +84,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
     private void readPreferences() {
         ballSpeedIncrease = prefs.getBoolean(BALL_SPEED_INCREASE_SETTING, true);
-        aiHandicap = prefs.getInt(AI_HANDICAP_SETTING, 4);
+        aiHandicap = prefs.getInt(AI_HANDICAP_SETTING, 4) + 1;
     }
 
     private void init() {
@@ -105,8 +104,20 @@ public class GameEngine implements OnTouchListener, Constants {
 		p1.setPosition(p1StartPosition);
 		p1.setTouchBox(new Rect(0, totalHeight/4 * 3, totalWidth, totalHeight));
 
-		if (gameMode > TRAINING_MODE) {
-			p2 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), sizeProvider.getPaddleSpeed());
+
+
+        if (gameMode != TRAINING_MODE) {
+
+            boolean isP2Human;
+            int paddleSpeed = sizeProvider.getPaddleSpeed();
+            if (gameMode == SINGLE_MODE) {
+                isP2Human = false;
+                paddleSpeed /= aiHandicap;
+            } else {
+                isP2Human = true;
+            }
+
+			p2 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), paddleSpeed, isP2Human);
 			Point p2StartPosition = new Point(totalWidth/2, sizeProvider.getPaddleHeight()/2 + sizeProvider.getPaddlePadding());
 			p2.setPosition(p2StartPosition);
 			p2.setTouchBox(new Rect(0, 0, totalWidth, totalHeight/4));
@@ -143,14 +154,29 @@ public class GameEngine implements OnTouchListener, Constants {
 	public void gameLogic() {
 		p1.move();
 
-        if (gameMode > TRAINING_MODE) {
-            p2.move();
+        switch (gameMode) {
+            case SINGLE_MODE:
+                aiMove(p2);
+                break;
+            case MULTITOUCH_MODE:
+                p2.move();
+                break;
+            case BLUETOOTH_MODE:
+                p2.move();
+                break;
+            default:
+                break;
         }
 
 		moveBall();
 	}
 
-	private void moveBall() {
+    private void aiMove(Paddle p2) {
+        p2.goTo(ball.getPosition().x);
+        p2.move();
+    }
+
+    private void moveBall() {
 
 		Point nextPosition = ball.nextPosition();
 		int x = nextPosition.x;
@@ -415,7 +441,7 @@ public class GameEngine implements OnTouchListener, Constants {
 	}
 
 	public void newRound(){
-		newBall();
+		resetBall();
         initialDraw();
 
 		winnable = true;
@@ -427,9 +453,10 @@ public class GameEngine implements OnTouchListener, Constants {
 		gameLoop.start();
 	}
 
-	public void newBall(){
+	public void resetBall(){
 		Point ballStartPosition = new Point(totalWidth/2, totalHeight/2);
 		ball.setPosition(ballStartPosition);
+        ball.resetSpeed();
 
 		if(serve == 1){
             ball.serve(serve);

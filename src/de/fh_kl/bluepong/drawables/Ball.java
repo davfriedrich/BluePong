@@ -15,7 +15,7 @@ import de.fh_kl.bluepong.constants.Constants;
 public class Ball implements DrawableObject, Constants {
 
 	private int size;
-	private int speed;
+	private int speed, initialSpeed;
 	private Point goTo;
 	private Color color;
 	private Rect ball;
@@ -26,6 +26,7 @@ public class Ball implements DrawableObject, Constants {
 	public Ball(int size, int speed) {
 		this.size = size;
 		this.speed = speed;
+        initialSpeed = speed;
 		ball = new Rect(0, 0, size, size);		
 		randomAngle();
 	}
@@ -129,6 +130,10 @@ public class Ball implements DrawableObject, Constants {
 
         setAngle(getAngle() + direction*PADDLE_SPEED_RATIO*2*Math.PI);
         Log.v("BallAngle", "before spin " + getAngle());
+    }
+
+    public void resetSpeed() {
+        speed = initialSpeed;
     }
 
     public void accelerate() {
