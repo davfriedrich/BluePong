@@ -153,7 +153,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 			x = dx + ball.getWidth()/2;
 
-			ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+			ball.setAngle((Math.PI - ball.getAngle()));
 		}
 
 
@@ -163,7 +163,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 			x = totalWidth - (dx + ball.getWidth()/2);
 
-			ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+			ball.setAngle((Math.PI - ball.getAngle()));
 		}
 
 
@@ -176,7 +176,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 				y = topWall.bottom + dy + ball.getHeight()/2;
 
-				ball.setAngle((-1 * ball.getAngle()) % (2*Math.PI));
+				ball.setAngle((-1 * ball.getAngle()));
 			}
 		} else {
 			// collision with paddle 2?
@@ -187,7 +187,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 				y = p2Paddle.bottom + (dy + ball.getHeight()/2);
 
-				ball.setAngle((-1 * ball.getAngle()) % (2*Math.PI));
+				ball.setAngle((-1 * ball.getAngle()));
 
 			} else if (y - ball.getHeight()/2 < p2Paddle.bottom){
 
@@ -199,7 +199,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 					x = p2Paddle.right + dx + ball.getWidth()/2;
 
-					ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+					ball.setAngle((Math.PI - ball.getAngle()));
 				}
 
 
@@ -209,7 +209,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 					x = p2Paddle.left - (dx + ball.getWidth()/2);
 
-					ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+					ball.setAngle((Math.PI - ball.getAngle()));
 				}
 			}
 
@@ -227,7 +227,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 			y = p1Paddle.top - (dy + ball.getHeight()/2);
 
-            ball.setAngle((-1 * ball.getAngle()) % (2*Math.PI));
+            ball.setAngle((-1 * ball.getAngle()));
 
 		} else if(y + ball.getHeight()/2 > p1Paddle.top){
 
@@ -239,7 +239,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 				x = p1Paddle.right + dx + ball.getWidth()/2;
 
-				ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+				ball.setAngle((Math.PI - ball.getAngle()));
 			}
 
 
@@ -249,7 +249,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 				x = p1Paddle.left - (dx + ball.getWidth()/2);
 
-				ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+				ball.setAngle((Math.PI - ball.getAngle()));
 			}
 		}
 
@@ -265,7 +265,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
             x = dx + ball.getWidth()/2;
 
-            ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+            ball.setAngle((Math.PI - ball.getAngle()));
         }
 
 
@@ -275,7 +275,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
             x = totalWidth - (dx + ball.getWidth()/2);
 
-            ball.setAngle((Math.PI - ball.getAngle()) % (2*Math.PI));
+            ball.setAngle((Math.PI - ball.getAngle()));
         }
 
         ball.goTo(new Point(x, y));

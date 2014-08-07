@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Paint.Style;
 import android.util.Log;
+import de.fh_kl.bluepong.MainActivity;
 
 public class Ball implements DrawableObject{
 
@@ -25,7 +26,7 @@ public class Ball implements DrawableObject{
 		this.size = size;
 		this.speed = speed;
 		ball = new Rect(0, 0, size, size);		
-		angle = randomAngle();
+		setAngle(randomAngle());
 	}
 	
 	private double randomAngle() {
@@ -86,9 +87,34 @@ public class Ball implements DrawableObject{
 	}
 	
 	public void setAngle(double angle) {
-		
-		Log.v("angle", "" + angle);
-		this.angle = angle;
+
+		this.angle = checkAndCorrectAngle(normalizeAngle(angle));
 	}
+
+    private double normalizeAngle(double angle) {
+        return (angle %= 2*Math.PI) >= 0 ? angle : (angle + 2*Math.PI);
+    }
+
+    private double checkAndCorrectAngle(double angle) {
+
+        Log.v("angle", "" + angle);
+
+        double resultAngle = angle;
+
+        if (resultAngle < Math.PI/8) {
+            resultAngle = Math.PI / 8;
+        } else if (resultAngle > 7*Math.PI/8 && resultAngle < 9*Math.PI/8) {
+            if (resultAngle > Math.PI) {
+                resultAngle = 9 * Math.PI/8;
+            } else {
+                resultAngle = 7*Math.PI/8;
+            }
+        } else if (resultAngle > 15*Math.PI/8) {
+            resultAngle = 15*Math.PI/8;
+        }
+
+        Log.v("corrected angle", "" + resultAngle);
+        return resultAngle;
+    }
 
 }
