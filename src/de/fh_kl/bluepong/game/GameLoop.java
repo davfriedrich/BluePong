@@ -48,6 +48,7 @@ public class GameLoop extends Thread {
 		}
 		
 		engine.setDestroyed(true);
+		engine.newRound();
 	}
 
 }

@@ -1,5 +1,6 @@
 package de.fh_kl.bluepong.game;
 
+import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 import de.fh_kl.bluepong.constants.Constants;
@@ -41,6 +42,8 @@ public class GameEngine implements OnTouchListener, Constants {
 	private boolean paused = false;
 	private boolean destroyed = false;
 	private boolean winnable = true;
+	
+	private int serve;
 	
 	GameLoop gameLoop;
 	Semaphore sem;
@@ -214,6 +217,7 @@ public class GameEngine implements OnTouchListener, Constants {
 				
 			if (y + ball.getHeight()/2 < 0) {
 				running = false;
+				serve = 1;
 			}
 		}
 		
@@ -256,6 +260,7 @@ public class GameEngine implements OnTouchListener, Constants {
 			
 		if (y - ball.getHeight()/2 > totalHeight) {
 			running = false;
+			serve = 2;
 		}
 		
 		
@@ -321,6 +326,33 @@ public class GameEngine implements OnTouchListener, Constants {
 		this.destroyed = destroyed;		
 	}
 	
+	public void newRound(){
+		newBall();
+		
+		winnable = true;
+		destroyed = false;
+		paused = false;
+		running = true;
+		
+		gameLoop = new GameLoop(this, sem);
+		gameLoop.start();
+	}
+	
+	public void newBall(){
+		Point ballStartPosition = new Point(totalWidth/2, totalHeight/2);
+		ball.setPosition(ballStartPosition);
+		
+		Random random = new Random(System.currentTimeMillis());
+		double angle;
+		if(serve == 1){
+			angle = Math.PI/2 + random.nextGaussian()*Math.PI;
+		}else if(serve == 2){
+			angle = Math.PI/2 + Math.PI + random.nextGaussian()*Math.PI;
+		}else{
+			angle = Math.PI/2 + random.nextInt(2)*Math.PI + random.nextGaussian()*Math.PI;
+		}
+		ball.setAngle(angle);
+	}
 	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -344,7 +376,12 @@ public class GameEngine implements OnTouchListener, Constants {
 						running = true;
 						gameLoop.start();
 					} else if (running && !destroyed && !paused) {
-						sem.acquireUninterruptibly();
+						try {
+							sem.acquire();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						paused = true;
 					} else if (running && !destroyed && paused) {
 						sem.release();
