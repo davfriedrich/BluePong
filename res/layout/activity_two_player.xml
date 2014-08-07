@@ -11,20 +11,39 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/multitouchButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="32dp"
         android:background="@android:color/transparent"
-        android:text="@string/bluetoothButtonString" />
+        android:text="@string/bluetoothButtonString" android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/multitouchButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
         android:background="@android:color/transparent"
         android:onClick="startMultitouchGame"
-        android:text="@string/multitouchButtonString" />
+        android:text="@string/multitouchButtonString" android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/title_activity_two_player"
+            android:id="@id/twoPlayerTitle"
+            android:textSize="@dimen/subTitleText"
+            android:layout_below="@+id/gameTitle" android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+    <TextView
+            android:id="@+id/gameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:text="@string/app_name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/titleText" android:textColor="#ff31c2ff"/>
 
 </RelativeLayout>

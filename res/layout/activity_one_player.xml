@@ -10,34 +10,50 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
         android:background="@android:color/transparent"
         android:onClick="startTraining"
-        android:text="@string/trainingButtonString" />
+        android:text="@string/trainingButtonString"
+        android:layout_centerVertical="true" android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/aiButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/trainingButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
         android:background="@android:color/transparent"
         android:onClick="startAiMatch"
-        android:text="@string/aiButtonString" />
+        android:text="@string/aiButtonString"
+        android:layout_below="@+id/trainingButton" android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/highscoreButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/aiButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
         android:background="@android:color/transparent"
-        android:text="@string/highscoreButtonString" />
+        android:text="@string/highscoreButtonString"
+        android:layout_below="@+id/aiButton" android:layout_centerHorizontal="true" android:layout_marginTop="32dp"
+        android:textSize="@dimen/buttonText"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/title_activity_one_player"
+            android:id="@id/onePlayerTitle"
+            android:textSize="@dimen/subTitleText"
+            android:layout_below="@+id/gameTitle" android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+    <TextView
+            android:id="@+id/gameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:text="@string/app_name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/titleText" android:textColor="#ff31c2ff"/>
 
 </RelativeLayout>
