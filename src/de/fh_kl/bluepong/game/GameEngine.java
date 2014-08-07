@@ -458,9 +458,7 @@ public class GameEngine implements OnTouchListener, Constants {
 		ball.setPosition(ballStartPosition);
         ball.resetSpeed();
 
-		if(serve == 1){
-            ball.serve(serve);
-		} else if (serve == 2) {
+		if(serve == 1 || serve == 2){
             ball.serve(serve);
 		} else {
             ball.randomAngle();

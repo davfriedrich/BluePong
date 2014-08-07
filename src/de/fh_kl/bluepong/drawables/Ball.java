@@ -32,10 +32,10 @@ public class Ball implements DrawableObject, Constants {
 	}
 
     public void serve(int i) {
-        if (i == 1) {
-            setAngle(Math.PI/2 + Math.PI + random.nextGaussian()*Math.PI);
+        if (i == 2) {
+            setAngle(Math.PI + random.nextDouble()*Math.PI);
         } else {
-            setAngle(Math.PI/2  + random.nextGaussian()*Math.PI);
+            setAngle(random.nextDouble()*Math.PI);
         }
     }
 	
