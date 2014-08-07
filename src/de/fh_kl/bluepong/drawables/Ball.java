@@ -10,8 +10,9 @@ import android.graphics.Rect;
 import android.graphics.Paint.Style;
 import android.util.Log;
 import de.fh_kl.bluepong.MainActivity;
+import de.fh_kl.bluepong.constants.Constants;
 
-public class Ball implements DrawableObject{
+public class Ball implements DrawableObject, Constants {
 
 	private int size;
 	private int speed;
@@ -97,8 +98,6 @@ public class Ball implements DrawableObject{
 
     private double checkAndCorrectAngle(double angle) {
 
-        Log.v("angle", "" + angle);
-
         double resultAngle = angle;
 
         if (resultAngle < Math.PI/8) {
@@ -113,8 +112,15 @@ public class Ball implements DrawableObject{
             resultAngle = 15*Math.PI/8;
         }
 
-        Log.v("corrected angle", "" + resultAngle);
         return resultAngle;
+    }
+
+    public void addSpin(int direction) {
+
+        Log.v("BallAngle", "before spin " + getAngle());
+
+        setAngle(getAngle() + direction*PADDLE_SPEED_RATIO*2*Math.PI);
+        Log.v("BallAngle", "before spin " + getAngle());
     }
 
 }

@@ -55,20 +55,22 @@ public class Paddle implements DrawableObject {
 	
 	@Override
 	public int getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+		return height;
 	}
 	
 	@Override
 	public int getWidth() {
-		// TODO Auto-generated method stub
-		return 0;
+		return width;
 	}
 	
 	@Override
 	public Point getPosition() {
 		return new Point(paddle.centerX(), paddle.centerY());
 	}
+
+    public int getXPosition() {
+        return paddle.centerX();
+    }
 	
 	public void setPosition(Point newPosition) {
 		paddle.offsetTo(newPosition.x - width/2, newPosition.y - height/2);
@@ -92,6 +94,21 @@ public class Paddle implements DrawableObject {
 	public void goTo(int goTo) {
 		this.goTo = goTo;
 	}
+
+    public int getDirection() {
+
+        if (goTo == getXPosition()) {
+            return 0;
+        } else {
+            if (goTo < getXPosition()) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+
+
+    }
 
 	
 

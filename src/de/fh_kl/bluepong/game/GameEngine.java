@@ -189,6 +189,12 @@ public class GameEngine implements OnTouchListener, Constants {
 
 				ball.setAngle((-1 * ball.getAngle()));
 
+                if (p2.getDirection() != 0) {
+
+                    ball.addSpin(p2.getDirection());
+                }
+
+
 			} else if (y - ball.getHeight()/2 < p2Paddle.bottom){
 
 				winnable = false;
@@ -228,6 +234,11 @@ public class GameEngine implements OnTouchListener, Constants {
 			y = p1Paddle.top - (dy + ball.getHeight()/2);
 
             ball.setAngle((-1 * ball.getAngle()));
+
+            if (p2.getDirection() != 0) {
+
+                ball.addSpin(-1*p2.getDirection());
+            }
 
 		} else if(y + ball.getHeight()/2 > p1Paddle.top){
 
@@ -333,6 +344,8 @@ public class GameEngine implements OnTouchListener, Constants {
 
 	public void stop() {
 		running = false;
+
+        pauseSemaphore.release();
 
         try {
             aliveSemaphore.acquire();
