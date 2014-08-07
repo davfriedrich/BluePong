@@ -13,6 +13,7 @@ public class Paddle implements DrawableObject {
 	private int height;
 	private int speed;
 	private int goTo;
+    private int score = 0;
 	private Color color;
 	private Rect paddle;
 	private Rect touchbox;
@@ -51,7 +52,18 @@ public class Paddle implements DrawableObject {
 			paddle.offset(Math.min(Math.abs(dx), speed), 0);
 		}
 	}
-	
+
+    public int getScore() {
+        return score;
+    }
+
+    public int incrementScore() {
+        return incrementScore(1);
+    }
+
+    public int incrementScore(int i) {
+        return score += i;
+    }
 	
 	@Override
 	public int getHeight() {

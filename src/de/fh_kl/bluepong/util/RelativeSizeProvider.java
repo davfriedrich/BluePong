@@ -40,4 +40,8 @@ public class RelativeSizeProvider implements Constants {
 		return (int) (height * WALL_THICKNESS_TRAINING);
 	}
 
+    public int getTextSize() {
+        return (int) (width * TEXT_SIZE_RATIO);
+    }
+
 }

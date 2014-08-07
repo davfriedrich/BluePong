@@ -17,6 +17,9 @@ public interface Constants {
 	static double BALL_SPEED_RATIO = 0.02;
 	
 	static double WALL_THICKNESS_TRAINING = 0.04;
+
+	static double TEXT_SIZE_RATIO = 0.16;
+
 	
 	static int FPS = 30;
 

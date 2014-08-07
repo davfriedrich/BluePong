@@ -116,11 +116,12 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		p1.draw(canvas);
 
-		if (gameMode > TRAINING_MODE) {
+		if (gameMode == TRAINING_MODE) {
+			drawPlayfield(canvas, true);
+		} else {
 			p2.draw(canvas);
 			drawPlayfield(canvas, false);
-		} else {
-			drawPlayfield(canvas, true);
+            drawScore(canvas);
 		}
 
 		ball.draw(canvas);
@@ -220,6 +221,8 @@ public class GameEngine implements OnTouchListener, Constants {
 			}
 
 			if (y + ball.getHeight()/2 < 0) {
+
+                p1.incrementScore();
 				running = false;
 				serve = 1;
 			}
@@ -265,6 +268,7 @@ public class GameEngine implements OnTouchListener, Constants {
 		}
 
 		if (y - ball.getHeight()/2 > totalHeight) {
+            p2.incrementScore();
 			running = false;
 			serve = 2;
 		}
@@ -303,14 +307,16 @@ public class GameEngine implements OnTouchListener, Constants {
 		// paddles
 		p1.draw(canvas);
 
-		if (gameMode > TRAINING_MODE) {
-			p2.draw(canvas);
+		if (gameMode == TRAINING_MODE) {
 			// playfield
-			drawPlayfield(canvas, false);
+			drawPlayfield(canvas, true);
 		} else {
 
-			drawPlayfield(canvas, true);
+			p2.draw(canvas);
+			drawPlayfield(canvas, false);
+            drawScore(canvas);
 		}
+
 
 		// ball
 		ball.draw(canvas);
@@ -341,6 +347,32 @@ public class GameEngine implements OnTouchListener, Constants {
 			canvas.drawLine(0, totalHeight/2, totalWidth, totalHeight/2, paint);
 		}
 	}
+
+
+    private void drawScore(Canvas canvas) {
+
+        int x = totalWidth/5 * 4;
+
+        int yp1 = totalHeight/2 + totalHeight/20;
+        int yp2 = totalHeight/2 - totalHeight/20;
+
+        Paint paint = new Paint();
+        paint.setColor(Color.YELLOW);
+        paint.setTextSize(sizeProvider.getTextSize());
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.save();
+        canvas.rotate(90, x, yp1);
+        canvas.drawText("" + p1.getScore(), x, yp1, paint);
+        canvas.restore();
+
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.save();
+        canvas.rotate(90, x, yp2);
+        canvas.drawText("" + p2.getScore(), x, yp2, paint);
+        canvas.restore();
+    }
+
 
 	public void stop() {
 		running = false;
