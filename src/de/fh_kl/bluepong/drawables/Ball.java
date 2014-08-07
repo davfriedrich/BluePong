@@ -27,13 +27,21 @@ public class Ball implements DrawableObject, Constants {
 		this.size = size;
 		this.speed = speed;
 		ball = new Rect(0, 0, size, size);		
-		setAngle(randomAngle());
+		randomAngle();
 	}
+
+    public void serve(int i) {
+        if (i == 1) {
+            setAngle(Math.PI/2 + Math.PI + random.nextGaussian()*Math.PI);
+        } else {
+            setAngle(Math.PI/2  + random.nextGaussian()*Math.PI);
+        }
+    }
 	
-	private double randomAngle() {
+	public void randomAngle() {
 		
 		double angle = Math.PI/2 + random.nextInt(2)*Math.PI + random.nextGaussian()*Math.PI;
-		return angle; 
+		setAngle(angle);
 	}
 
 	public Point nextPosition() {
@@ -121,6 +129,14 @@ public class Ball implements DrawableObject, Constants {
 
         setAngle(getAngle() + direction*PADDLE_SPEED_RATIO*2*Math.PI);
         Log.v("BallAngle", "before spin " + getAngle());
+    }
+
+    public void accelerate() {
+        accelerate(1);
+    }
+
+    private void accelerate(int i) {
+        speed += i;
     }
 
 }

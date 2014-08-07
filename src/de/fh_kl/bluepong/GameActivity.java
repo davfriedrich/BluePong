@@ -2,7 +2,10 @@ package de.fh_kl.bluepong;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
@@ -15,6 +18,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 	
 	SurfaceView sv;
 	GameEngine gameEngine;
+    SharedPreferences preferences;
 	
 	int gameMode;
 	
@@ -34,13 +38,15 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
        sv = (SurfaceView) findViewById(R.id.TrainingView);
 
        sv.getHolder().addCallback(this);
-        
+
+       preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		
-		gameEngine = new GameEngine(sv, new RelativeSizeProvider(sv.getWidth(), sv.getHeight()), gameMode);
+		gameEngine = new GameEngine(sv, preferences, gameMode);
 		
 		sv.setOnTouchListener(gameEngine);
 		

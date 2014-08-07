@@ -3,6 +3,7 @@ package de.fh_kl.bluepong.game;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+import android.content.SharedPreferences;
 import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.drawables.Ball;
 import de.fh_kl.bluepong.drawables.Paddle;
@@ -26,6 +27,7 @@ public class GameEngine implements OnTouchListener, Constants {
 	private SurfaceView view;
 	private SurfaceHolder holder;
 	private RelativeSizeProvider sizeProvider;
+    private SharedPreferences prefs;
 
 	int totalWidth;
 	int totalHeight;
@@ -52,18 +54,24 @@ public class GameEngine implements OnTouchListener, Constants {
 
 	int gameMode;
 
+    private int aiHandicap;
+    private boolean ballSpeedIncrease;
 
-	public GameEngine(SurfaceView view, RelativeSizeProvider relativeSizeProvider, int gameMode) {
+    public GameEngine(SurfaceView view, SharedPreferences preferences, int gameMode) {
 
 		this.gameMode = gameMode;
-
-		sizeProvider = relativeSizeProvider;
 
 		this.view = view;
 		holder = view.getHolder();
 
 		totalWidth = view.getWidth();
 		totalHeight = view.getHeight();
+
+        prefs = preferences;
+
+        readPreferences();
+
+		sizeProvider = new RelativeSizeProvider(totalWidth, totalHeight, preferences);
 
 		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
 
@@ -75,7 +83,12 @@ public class GameEngine implements OnTouchListener, Constants {
 		init();
 	}
 
-	private void init() {
+    private void readPreferences() {
+        ballSpeedIncrease = prefs.getBoolean(BALL_SPEED_INCREASE_SETTING, true);
+        aiHandicap = prefs.getInt(AI_HANDICAP_SETTING, 4);
+    }
+
+    private void init() {
 
 		initPaddles();
 
@@ -83,9 +96,6 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		initialDraw();
 
-//		running = true;
-
-//		gameLoop.start();
 	}
 
 	private void initPaddles(){
@@ -195,6 +205,9 @@ public class GameEngine implements OnTouchListener, Constants {
                     ball.addSpin(p2.getDirection());
                 }
 
+                if (ballSpeedIncrease) {
+                    ball.accelerate();
+                }
 
 			} else if (y - ball.getHeight()/2 < p2Paddle.bottom){
 
@@ -241,6 +254,10 @@ public class GameEngine implements OnTouchListener, Constants {
             if (p1.getDirection() != 0) {
 
                 ball.addSpin(-1*p1.getDirection());
+            }
+
+            if (ballSpeedIncrease) {
+                ball.accelerate();
             }
 
 		} else if(y + ball.getHeight()/2 > p1Paddle.top){
@@ -399,6 +416,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 	public void newRound(){
 		newBall();
+        initialDraw();
 
 		winnable = true;
 		destroyed = false;
@@ -413,16 +431,13 @@ public class GameEngine implements OnTouchListener, Constants {
 		Point ballStartPosition = new Point(totalWidth/2, totalHeight/2);
 		ball.setPosition(ballStartPosition);
 
-		Random random = new Random(System.currentTimeMillis());
-		double angle;
 		if(serve == 1){
-			angle = Math.PI/2 + random.nextGaussian()*Math.PI;
-		}else if(serve == 2){
-			angle = Math.PI/2 + Math.PI + random.nextGaussian()*Math.PI;
-		}else{
-			angle = Math.PI/2 + random.nextInt(2)*Math.PI + random.nextGaussian()*Math.PI;
-		}
-		ball.setAngle(angle);
+            ball.serve(serve);
+		} else if (serve == 2) {
+            ball.serve(serve);
+		} else {
+            ball.randomAngle();
+        }
 	}
 
 	@Override

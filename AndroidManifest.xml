@@ -12,7 +12,9 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.Holo" >
+
+        <!--android:theme="@style/AppTheme" >-->
         <activity
             android:name="de.fh_kl.bluepong.MainActivity"
             android:label="@string/app_name" >
@@ -39,6 +41,7 @@
             android:label="@string/title_activity_game"
             android:screenOrientation="portrait" >
         </activity>
+        <activity android:name=".SettingsActivity"/>
     </application>
 
 </manifest>

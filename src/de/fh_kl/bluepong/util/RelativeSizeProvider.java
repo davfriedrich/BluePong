@@ -1,27 +1,40 @@
 package de.fh_kl.bluepong.util;
 
+import android.content.SharedPreferences;
 import de.fh_kl.bluepong.constants.Constants;
 
 public class RelativeSizeProvider implements Constants {
 	
 	int width;
 	int height;
+    SharedPreferences prefs;
+    int ballSpeedSetting, ballSizeSetting, paddleSpeedSetting, paddleSizeSetting;
 	
-	public RelativeSizeProvider(int viewWidth, int viewHeight){
+	public RelativeSizeProvider(int viewWidth, int viewHeight, SharedPreferences preferences){
 		width = viewWidth;
 		height = viewHeight;
+        prefs = preferences;
+
+        readPreferences();
 	}
-	
-	public int getBallSize() {
-		return (int) (height * BALL_SIZE_RATIO);
+
+    private void readPreferences() {
+        ballSpeedSetting = prefs.getInt(BALL_SPEED_SETTING, 4) + 1;
+        ballSizeSetting = prefs.getInt(BALL_SIZE_SETTING, 4) + 1;
+        paddleSpeedSetting = prefs.getInt(PADDLE_SPEED_SETTING, 4) + 1;
+        paddleSizeSetting= prefs.getInt(PADDLE_SIZE_SETTING, 4) + 1;
+    }
+
+    public int getBallSize() {
+		return (int) (height * BALL_SIZE_RATIO * ballSizeSetting);
 	}
 	
 	public int getBallSpeed() {
-		return (int) (width * BALL_SPEED_RATIO);
+		return (int) (width * BALL_SPEED_RATIO * ballSpeedSetting);
 	}
 	
 	public int getPaddleWidth() {
-		return (int) (width * PADDLE_WIDTH_RATIO);
+		return (int) (width * PADDLE_WIDTH_RATIO * paddleSizeSetting);
 	}
 	
 	public int getPaddleHeight() {
@@ -29,7 +42,7 @@ public class RelativeSizeProvider implements Constants {
 	}
 	
 	public int getPaddleSpeed() {
-		return (int) (width * PADDLE_SPEED_RATIO);
+		return (int) (width * PADDLE_SPEED_RATIO * paddleSpeedSetting);
 	}
 	
 	public int getPaddlePadding() {

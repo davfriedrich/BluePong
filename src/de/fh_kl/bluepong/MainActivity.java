@@ -27,4 +27,9 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, TournamentActivity.class);
 		startActivity(intent);
 	}
+
+    public void showSettings(View v) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
 }

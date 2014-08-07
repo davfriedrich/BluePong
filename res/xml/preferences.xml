@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/lbl_gameplay_settings">
+
+        <SeekBarPreference
+                android:defaultValue="4"
+                android:title="@string/lbl_ball_speed_setting"
+                android:key="ballSpeedSetting"
+                android:max="9">
+        </SeekBarPreference>
+
+        <CheckBoxPreference
+                android:title="@string/lbl_ball_speed_increase"
+                android:defaultValue="true"
+                android:key="ballSpeedIncreaseSetting">
+        </CheckBoxPreference>
+
+        <SeekBarPreference
+                android:defaultValue="4"
+                android:title="@string/lbl_ball_size_setting"
+                android:key="ballSizeSetting"
+                android:max="9">
+        </SeekBarPreference>
+
+        <SeekBarPreference
+                android:defaultValue="4"
+                android:title="@string/lbl_paddle_speed_setting"
+                android:key="paddleSpeedSetting"
+                android:max="9">
+        </SeekBarPreference>
+
+        <SeekBarPreference
+                android:defaultValue="4"
+                android:title="@string/lbl_paddle_size_setting"
+                android:key="paddleSizeSetting"
+                android:max="9">
+        </SeekBarPreference>
+
+        <SeekBarPreference
+                android:defaultValue="4"
+                android:title="@string/lbl_ai_handicap"
+                android:key="aiHandicapSetting"
+                android:max="9">
+        </SeekBarPreference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/lbl_appearance_settings">
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

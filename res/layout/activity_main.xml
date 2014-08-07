@@ -5,6 +5,16 @@
     tools:context="${packageName}.${activityClass}" >
 
     <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tournamentButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="68dp"
+            android:onClick="showSettings"
+            android:text="@string/btn_settings" />
+
+    <Button
         android:id="@+id/tournamentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
