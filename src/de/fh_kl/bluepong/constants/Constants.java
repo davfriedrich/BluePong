@@ -7,6 +7,7 @@ public interface Constants {
 	final static int MULTITOUCH_MODE = 2;
 	final static int BLUETOOTH_MODE = 3;
 	
+	final static String TOURNAMENT_PLAYER = "TournamentPlayer";	
 	
 	static double PADDLE_HEIGHT_RATIO = 0.04;
 	static double PADDLE_PADDING_RATIO = 0.04;

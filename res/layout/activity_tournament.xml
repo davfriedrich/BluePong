@@ -4,4 +4,33 @@
     android:layout_height="match_parent"
     tools:context="${packageName}.${activityClass}" >
 
+    <Button
+        android:id="@+id/tournamentViewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:onClick="click"
+        android:text="Button" />
+
+    <EditText
+        android:id="@+id/tounamentViewTextField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tournamentViewButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/tournamentViewTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tounamentViewTextField"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="53dp"
+        android:text="TextView" />
+
 </RelativeLayout>
