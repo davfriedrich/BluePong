@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
+        android:background="@android:color/transparent"
         android:onClick="startTraining"
         android:text="@string/trainingButtonString" />
 
@@ -24,6 +25,7 @@
         android:layout_below="@+id/trainingButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
+        android:background="@android:color/transparent"
         android:onClick="startAiMatch"
         android:text="@string/aiButtonString" />
 
@@ -35,6 +37,7 @@
         android:layout_below="@+id/aiButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
+        android:background="@android:color/transparent"
         android:text="@string/highscoreButtonString" />
 
 </RelativeLayout>

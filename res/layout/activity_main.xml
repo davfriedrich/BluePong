@@ -11,6 +11,7 @@
             android:layout_below="@+id/tournamentButton"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="68dp"
+            android:background="?android:selectableItemBackground"
             android:onClick="showSettings"
             android:text="@string/btn_settings" />
 
@@ -21,6 +22,7 @@
         android:layout_below="@+id/twoPlayerButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
+        android:background="@android:color/transparent"
         android:onClick="tournamentMode"
         android:text="@string/tournamentButtonSring" />
 
@@ -31,6 +33,7 @@
         android:layout_below="@+id/onePlayerButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
+        android:background="@android:color/transparent"
         android:onClick="twoPlayer"
         android:text="@string/twoPlayerButtonString" />
 
@@ -41,6 +44,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
+       	android:background="@android:color/transparent"
         android:onClick="onePlayer"
         android:text="@string/onePlayerButtonString" />
 

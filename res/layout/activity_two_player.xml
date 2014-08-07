@@ -12,6 +12,7 @@
         android:layout_below="@+id/multitouchButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
+        android:background="@android:color/transparent"
         android:text="@string/bluetoothButtonString" />
 
     <Button
@@ -22,6 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
+        android:background="@android:color/transparent"
         android:onClick="startMultitouchGame"
         android:text="@string/multitouchButtonString" />
 

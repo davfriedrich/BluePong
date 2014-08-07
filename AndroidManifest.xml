@@ -17,7 +17,8 @@
         <!--android:theme="@style/AppTheme" >-->
         <activity
             android:name="de.fh_kl.bluepong.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,22 +27,26 @@
         </activity>
         <activity
             android:name="de.fh_kl.bluepong.OnePlayerActivity"
-            android:label="@string/title_activity_one_player" >
+            android:label="@string/title_activity_one_player"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.fh_kl.bluepong.TwoPlayerActivity"
-            android:label="@string/title_activity_two_player" >
+            android:label="@string/title_activity_two_player"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.fh_kl.bluepong.TournamentActivity"
-            android:label="@string/title_activity_tournament" >
+            android:label="@string/title_activity_tournament"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.fh_kl.bluepong.GameActivity"
             android:label="@string/title_activity_game"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
