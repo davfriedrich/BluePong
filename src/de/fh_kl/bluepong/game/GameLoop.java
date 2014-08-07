@@ -5,19 +5,27 @@ import java.util.concurrent.Semaphore;
 public class GameLoop extends Thread {
 	
 	GameEngine engine;
-	Semaphore sem;
-	
-	public GameLoop(GameEngine gameEngine, Semaphore semaphore) {
+	Semaphore pauseSemaphore;
+    private Semaphore aliveSemaphore;
+
+    public GameLoop(GameEngine gameEngine, Semaphore semaphore, Semaphore aliveSemaphore) {
 		engine = gameEngine;
-		sem = semaphore;
-	}
+        pauseSemaphore = semaphore;
+        this.aliveSemaphore = aliveSemaphore;
+    }
 	
 	public void run(){
-		
-		while (engine.isRunning()) {
+
+        try {
+            aliveSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        while (engine.isRunning()) {
 			
 			try {
-				sem.acquire();
+                pauseSemaphore.acquire();
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
@@ -34,7 +42,7 @@ public class GameLoop extends Thread {
 			
 			long dTime = stopTime - startTime;
 			
-			sem.release();
+			pauseSemaphore.release();
 
 			if (dTime < 33) {
 				try {
@@ -48,6 +56,9 @@ public class GameLoop extends Thread {
 		}
 		
 		engine.setDestroyed(true);
+
+        aliveSemaphore.release();
+
 		engine.newRound();
 	}
 

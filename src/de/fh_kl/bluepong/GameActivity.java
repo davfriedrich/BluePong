@@ -61,8 +61,8 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
 		gameEngine.stop();
+		super.onBackPressed();
 	}
 	
 	
