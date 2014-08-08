@@ -52,11 +52,12 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		
-		if(gameMode == TOURNAMENT_MODE){
+		if(gameMode >= TOURNAMENT_MODE){
 			gameEngine = new GameEngine(this, sv, preferences, gameMode, playerNames);
-		}
+		} else {
+            gameEngine = new GameEngine(this, sv, preferences, gameMode);
+        }
 
-		gameEngine = new GameEngine(this, sv, preferences, gameMode);
 
 		sv.setOnTouchListener(gameEngine);
 		

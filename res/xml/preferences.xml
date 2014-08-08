@@ -39,10 +39,10 @@
         </SeekBarPreference>
 
         <SeekBarPreference
-                android:defaultValue="4"
+                android:defaultValue="9"
                 android:title="@string/lbl_ai_handicap"
                 android:key="aiHandicapSetting"
-                android:max="9">
+                android:max="19">
         </SeekBarPreference>
 
     </PreferenceCategory>

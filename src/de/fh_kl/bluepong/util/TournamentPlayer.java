@@ -56,7 +56,7 @@ public class TournamentPlayer {
 	}
 
 	public void setWinner(int lastWinnerIndex) {
-		if(lastWinnerIndex == 0){
+		if(lastWinnerIndex == 1){
 			currentPlayer1.setOutOfGame();
 		}else if(currentPlayer2 != null){
 			currentPlayer2.setOutOfGame();

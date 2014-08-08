@@ -397,11 +397,11 @@ public class GameEngine implements OnTouchListener, Constants {
         paint.setTextSize(sizeProvider.getPlayerNameSize());
         paint.setColor(Color.parseColor("#ff31c2ff"));
 
-        canvas.drawText(p1.getName(), totalWidth/2, totalHeight, paint);
+        canvas.drawText(p1.getName(), totalWidth/2, totalHeight - paint.descent(), paint);
 
         canvas.save();
         canvas.rotate(180, totalWidth/2, 0);
-        canvas.drawText(p2.getName(), totalWidth/2, 0, paint);
+        canvas.drawText(p2.getName(), totalWidth/2, - paint.descent(), paint);
         canvas.restore();
     }
 
