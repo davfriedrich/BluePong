@@ -58,9 +58,6 @@ public class GameEngine implements OnTouchListener, Constants {
 
     private int gameMode;
     
-    private String playerNames[];
-    private boolean tournamentAi;
-
     private int aiHandicap;
     private boolean ballSpeedIncrease;
 
@@ -75,7 +72,7 @@ public class GameEngine implements OnTouchListener, Constants {
         draw();
 	}
 
-    public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[], boolean tournamentAI) {
+    public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[]) {
 
     	init(gameActivity, view, preferences, gameMode);
 

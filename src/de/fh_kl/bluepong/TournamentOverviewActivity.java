@@ -79,9 +79,12 @@ public class TournamentOverviewActivity extends Activity implements Constants{
 	
 	public void startGame(View v){
 		Intent gameIntent = new Intent(this,GameActivity.class);
-		gameIntent.putExtra(GAME_MODE, TOURNAMENT_MODE);
+		if(aiMode){
+			gameIntent.putExtra(GAME_MODE, TOURNAMENT_MODE_AI);
+		}else{
+			gameIntent.putExtra(GAME_MODE, TOURNAMENT_MODE);
+		}
 		gameIntent.putExtra(PLAYER_NAMES, new String[] {currentPlayer1, currentPlayer2});
-		gameIntent.putExtra(TOURNAMENT_AI, aiMode);
 		startActivityForResult(gameIntent, 0);
 	}
 	
