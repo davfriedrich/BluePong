@@ -63,7 +63,6 @@ public class GameEngine implements OnTouchListener, Constants {
     private int gameMode;
     
     private String playerNames[];
-    private boolean tournamentAi;
 
     private int aiHandicap;
     private boolean ballSpeedIncrease;
@@ -102,7 +101,7 @@ public class GameEngine implements OnTouchListener, Constants {
 		init();
 	}
     
-    public GameEngine(Context context, SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[], boolean tournamentAI) {
+    public GameEngine(Context context, SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[]) {
 
     	this.context = context;
     	START = context.getResources().getString(R.string.StartScreenString);
@@ -112,7 +111,6 @@ public class GameEngine implements OnTouchListener, Constants {
   		this.gameMode = gameMode;
   		
   		this.playerNames = playerNames;
-  		this.tournamentAi = tournamentAI;
 
   		this.view = view;
   		holder = view.getHolder();

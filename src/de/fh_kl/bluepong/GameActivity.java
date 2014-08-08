@@ -22,8 +22,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
     	
 	int gameMode;
 	
-	String playerNames[];
-	boolean tournamentAi;	
+	String playerNames[];	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +37,8 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
        Intent intent = getIntent();
        gameMode = intent.getIntExtra(GAME_MODE, 0);
        
-       if(gameMode == TOURNAMENT_MODE){
+       if(gameMode == TOURNAMENT_MODE || gameMode == TOURNAMENT_MODE_AI){
     	   playerNames = intent.getStringArrayExtra(PLAYER_NAMES);
-    	   tournamentAi = intent.getBooleanExtra(TOURNAMENT_AI, false);
        }
 
        sv = (SurfaceView) findViewById(R.id.TrainingView);
@@ -55,7 +53,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 	public void surfaceCreated(SurfaceHolder holder) {
 		
 		if(gameMode == TOURNAMENT_MODE){
-			gameEngine = new GameEngine(this, sv, preferences, gameMode, playerNames, tournamentAi);
+			gameEngine = new GameEngine(this, sv, preferences, gameMode, playerNames);
 		}
 
 		gameEngine = new GameEngine(this, sv, preferences, gameMode);
@@ -64,9 +62,9 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 		
 	}
 	
-	public void endRound(String winner){
+	public void endRound(int winnerIndex){
 		Intent endIntent = new Intent();
-		endIntent.putExtra(WINNER, winner);
+		endIntent.putExtra(WINNER, winnerIndex);
 		setResult(RESULT_OK, endIntent);
 		finish();
 	}
