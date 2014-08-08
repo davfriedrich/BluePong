@@ -66,93 +66,69 @@ public class GameEngine implements OnTouchListener, Constants {
 
     public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode) {
 
+        init(gameActivity, view, preferences, gameMode);
+
+		initPaddles();
+
+        initBall();
+
+        draw();
+	}
+
+    public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[], boolean tournamentAI) {
+
+    	init(gameActivity, view, preferences, gameMode);
+
+        initPaddles(playerNames);
+
+        initBall();
+
+        draw();
+	}
+
+    private void init(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode) {
         this.gameActivity = gameActivity;
         START = gameActivity.getResources().getString(R.string.StartScreenString);
         PAUSE = gameActivity.getResources().getString(R.string.PauseScreenString);
         textBoundingBox = new Rect();
 
-		this.gameMode = gameMode;
+        this.gameMode = gameMode;
 
-		this.view = view;
-		holder = view.getHolder();
+        this.view = view;
+        holder = view.getHolder();
 
-		totalWidth = view.getWidth();
-		totalHeight = view.getHeight();
+        totalWidth = view.getWidth();
+        totalHeight = view.getHeight();
 
         prefs = preferences;
 
         readPreferences();
 
-		sizeProvider = new RelativeSizeProvider(totalWidth, totalHeight, preferences);
+        sizeProvider = new RelativeSizeProvider(totalWidth, totalHeight, preferences);
 
         paint = new Paint();
         paint.setStyle(Style.FILL);
         Typeface team401 = Typeface.createFromAsset(gameActivity.getAssets(), "fonts/Team401.ttf");
         paint.setTypeface(team401);
 
-		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
+        controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
 
-		pauseSemaphore = new Semaphore(1);
-		aliveSemaphore = new Semaphore(1);
+        pauseSemaphore = new Semaphore(1);
+        aliveSemaphore = new Semaphore(1);
 
-		gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
-
-		init();
-	}
-    
-    public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[], boolean tournamentAI) {
-
-    	this.gameActivity = gameActivity;
-    	START = gameActivity.getResources().getString(R.string.StartScreenString);
-    	PAUSE = gameActivity.getResources().getString(R.string.PauseScreenString);
-    	textBoundingBox = new Rect();
-
-  		this.gameMode = gameMode;
-  		
-  		this.playerNames = playerNames;
-  		this.tournamentAi = tournamentAI;
-
-  		this.view = view;
-  		holder = view.getHolder();
-
-  		totalWidth = view.getWidth();
-  		totalHeight = view.getHeight();
-
-  		prefs = preferences;
-
-  		readPreferences();
-
-  		sizeProvider = new RelativeSizeProvider(totalWidth, totalHeight, preferences);
-
-  		paint = new Paint();
-  		paint.setStyle(Style.FILL);
-        Typeface team401 = Typeface.createFromAsset(gameActivity.getAssets(), "fonts/Team401.ttf");
-        paint.setTypeface(team401);
-
-  		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
-
-  		pauseSemaphore = new Semaphore(1);
-  		aliveSemaphore = new Semaphore(1);
-
-  		gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
-
-  		init();
-	}
+        gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
+    }
 
     private void readPreferences() {
         ballSpeedIncrease = prefs.getBoolean(BALL_SPEED_INCREASE_SETTING, true);
         aiHandicap = prefs.getInt(AI_HANDICAP_SETTING, 4) + 1;
     }
 
-    private void init() {
-
-		initPaddles();
-
-		initBall();
-
-		draw();
-
-	}
+    private void initPaddles(String[] playerNames) {
+        initPaddles();
+        p1.setName(playerNames[0]);
+        p2.setName(playerNames[1]);
+    }
 
 	private void initPaddles(){
 
@@ -165,16 +141,12 @@ public class GameEngine implements OnTouchListener, Constants {
 
         if (gameMode != TRAINING_MODE) {
 
-            boolean isP2Human;
             int paddleSpeed = sizeProvider.getPaddleSpeed();
-            if (gameMode == SINGLE_MODE) {
-                isP2Human = false;
+            if (gameMode == SINGLE_MODE || gameMode == TOURNAMENT_MODE_AI) {
                 paddleSpeed /= aiHandicap;
-            } else {
-                isP2Human = true;
             }
 
-			p2 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), paddleSpeed, isP2Human);
+			p2 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), paddleSpeed);
 			Point p2StartPosition = new Point(totalWidth/2, sizeProvider.getPaddleHeight()/2 + sizeProvider.getPaddlePadding());
 			p2.setPosition(p2StartPosition);
 			p2.setTouchBox(new Rect(0, 0, totalWidth, totalHeight/4));
@@ -192,11 +164,11 @@ public class GameEngine implements OnTouchListener, Constants {
 
         switch (gameMode) {
             case SINGLE_MODE:
+            case TOURNAMENT_MODE_AI:
                 aiMove(p2);
                 break;
             case MULTITOUCH_MODE:
-                p2.move();
-                break;
+            case TOURNAMENT_MODE:
             case BLUETOOTH_MODE:
                 p2.move();
                 break;
@@ -405,6 +377,10 @@ public class GameEngine implements OnTouchListener, Constants {
             drawScore(canvas);
 		}
 
+        if (gameMode >= TOURNAMENT_MODE) {
+            drawPlayerNames(canvas);
+        }
+
 		// ball
 		ball.draw(canvas);
 
@@ -418,6 +394,19 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		holder.unlockCanvasAndPost(canvas);
 	}
+
+    private void drawPlayerNames(Canvas canvas) {
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTextSize(sizeProvider.getPlayerNameSize());
+        paint.setColor(Color.parseColor("#ff31c2ff"));
+
+        canvas.drawText(p1.getName(), totalWidth/2, totalHeight, paint);
+
+        canvas.save();
+        canvas.rotate(180, totalWidth/2, 0);
+        canvas.drawText(p2.getName(), totalWidth/2, 0, paint);
+        canvas.restore();
+    }
 
     private void drawStartScreen(Canvas canvas) {
         drawMenuText(canvas, START);

@@ -7,7 +7,8 @@ public interface Constants {
 	final static int MULTITOUCH_MODE = 2;
 	final static int BLUETOOTH_MODE = 3;
 	final static int TOURNAMENT_MODE = 4;
-	
+	final static int TOURNAMENT_MODE_AI = 5;
+
 	final static String TOURNAMENT_AI = "TournamentAi";
 	final static String TOURNAMENT_PLAYER = "TournamentPlayer";	
 	final static String PLAYER_NAMES = "PlayerNames";

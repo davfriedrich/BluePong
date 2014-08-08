@@ -63,5 +63,8 @@ public class RelativeSizeProvider implements Constants {
     public int getMenuSize() {
         return (int) (width * SCORE_SIZE_RATIO);
     }
+    public int getPlayerNameSize() {
+        return (int) (width * PLAYER_TEXT_SIZE_RATIO);
+    }
 
 }

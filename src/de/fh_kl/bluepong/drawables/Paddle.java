@@ -10,6 +10,7 @@ import android.graphics.Rect;
 public class Paddle implements DrawableObject {
 
     private boolean human;
+    private String name;
 	private int width;
 	private int height;
 	private int speed;
@@ -69,6 +70,14 @@ public class Paddle implements DrawableObject {
 
     public int incrementScore(int i) {
         return score += i;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 	
 	@Override
