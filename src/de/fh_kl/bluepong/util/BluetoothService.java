@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,5 +31,16 @@ public class BluetoothService {
     }
 
 
+    public boolean connect(BluetoothDevice deviceToConnect) {
 
+        try {
+            socket = deviceToConnect.createInsecureRfcommSocketToServiceRecord(uuid);
+
+            socket.connect();
+
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
 }

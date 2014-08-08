@@ -1,9 +1,14 @@
 package de.fh_kl.bluepong;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -79,6 +84,14 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+        BluetoothDevice deviceToConnect = (BluetoothDevice) adapterView.getItemAtPosition(i);
 
+        if (!bluetoothService.connect(deviceToConnect)) {
+            AlertDialog failDialog = new AlertDialog.Builder(this).setMessage(R.string.bluetoothConnectionFailed).show();
+            TextView message = (TextView) failDialog.findViewById(android.R.id.message);
+            message.setTypeface(team401);
+            message.setGravity(Gravity.CENTER_HORIZONTAL);
+            message.setTextColor(Color.RED);
+        }
     }
 }

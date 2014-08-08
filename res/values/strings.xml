@@ -40,4 +40,5 @@
     <string name="btn_bluetooth_hostGame">Host game</string>
     <string name="btn_bluetooth_joinGame">Join game</string>
     <string name="lbl_bluetooth_joinGame">Select device to join</string>
+    <string name="bluetoothConnectionFailed">Connection failed</string>
 </resources>
