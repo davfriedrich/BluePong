@@ -15,18 +15,14 @@ public class Paddle implements DrawableObject {
 	private int speed;
 	private int goTo;
     private int score = 0;
+    private Paint paint;
 	private Color color;
 	private Rect paddle;
 	private Rect touchbox;
 	
 	
 	public Paddle(int width, int height, int speed) {
-		super();
-		this.width = width;
-		this.height = height;
-		this.speed = speed;
-        human = false;
-		paddle = new Rect(0,  0, width, height);
+		this(width, height, speed, true);
 	}
 
     public Paddle(int width, int height, int speed, boolean isHuman) {
@@ -36,14 +32,13 @@ public class Paddle implements DrawableObject {
         this.speed = speed;
         human = isHuman;
         paddle = new Rect(0,  0, width, height);
+        paint = new Paint();
+        paint.setColor(Color.CYAN);
+        paint.setStyle(Style.FILL);
     }
 
 	@Override
 	public void draw(Canvas canvas) {
-		
-		Paint paint = new Paint();
-		paint.setColor(Color.CYAN);
-		paint.setStyle(Style.FILL);
 		
 		canvas.drawRect(paddle, paint);
 	}

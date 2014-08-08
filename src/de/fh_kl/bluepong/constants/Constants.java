@@ -13,8 +13,8 @@ public interface Constants {
 	final static String PLAYER_NAMES = "PlayerNames";
 	final static String WINNER = "Winner";
 	
-	static double PADDLE_HEIGHT_RATIO = 0.04;
-	static double PADDLE_PADDING_RATIO = 0.04;
+	static double PADDLE_HEIGHT_RATIO = 0.03;
+	static double PADDLE_PADDING_RATIO = 0.05;
 	static double PADDLE_SPEED_RATIO = 0.027;
 	static double PADDLE_WIDTH_RATIO = 0.04;
 
@@ -23,7 +23,9 @@ public interface Constants {
 
 	static double WALL_THICKNESS_TRAINING = 0.04;
 
-	static double TEXT_SIZE_RATIO = 0.16;
+	static double SCORE_SIZE_RATIO = 0.16;
+	static double MENU_TEXT_SIZE_RATIO = 0.2;
+	static double PLAYER_TEXT_SIZE_RATIO = 0.04;
 
 	
 	static int FPS = 30;
