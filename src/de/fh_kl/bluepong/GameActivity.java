@@ -62,9 +62,9 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 		
 	}
 	
-	public void endRound(int winnerIndex){
+	public void endRound(int winner){
 		Intent endIntent = new Intent();
-		endIntent.putExtra(WINNER, winnerIndex);
+		endIntent.putExtra(WINNER, winner);
 		setResult(RESULT_OK, endIntent);
 		finish();
 	}
