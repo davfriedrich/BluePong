@@ -28,7 +28,7 @@ public class TournamentPlayer {
 			return;
 			
 		}
-		while(tmp.getValue() > value){
+		while(tmp.getValue() >= value){
 			lastTmp = tmp;
 			tmp = tmp.getNext();
 			if(tmp == null){
