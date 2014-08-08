@@ -5,7 +5,7 @@ import java.util.concurrent.Semaphore;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.*;
-import android.util.Log;
+import de.fh_kl.bluepong.GameActivity;
 import de.fh_kl.bluepong.R;
 import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.drawables.Ball;
@@ -24,7 +24,7 @@ public class GameEngine implements OnTouchListener, Constants {
     private String PAUSE;
     private Rect textBoundingBox;
 
-    private Context context;
+    private GameActivity gameActivity;
 	private SurfaceView view;
 	private SurfaceHolder holder;
 	private RelativeSizeProvider sizeProvider;
@@ -64,11 +64,11 @@ public class GameEngine implements OnTouchListener, Constants {
     private int aiHandicap;
     private boolean ballSpeedIncrease;
 
-    public GameEngine(Context context, SurfaceView view, SharedPreferences preferences, int gameMode) {
+    public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode) {
 
-        this.context = context;
-        START = context.getResources().getString(R.string.StartScreenString);
-        PAUSE = context.getResources().getString(R.string.PauseScreenString);
+        this.gameActivity = gameActivity;
+        START = gameActivity.getResources().getString(R.string.StartScreenString);
+        PAUSE = gameActivity.getResources().getString(R.string.PauseScreenString);
         textBoundingBox = new Rect();
 
 		this.gameMode = gameMode;
@@ -87,7 +87,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
         paint = new Paint();
         paint.setStyle(Style.FILL);
-        Typeface team401 = Typeface.createFromAsset(context.getAssets(), "fonts/Team401.ttf");
+        Typeface team401 = Typeface.createFromAsset(gameActivity.getAssets(), "fonts/Team401.ttf");
         paint.setTypeface(team401);
 
 		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
@@ -100,11 +100,11 @@ public class GameEngine implements OnTouchListener, Constants {
 		init();
 	}
     
-    public GameEngine(Context context, SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[], boolean tournamentAI) {
+    public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[], boolean tournamentAI) {
 
-    	this.context = context;
-    	START = context.getResources().getString(R.string.StartScreenString);
-    	PAUSE = context.getResources().getString(R.string.PauseScreenString);
+    	this.gameActivity = gameActivity;
+    	START = gameActivity.getResources().getString(R.string.StartScreenString);
+    	PAUSE = gameActivity.getResources().getString(R.string.PauseScreenString);
     	textBoundingBox = new Rect();
 
   		this.gameMode = gameMode;
@@ -126,7 +126,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
   		paint = new Paint();
   		paint.setStyle(Style.FILL);
-        Typeface team401 = Typeface.createFromAsset(context.getAssets(), "fonts/Team401.ttf");
+        Typeface team401 = Typeface.createFromAsset(gameActivity.getAssets(), "fonts/Team401.ttf");
         paint.setTypeface(team401);
 
   		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
@@ -186,26 +186,6 @@ public class GameEngine implements OnTouchListener, Constants {
         ball = new Ball(sizeProvider.getBallSize(), sizeProvider.getBallSpeed());
 		ball.setPosition(sizeProvider.getCenterPoint());
 	}
-
-//	private void initialDraw() {
-//
-//		Canvas canvas = holder.lockCanvas();
-//
-//		p1.draw(canvas);
-//
-//		if (gameMode == TRAINING_MODE) {
-//			drawPlayingField(canvas, true);
-//		} else {
-//			p2.draw(canvas);
-//			drawPlayingField(canvas, false);
-//            drawScore(canvas);
-//		}
-//
-//		ball.draw(canvas);
-//
-//
-//		holder.unlockCanvasAndPost(canvas);
-//	}
 
 	public void gameLogic() {
 		p1.move();
@@ -537,18 +517,37 @@ public class GameEngine implements OnTouchListener, Constants {
 	}
 
 	public void newRound(){
-		resetBall();
-        draw();
 
-		winnable = true;
-		destroyed = false;
-		paused = false;
+        int winner = checkForWinner();
 
-		gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
-		start();
+        if(winner < 0) {
+
+            resetBall();
+            draw();
+
+            winnable = true;
+            destroyed = false;
+            paused = false;
+
+            gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
+            start();
+        } else {
+            gameActivity.endRound(winner);
+        }
 	}
 
-	public void resetBall(){
+    private int checkForWinner() {
+
+        if (p1.getScore() == SCORE_LIMIT) {
+            return 0;
+        } else if (p2.getScore() == SCORE_LIMIT) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    public void resetBall(){
 		ball.setPosition(sizeProvider.getCenterPoint());
         ball.resetSpeed();
 

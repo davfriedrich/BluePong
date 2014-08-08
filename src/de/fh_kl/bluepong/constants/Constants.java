@@ -12,6 +12,8 @@ public interface Constants {
 	final static String TOURNAMENT_PLAYER = "TournamentPlayer";	
 	final static String PLAYER_NAMES = "PlayerNames";
 	final static String WINNER = "Winner";
+
+    final static int SCORE_LIMIT = 1;
 	
 	static double PADDLE_HEIGHT_RATIO = 0.03;
 	static double PADDLE_PADDING_RATIO = 0.05;
