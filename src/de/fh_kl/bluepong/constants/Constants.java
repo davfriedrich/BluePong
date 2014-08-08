@@ -28,7 +28,7 @@ public interface Constants {
 
 	static double SCORE_SIZE_RATIO = 0.08;
 	static double MENU_TEXT_SIZE_RATIO = 0.1;
-	static double PLAYER_TEXT_SIZE_RATIO = 0.03;
+	static double PLAYER_TEXT_SIZE_RATIO = 0.04;
 
 	
 	static int FPS = 30;

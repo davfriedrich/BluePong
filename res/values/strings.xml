@@ -35,4 +35,5 @@
 
     <string name="StartScreenString">Start</string>
     <string name="PauseScreenString">Pause</string>
+    <string name="WinScreenString">wins</string>
 </resources>

@@ -2,7 +2,6 @@ package de.fh_kl.bluepong.game;
 
 import java.util.concurrent.Semaphore;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.*;
 import de.fh_kl.bluepong.GameActivity;
@@ -406,16 +405,20 @@ public class GameEngine implements OnTouchListener, Constants {
     }
 
     private void drawStartScreen(Canvas canvas) {
-        drawMenuText(canvas, START);
+        drawCenterText(canvas, START);
     }
 
     private void drawPauseScreen(Canvas canvas) {
-        drawMenuText(canvas, PAUSE);
+        drawCenterText(canvas, PAUSE);
     }
 
-    private void drawMenuText(Canvas canvas, String text) {
+    private void drawCenterText(Canvas canvas, String text) {
+        drawCenterText(canvas, text, sizeProvider.getMenuSize());
+    }
+
+    private void drawCenterText(Canvas canvas, String text, int textSize) {
         paint.setColor(Color.GREEN);
-        paint.setTextSize(sizeProvider.getMenuSize());
+        paint.setTextSize(textSize);
         paint.getTextBounds(text, 0, text.length(), textBoundingBox);
         int height = Math.abs(textBoundingBox.bottom - textBoundingBox.top);
 
@@ -518,9 +521,20 @@ public class GameEngine implements OnTouchListener, Constants {
             gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
             start();
         } else {
-            gameActivity.endRound(winner);
+
+            drawWinnerScreen(winner);
         }
 	}
+
+    private void drawWinnerScreen(int winner) {
+        Canvas canvas = holder.lockCanvas();
+
+        String winningPlayer = (winner == 0 ? p1.getName() : p2.getName());
+
+        drawCenterText(canvas, winningPlayer + " " + gameActivity.getString(R.string.WinScreenString), sizeProvider.getPlayerNameSize());
+
+        holder.unlockCanvasAndPost(canvas);
+    }
 
     private int checkForWinner() {
 
@@ -579,7 +593,9 @@ public class GameEngine implements OnTouchListener, Constants {
 					} else if (running && !destroyed && paused) {
 						pauseSemaphore.release();
 						paused = false;
-					}
+					} else if (!running && !paused) {
+                        gameActivity.endRound(checkForWinner());
+                    }
 				}
 			}
 
