@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -52,24 +53,36 @@ public class TournamentActivity extends Activity implements Constants{
 	public void click(View v){
 		switch(state){
 			case 0:
-				count = Integer.parseInt(textField.getText().toString());
-				textView.setText("Geben sie den Namen des 1. Spielers ein");
-				textField.setText("");
-				textField.setInputType(InputType.TYPE_CLASS_TEXT);
-				state = 1;
-				counter = 0;
-				player = new String[count];
+				try{
+					count = Integer.parseInt(textField.getText().toString());
+				}catch(NumberFormatException e){
+					count = 0;
+				}
+				if(count < 2){
+					textView.setText("Mindesten 2 Spieler notwendig");
+					textField.setText("");
+				}else{
+					textView.setText("Geben sie den Namen des 1. Spielers ein");
+					textField.setText("");
+					textField.setInputType(InputType.TYPE_CLASS_TEXT);
+					state = 1;
+					counter = 0;
+					player = new String[count];
+				}
 				break;
 			case 1:
-				player[counter] = textField.getText().toString();
-				counter++;
-				textView.setText("Geben sie den Namen des " + (counter + 1) + ". Spielers ein");
-				textField.setText("");
-				if(count == counter){
-					state = 2;
-					textView.setText("");
-					textField.setVisibility(View.GONE);
-					button.setText("Spiel beginnen");
+				String tmpName = textField.getText().toString();
+				if(!tmpName.equals("")){
+					player[counter] = tmpName;
+					counter++;
+					textView.setText("Geben sie den Namen des " + (counter + 1) + ". Spielers ein");
+					textField.setText("");
+					if(count == counter){
+						state = 2;
+						textView.setText("");
+						textField.setVisibility(View.GONE);
+						button.setText("Spiel beginnen");
+					}
 				}
 				break;
 			case 2:

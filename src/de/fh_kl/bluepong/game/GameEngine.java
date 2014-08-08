@@ -57,6 +57,9 @@ public class GameEngine implements OnTouchListener, Constants {
     private Semaphore aliveSemaphore;
 
     private int gameMode;
+    
+    private String playerNames[];
+    private boolean tournamentAi;
 
     private int aiHandicap;
     private boolean ballSpeedIncrease;
@@ -105,6 +108,9 @@ public class GameEngine implements OnTouchListener, Constants {
     	textBoundingBox = new Rect();
 
   		this.gameMode = gameMode;
+  		
+  		this.playerNames = playerNames;
+  		this.tournamentAi = tournamentAI;
 
   		this.view = view;
   		holder = view.getHolder();

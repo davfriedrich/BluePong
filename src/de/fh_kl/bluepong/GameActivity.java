@@ -63,6 +63,13 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 		sv.setOnTouchListener(gameEngine);
 		
 	}
+	
+	public void endRound(String winner){
+		Intent endIntent = new Intent();
+		endIntent.putExtra(WINNER, winner);
+		setResult(RESULT_OK, endIntent);
+		finish();
+	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
