@@ -4,4 +4,31 @@
     android:layout_height="match_parent"
     tools:context="${packageName}.${activityClass}" >
 
+    <Button
+        android:id="@+id/tournamentOverviewStartGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="76dp"
+        android:onClick="startGame"
+        android:text="@string/tournamentOverviewStartGameButtonString" />
+
+    <TextView
+        android:id="@+id/tournamentOverviewNextPlayerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tournamentOververviewNextGameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tournamentOverviewNextPlayerTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="96dp"
+        android:text="@string/tournamentOverviewNextGameString" />
+
 </RelativeLayout>

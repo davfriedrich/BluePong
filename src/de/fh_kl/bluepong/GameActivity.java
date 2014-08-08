@@ -19,8 +19,11 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 	SurfaceView sv;
 	GameEngine gameEngine;
     SharedPreferences preferences;
-	
+    	
 	int gameMode;
+	
+	String playerNames[];
+	boolean tournamentAi;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,11 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
        
        Intent intent = getIntent();
        gameMode = intent.getIntExtra(GAME_MODE, 0);
+       
+       if(gameMode == TOURNAMENT_MODE){
+    	   playerNames = intent.getStringArrayExtra(PLAYER_NAMES);
+    	   tournamentAi = intent.getBooleanExtra(TOURNAMENT_AI, false);
+       }
 
        sv = (SurfaceView) findViewById(R.id.TrainingView);
 
@@ -46,6 +54,9 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		
+		if(gameMode == TOURNAMENT_MODE){
+			gameEngine = new GameEngine(sv, preferences, gameMode, playerNames, tournamentAi);
+		}
 		gameEngine = new GameEngine(sv, preferences, gameMode);
 		
 		sv.setOnTouchListener(gameEngine);

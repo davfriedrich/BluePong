@@ -25,5 +25,7 @@
     <string name="lbl_ai_handicap">AI handicap</string>
     <string name="lbl_appearance_settings">Appearance</string>
     <string name="title_activity_tournament_overview">TournamentOverviewActivity</string>
+    <string name="tournamentOverviewNextGameString">Als nächstes spielen:</string>
+    <string name="tournamentOverviewStartGameButtonString">Spiel beginnen</string>
 
 </resources>

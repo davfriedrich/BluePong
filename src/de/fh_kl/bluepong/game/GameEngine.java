@@ -81,6 +81,32 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		init();
 	}
+    
+    public GameEngine(SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[], boolean tournamentAI) {
+
+		this.gameMode = gameMode;
+
+		this.view = view;
+		holder = view.getHolder();
+
+		totalWidth = view.getWidth();
+		totalHeight = view.getHeight();
+
+        prefs = preferences;
+
+        readPreferences();
+
+		sizeProvider = new RelativeSizeProvider(totalWidth, totalHeight, preferences);
+
+		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
+
+		pauseSemaphore = new Semaphore(1);
+		aliveSemaphore = new Semaphore(1);
+
+		gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
+
+		init();
+	}
 
     private void readPreferences() {
         ballSpeedIncrease = prefs.getBoolean(BALL_SPEED_INCREASE_SETTING, true);
