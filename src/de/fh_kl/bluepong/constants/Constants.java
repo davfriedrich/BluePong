@@ -23,8 +23,8 @@ public interface Constants {
 
 	static double WALL_THICKNESS_TRAINING = 0.04;
 
-	static double SCORE_SIZE_RATIO = 0.16;
-	static double MENU_TEXT_SIZE_RATIO = 0.2;
+	static double SCORE_SIZE_RATIO = 0.08;
+	static double MENU_TEXT_SIZE_RATIO = 0.1;
 	static double PLAYER_TEXT_SIZE_RATIO = 0.04;
 
 	

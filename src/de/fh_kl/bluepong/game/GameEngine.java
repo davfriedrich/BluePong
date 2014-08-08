@@ -4,19 +4,14 @@ import java.util.concurrent.Semaphore;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.*;
 import android.util.Log;
 import de.fh_kl.bluepong.R;
 import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.drawables.Ball;
 import de.fh_kl.bluepong.drawables.Paddle;
 import de.fh_kl.bluepong.util.RelativeSizeProvider;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -50,6 +45,7 @@ public class GameEngine implements OnTouchListener, Constants {
     private Ball ball;
 
 	private boolean running = false;
+	private boolean started = false;
 	private boolean paused = false;
 	private boolean destroyed = false;
 	private boolean winnable = true;
@@ -88,6 +84,8 @@ public class GameEngine implements OnTouchListener, Constants {
 
         paint = new Paint();
         paint.setStyle(Style.FILL);
+        Typeface team401 = Typeface.createFromAsset(context.getAssets(), "fonts/Team401.ttf");
+        paint.setTypeface(team401);
 
 		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
 
@@ -122,6 +120,8 @@ public class GameEngine implements OnTouchListener, Constants {
 
   		paint = new Paint();
   		paint.setStyle(Style.FILL);
+        Typeface team401 = Typeface.createFromAsset(context.getAssets(), "fonts/Team401.ttf");
+        paint.setTypeface(team401);
 
   		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
 
@@ -422,7 +422,7 @@ public class GameEngine implements OnTouchListener, Constants {
 		// ball
 		ball.draw(canvas);
 
-        if (!running) {
+        if (!started) {
             drawStartScreen(canvas);
         }
 
@@ -445,9 +445,7 @@ public class GameEngine implements OnTouchListener, Constants {
         paint.setColor(Color.GREEN);
         paint.setTextSize(sizeProvider.getMenuSize());
         paint.getTextBounds(text, 0, text.length(), textBoundingBox);
-//
         int height = Math.abs(textBoundingBox.bottom - textBoundingBox.top);
-//        int height = paint.ascent(text) - paint.descent(text);
 
         int x = totalWidth/2;
         int y = totalHeight/2;
@@ -456,7 +454,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
         canvas.save();
         canvas.rotate(90, x, y);
-        canvas.drawText(text, x, y + height/2, paint);
+        canvas.drawText(text, x, y, paint);
         canvas.restore();
     }
 
@@ -506,6 +504,11 @@ public class GameEngine implements OnTouchListener, Constants {
         canvas.restore();
     }
 
+    public void start() {
+        running = true;
+        started = true;
+        gameLoop.start();
+    }
 
 	public void stop() {
 		running = false;
@@ -534,10 +537,9 @@ public class GameEngine implements OnTouchListener, Constants {
 		winnable = true;
 		destroyed = false;
 		paused = false;
-		running = true;
 
 		gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
-		gameLoop.start();
+		start();
 	}
 
 	public void resetBall(){
@@ -573,16 +575,16 @@ public class GameEngine implements OnTouchListener, Constants {
 			if(event.getAction() == MotionEvent.ACTION_DOWN){
 				if (controlTouchBox.contains(px, py)) {
 					if (!running && !destroyed) {
-						running = true;
-						gameLoop.start();
+						start();
 					} else if (running && !destroyed && !paused) {
-						paused = true;
 						try {
 							pauseSemaphore.acquire();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						paused = true;
+                        draw();
 					} else if (running && !destroyed && paused) {
 						pauseSemaphore.release();
 						paused = false;
