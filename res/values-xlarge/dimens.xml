@@ -3,4 +3,5 @@
     <dimen name="titleText">48dp</dimen>
     <dimen name="subTitleText">40dp</dimen>
     <dimen name="buttonText">32dp</dimen>
+    <dimen name="listText">24dp</dimen>
 </resources>

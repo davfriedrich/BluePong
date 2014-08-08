@@ -53,4 +53,11 @@ public class TwoPlayerActivity extends Activity implements Constants {
 		
 		startActivity(intent);
 	}
+
+    public void startBluetoothGame(View v) {
+        Intent intent = new Intent(this, BluetoothActivity.class);
+        intent.putExtra(GAME_MODE, BLUETOOTH_MODE);
+
+        startActivity(intent);
+    }
 }

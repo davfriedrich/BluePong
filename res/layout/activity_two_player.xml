@@ -13,7 +13,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:background="@android:color/transparent"
-        android:text="@string/bluetoothButtonString" android:textSize="@dimen/buttonText"/>
+        android:text="@string/bluetoothButtonString" android:textSize="@dimen/buttonText"
+        android:onClick="startBluetoothGame"/>
 
     <Button
         android:id="@+id/multitouchButton"

@@ -507,24 +507,30 @@ public class GameEngine implements OnTouchListener, Constants {
 
 	public void newRound(){
 
-        int winner = checkForWinner();
+        if (gameMode >= TOURNAMENT_MODE) {
+            int winner = checkForWinner();
 
-        if(winner < 0) {
-
-            resetBall();
-            draw();
-
-            winnable = true;
-            destroyed = false;
-            paused = false;
-
-            gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
-            start();
-        } else {
-
-            drawWinnerScreen(winner);
+            if (winner < 0) {
+                continueGame();
+            } else {
+                drawWinnerScreen(winner);
+            }
+        }else{
+            continueGame();
         }
 	}
+
+    private void continueGame() {
+        resetBall();
+        draw();
+
+        winnable = true;
+        destroyed = false;
+        paused = false;
+
+        gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
+        start();
+    }
 
     private void drawWinnerScreen(int winner) {
         Canvas canvas = holder.lockCanvas();

@@ -7,5 +7,6 @@
     <dimen name="titleText">32dp</dimen>
     <dimen name="subTitleText">24dp</dimen>
     <dimen name="buttonText">16dp</dimen>
+    <dimen name="listText">12dp</dimen>
 
 </resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/bluetoothTitle"
+            android:id="@+id/bluetoothTitle"
+            android:textSize="@dimen/subTitleText"
+            android:layout_below="@+id/gameTitle" android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+    <TextView
+            android:id="@+id/gameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:text="@string/app_name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/titleText" android:textColor="#ff31c2ff"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_bluetooth_hostGame"
+            android:id="@id/btn_bluetooth_hostGame" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+            android:textSize="@dimen/buttonText" android:onClick="hostGame"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_bluetooth_joinGame"
+            android:id="@+id/btn_bluetooth_joinGame" android:layout_below="@id/btn_bluetooth_hostGame" android:layout_alignLeft="@id/btn_bluetooth_hostGame"
+            android:layout_marginTop="32dp" android:textSize="@dimen/buttonText" android:onClick="joinGame"/>
+
+</RelativeLayout>

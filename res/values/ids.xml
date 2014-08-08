@@ -2,4 +2,5 @@
 <resources>
     <item name="onePlayerTitle" type="id"/>
     <item name="twoPlayerTitle" type="id"/>
+    <item name="btn_bluetooth_hostGame" type="id"/>
 </resources>

@@ -36,4 +36,8 @@
     <string name="StartScreenString">Start</string>
     <string name="PauseScreenString">Pause</string>
     <string name="WinScreenString">wins</string>
+    <string name="bluetoothTitle">Bluetooth</string>
+    <string name="btn_bluetooth_hostGame">Host game</string>
+    <string name="btn_bluetooth_joinGame">Join game</string>
+    <string name="lbl_bluetooth_joinGame">Select device to join</string>
 </resources>
