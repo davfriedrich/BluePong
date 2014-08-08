@@ -29,9 +29,17 @@
     <string name="lbl_ai_handicap">AI handicap</string>
 
     <string name="lbl_appearance_settings">Appearance</string>
+    
     <string name="title_activity_tournament_overview">TournamentOverviewActivity</string>
-    <string name="tournamentOverviewNextGameString">Als nächstes spielen:</string>
-    <string name="tournamentOverviewStartGameButtonString">Spiel beginnen</string>
+    <string name="tournamentOverviewNextGameString">Next playing:</string>
+    <string name="tournamentOverviewStartGameButtonString">Start game</string>
+    <string name="tournamentOverviewWinnerText">The winner is:</string>
+    <string name="tournamentOverviewErrorGameEndText">Because of an error, you have to replay the last game.</string>
+    <string name="tournamentActivityStartTournamentButtonString">Start tournament</string>
+    <string name="tournamentActivityButtonOkString">OK</string>
+    <string name="tournamentActivityPlayerNumberSetText">Insert the number of player:</string>
+    <string name="tournamentActivityPlayerNumberSetErrorText">At least two player required.</string>
+    <string name="tournamentActivitySetPlayerNameText">Insert Name of Player</string>
 
     <string name="StartScreenString">Start</string>
     <string name="PauseScreenString">Pause</string>

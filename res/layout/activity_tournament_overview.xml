@@ -11,6 +11,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="76dp"
+        android:background="@android:color/transparent"
         android:onClick="startGame"
         android:text="@string/tournamentOverviewStartGameButtonString" />
 
