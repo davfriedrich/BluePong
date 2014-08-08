@@ -1,6 +1,7 @@
 package de.fh_kl.bluepong.util;
 
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import de.fh_kl.bluepong.constants.Constants;
 
 public class RelativeSizeProvider implements Constants {
@@ -32,6 +33,8 @@ public class RelativeSizeProvider implements Constants {
 	public int getBallSpeed() {
 		return (int) (width * BALL_SPEED_RATIO * ballSpeedSetting);
 	}
+
+    public Point getCenterPoint() { return new Point(width/2, height/2); }
 	
 	public int getPaddleWidth() {
 		return (int) (width * PADDLE_WIDTH_RATIO * paddleSizeSetting);
@@ -53,8 +56,12 @@ public class RelativeSizeProvider implements Constants {
 		return (int) (height * WALL_THICKNESS_TRAINING);
 	}
 
-    public int getTextSize() {
-        return (int) (width * TEXT_SIZE_RATIO);
+    public int getScoreSize() {
+        return (int) (width * SCORE_SIZE_RATIO);
+    }
+
+    public int getMenuSize() {
+        return (int) (width * SCORE_SIZE_RATIO);
     }
 
 }

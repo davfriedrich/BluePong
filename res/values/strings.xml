@@ -15,15 +15,22 @@
     <string name="multitouchButtonString">Multitouch</string>
     <string name="bluetoothButtonString">Bluetooth</string>
     <string name="title_activity_game">GameActivity</string>
+
     <string name="btn_settings">Settings</string>
     <string name="lbl_gameplay_settings">Gameplay</string>
+
     <string name="lbl_ball_speed_setting">Ball speed</string>
     <string name="lbl_ball_speed_increase">Ball speed increases over time</string>
     <string name="lbl_ball_size_setting">Ball size</string>
+
     <string name="lbl_paddle_speed_setting">Paddle speed</string>
     <string name="lbl_paddle_size_setting">Paddle width</string>
+
     <string name="lbl_ai_handicap">AI handicap</string>
+
     <string name="lbl_appearance_settings">Appearance</string>
     <string name="title_activity_tournament_overview">TournamentOverviewActivity</string>
 
+    <string name="StartScreenString">Start</string>
+    <string name="PauseScreenString">Pause</string>
 </resources>

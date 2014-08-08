@@ -46,8 +46,8 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		
-		gameEngine = new GameEngine(sv, preferences, gameMode);
-		
+		gameEngine = new GameEngine(this, sv, preferences, gameMode);
+
 		sv.setOnTouchListener(gameEngine);
 		
 	}

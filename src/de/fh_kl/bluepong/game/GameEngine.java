@@ -2,7 +2,10 @@ package de.fh_kl.bluepong.game;
 
 import java.util.concurrent.Semaphore;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+import de.fh_kl.bluepong.R;
 import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.drawables.Ball;
 import de.fh_kl.bluepong.drawables.Paddle;
@@ -22,23 +25,29 @@ import android.view.View.OnTouchListener;
 
 public class GameEngine implements OnTouchListener, Constants {
 
+    private String START;
+    private String PAUSE;
+    private Rect textBoundingBox;
 
+    private Context context;
 	private SurfaceView view;
 	private SurfaceHolder holder;
 	private RelativeSizeProvider sizeProvider;
     private SharedPreferences prefs;
 
-	int totalWidth;
-	int totalHeight;
+    private int totalWidth;
+    private int totalHeight;
 
-	Rect controlTouchBox;
+    private Paint paint;
 
-    Rect topWall;
+    private Rect controlTouchBox;
 
-	Paddle p1;
-	Paddle p2;
+    private Rect topWall;
 
-	Ball ball;
+    private Paddle p1;
+    private Paddle p2;
+
+    private Ball ball;
 
 	private boolean running = false;
 	private boolean paused = false;
@@ -47,16 +56,21 @@ public class GameEngine implements OnTouchListener, Constants {
 
 	private int serve;
 
-	GameLoop gameLoop;
-	Semaphore pauseSemaphore;
-	Semaphore aliveSemaphore;
+    private GameLoop gameLoop;
+    private Semaphore pauseSemaphore;
+    private Semaphore aliveSemaphore;
 
-	int gameMode;
+    private int gameMode;
 
     private int aiHandicap;
     private boolean ballSpeedIncrease;
 
-    public GameEngine(SurfaceView view, SharedPreferences preferences, int gameMode) {
+    public GameEngine(Context context, SurfaceView view, SharedPreferences preferences, int gameMode) {
+
+        this.context = context;
+        START = context.getResources().getString(R.string.StartScreenString);
+        PAUSE = context.getResources().getString(R.string.PauseScreenString);
+        textBoundingBox = new Rect();
 
 		this.gameMode = gameMode;
 
@@ -71,6 +85,9 @@ public class GameEngine implements OnTouchListener, Constants {
         readPreferences();
 
 		sizeProvider = new RelativeSizeProvider(totalWidth, totalHeight, preferences);
+
+        paint = new Paint();
+        paint.setStyle(Style.FILL);
 
 		controlTouchBox = new Rect(totalWidth/4 * 1, totalHeight/5 * 2, totalWidth/4 * 3, totalHeight/5 * 3);
 
@@ -93,7 +110,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		initBall();
 
-		initialDraw();
+		draw();
 
 	}
 
@@ -126,30 +143,29 @@ public class GameEngine implements OnTouchListener, Constants {
 
 	private void initBall() {
 
-		ball = new Ball(sizeProvider.getBallSize(), sizeProvider.getBallSpeed());
-		Point ballStartPosition = new Point(totalWidth/2, totalHeight/2);
-		ball.setPosition(ballStartPosition);
+        ball = new Ball(sizeProvider.getBallSize(), sizeProvider.getBallSpeed());
+		ball.setPosition(sizeProvider.getCenterPoint());
 	}
 
-	private void initialDraw() {
-
-		Canvas canvas = holder.lockCanvas();
-
-		p1.draw(canvas);
-
-		if (gameMode == TRAINING_MODE) {
-			drawPlayfield(canvas, true);
-		} else {
-			p2.draw(canvas);
-			drawPlayfield(canvas, false);
-            drawScore(canvas);
-		}
-
-		ball.draw(canvas);
-
-
-		holder.unlockCanvasAndPost(canvas);
-	}
+//	private void initialDraw() {
+//
+//		Canvas canvas = holder.lockCanvas();
+//
+//		p1.draw(canvas);
+//
+//		if (gameMode == TRAINING_MODE) {
+//			drawPlayingField(canvas, true);
+//		} else {
+//			p2.draw(canvas);
+//			drawPlayingField(canvas, false);
+//            drawScore(canvas);
+//		}
+//
+//		ball.draw(canvas);
+//
+//
+//		holder.unlockCanvasAndPost(canvas);
+//	}
 
 	public void gameLogic() {
 		p1.move();
@@ -218,7 +234,10 @@ public class GameEngine implements OnTouchListener, Constants {
 		} else {
 			// collision with paddle 2?
 			Rect p2Paddle = p2.getPaddle();
-			if ((y - ball.getHeight()/2 < p2Paddle.bottom) && (x + ball.getWidth()/2 >= p2Paddle.left) && (x - ball.getWidth()/2 <= p2Paddle.right) && winnable) {
+			if ((y - ball.getHeight()/2 < p2Paddle.bottom)
+                    && (x + ball.getWidth()/2 >= p2Paddle.left)
+                    && (x - ball.getWidth()/2 <= p2Paddle.right)
+                    && winnable) {
 
 				int dy = Math.abs(p2Paddle.bottom - (y - ball.getHeight()/2));
 
@@ -269,7 +288,10 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		// collision with paddle 1?
 		Rect p1Paddle = p1.getPaddle();
-		if ((y + ball.getHeight()/2 > p1Paddle.top) && (x + ball.getWidth()/2 >= p1Paddle.left) && (x - ball.getWidth()/2 <= p1Paddle.right) && winnable) {
+		if ((y + ball.getHeight()/2 > p1Paddle.top)
+                && (x + ball.getWidth()/2 >= p1Paddle.left)
+                && (x - ball.getWidth()/2 <= p1Paddle.right)
+                && winnable) {
 
 			int dy = Math.abs(p1Paddle.top - (y + ball.getHeight()/2));
 
@@ -286,7 +308,7 @@ public class GameEngine implements OnTouchListener, Constants {
                 ball.accelerate();
             }
 
-		} else if(y + ball.getHeight()/2 > p1Paddle.top){
+		} else if (y + ball.getHeight()/2 > p1Paddle.top){
 
 			winnable = false;
 
@@ -355,29 +377,58 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		if (gameMode == TRAINING_MODE) {
 			// playfield
-			drawPlayfield(canvas, true);
+			drawPlayingField(canvas, true);
 		} else {
 
 			p2.draw(canvas);
-			drawPlayfield(canvas, false);
+			drawPlayingField(canvas, false);
             drawScore(canvas);
 		}
-
 
 		// ball
 		ball.draw(canvas);
 
+        if (!running) {
+            drawStartScreen(canvas);
+        }
 
+        if (paused) {
+            drawPauseScreen(canvas);
+        }
 
 		holder.unlockCanvasAndPost(canvas);
 	}
 
+    private void drawStartScreen(Canvas canvas) {
+        drawMenuText(canvas, START);
+    }
 
-	private void drawPlayfield(Canvas canvas, boolean training) {
+    private void drawPauseScreen(Canvas canvas) {
+        drawMenuText(canvas, PAUSE);
+    }
 
-		Paint paint = new Paint();
+    private void drawMenuText(Canvas canvas, String text) {
+        paint.setColor(Color.GREEN);
+        paint.setTextSize(sizeProvider.getMenuSize());
+        paint.getTextBounds(text, 0, text.length(), textBoundingBox);
+//
+        int height = Math.abs(textBoundingBox.bottom - textBoundingBox.top);
+//        int height = paint.ascent(text) - paint.descent(text);
+
+        int x = totalWidth/2;
+        int y = totalHeight/2;
+
+        paint.setTextAlign(Paint.Align.CENTER);
+
+        canvas.save();
+        canvas.rotate(90, x, y);
+        canvas.drawText(text, x, y + height/2, paint);
+        canvas.restore();
+    }
+
+    private void drawPlayingField(Canvas canvas, boolean training) {
+
 		paint.setColor(Color.WHITE);
-		paint.setStyle(Style.FILL);
 
 		if (training) {
 
@@ -388,12 +439,15 @@ public class GameEngine implements OnTouchListener, Constants {
 			canvas.drawRect(topWall, paint);
 		} else {
 
+            // set special Paint settings for dashed middle-line
 			paint.setStyle(Style.STROKE);
 			paint.setPathEffect(new DashPathEffect(new float[] {10,10}, 5));
 			canvas.drawLine(0, totalHeight/2, totalWidth, totalHeight/2, paint);
+            // unset special Paint settings
+            paint.setStyle(Style.FILL);
+            paint.setPathEffect(null);
 		}
 	}
-
 
     private void drawScore(Canvas canvas) {
 
@@ -402,9 +456,8 @@ public class GameEngine implements OnTouchListener, Constants {
         int yp1 = totalHeight/2 + totalHeight/20;
         int yp2 = totalHeight/2 - totalHeight/20;
 
-        Paint paint = new Paint();
         paint.setColor(Color.YELLOW);
-        paint.setTextSize(sizeProvider.getTextSize());
+        paint.setTextSize(sizeProvider.getScoreSize());
 
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.save();
@@ -442,7 +495,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 	public void newRound(){
 		resetBall();
-        initialDraw();
+        draw();
 
 		winnable = true;
 		destroyed = false;
@@ -454,8 +507,7 @@ public class GameEngine implements OnTouchListener, Constants {
 	}
 
 	public void resetBall(){
-		Point ballStartPosition = new Point(totalWidth/2, totalHeight/2);
-		ball.setPosition(ballStartPosition);
+		ball.setPosition(sizeProvider.getCenterPoint());
         ball.resetSpeed();
 
 		if(serve == 1 || serve == 2){
@@ -490,13 +542,13 @@ public class GameEngine implements OnTouchListener, Constants {
 						running = true;
 						gameLoop.start();
 					} else if (running && !destroyed && !paused) {
+						paused = true;
 						try {
 							pauseSemaphore.acquire();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						paused = true;
 					} else if (running && !destroyed && paused) {
 						pauseSemaphore.release();
 						paused = false;
