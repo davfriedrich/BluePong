@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
@@ -13,9 +12,6 @@ import android.view.WindowManager;
 import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.game.GameEngine;
 import de.fh_kl.bluepong.util.BluetoothService;
-import de.fh_kl.bluepong.util.RelativeSizeProvider;
-
-import java.io.InputStream;
 
 public class GameActivity extends Activity implements SurfaceHolder.Callback, Constants {
 	
@@ -73,7 +69,6 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
             bluetoothService.stop();
         }
     }
-
     @Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		
@@ -114,7 +109,6 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 		super.onBackPressed();
 
         if (gameMode == BLUETOOTH_MODE) {
-            Log.v("back", "backToBluetooth");
             setResult(RESULT_OK);
             finish();
         }

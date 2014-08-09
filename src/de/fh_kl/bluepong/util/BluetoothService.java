@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.IBinder;
 import android.util.Log;
 import de.fh_kl.bluepong.constants.Constants;
@@ -171,5 +172,13 @@ public class BluetoothService {
         }
 
         return -1;
+    }
+
+    public void sendPosition(int xPosition) {
+        send(xPosition);
+    }
+
+    public int getOpponentPosition() {
+        return receive();
     }
 }
