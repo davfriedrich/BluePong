@@ -1,7 +1,5 @@
 package de.fh_kl.bluepong.constants;
 
-import java.util.UUID;
-
 public interface Constants {
 	final static String GAME_MODE = "GameMode";
 	final static int TRAINING_MODE = 0;

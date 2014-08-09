@@ -9,6 +9,7 @@ import de.fh_kl.bluepong.R;
 import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.drawables.Ball;
 import de.fh_kl.bluepong.drawables.Paddle;
+import de.fh_kl.bluepong.util.BluetoothService;
 import de.fh_kl.bluepong.util.RelativeSizeProvider;
 import android.graphics.Paint.Style;
 import android.view.MotionEvent;
@@ -28,6 +29,7 @@ public class GameEngine implements OnTouchListener, Constants {
 	private SurfaceHolder holder;
 	private RelativeSizeProvider sizeProvider;
     private SharedPreferences prefs;
+    private BluetoothService bluetoothService;
 
     private int totalWidth;
     private int totalHeight;
@@ -63,6 +65,10 @@ public class GameEngine implements OnTouchListener, Constants {
     public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode) {
 
         init(gameActivity, view, preferences, gameMode);
+
+        if (gameMode == BLUETOOTH_MODE) {
+            bluetoothService = BluetoothService.getInstance();
+        }
 
 		initPaddles();
 
@@ -145,7 +151,10 @@ public class GameEngine implements OnTouchListener, Constants {
 			p2 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), paddleSpeed);
 			Point p2StartPosition = new Point(totalWidth/2, sizeProvider.getPaddleHeight()/2 + sizeProvider.getPaddlePadding());
 			p2.setPosition(p2StartPosition);
-			p2.setTouchBox(new Rect(0, 0, totalWidth, totalHeight/4));
+
+            if (gameMode != BLUETOOTH_MODE) {
+                p2.setTouchBox(new Rect(0, 0, totalWidth, totalHeight / 4));
+            }
 		}
 	}
 
@@ -165,8 +174,11 @@ public class GameEngine implements OnTouchListener, Constants {
                 break;
             case MULTITOUCH_MODE:
             case TOURNAMENT_MODE:
-            case BLUETOOTH_MODE:
                 p2.move();
+                break;
+            case BLUETOOTH_MODE:
+                bluetoothService.sendPosition(p1.getXPosition());
+                p2.setXPosition(bluetoothService.getOpponentPosition());
                 break;
             default:
                 break;
@@ -577,7 +589,7 @@ public class GameEngine implements OnTouchListener, Constants {
 				p1.goTo(px);
 			}
 
-            if (gameMode > TRAINING_MODE) {
+            if (gameMode != TRAINING_MODE || gameMode != BLUETOOTH_MODE) {
                 if (p2.touchInTouchbox(touch)) {
                     p2.goTo(px);
                 }

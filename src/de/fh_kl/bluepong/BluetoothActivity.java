@@ -100,8 +100,7 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.v("back", requestCode + " " + resultCode);
-        if (requestCode == BLUETOOTH_MODE && resultCode == RESULT_OK) {
+        if (requestCode == BLUETOOTH_MODE) {
             finish();
         }
     }

@@ -98,7 +98,11 @@ public class Paddle implements DrawableObject {
     public int getXPosition() {
         return paddle.centerX();
     }
-	
+
+    public void setXPosition(int x) {
+        setPosition(new Point(x, paddle.centerY()));
+    }
+
 	public void setPosition(Point newPosition) {
 		paddle.offsetTo(newPosition.x - width/2, newPosition.y - height/2);
 		
