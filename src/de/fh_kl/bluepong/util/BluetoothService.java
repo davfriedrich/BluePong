@@ -25,7 +25,7 @@ public class BluetoothService {
 
     public BluetoothService () {
         adapter = BluetoothAdapter.getDefaultAdapter();
-        uuid = UUID.randomUUID();
+        uuid = UUID.fromString(Constants.BLUETOOTH_UUID);
     }
 
 

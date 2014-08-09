@@ -54,7 +54,8 @@
             android:name="de.fh_kl.bluepong.TournamentOverviewActivity"
             android:label="@string/title_activity_tournament_overview" >
         </activity>
-        <activity android:name="de.fh_kl.bluepong.BluetoothActivity"/>
+        <activity android:name="de.fh_kl.bluepong.BluetoothActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 
