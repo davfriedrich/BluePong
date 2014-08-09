@@ -28,10 +28,7 @@ public class OnePlayerActivity extends Activity implements Constants {
         
 		setContentView(R.layout.activity_one_player);
 		
-		Typeface team401 = Typeface.createFromAsset(getAssets(), "fonts/Team401.ttf");
 
-        TextView gameTitle = (TextView) findViewById(R.id.gameTitle);
-        TextView onePlayerTitle = (TextView) findViewById(R.id.onePlayerTitle);
 		Button trainingButton = (Button) findViewById(R.id.trainingButton);
 		Button aiButton = (Button) findViewById(R.id.aiButton);
 		Button highscoreButton = (Button) findViewById(R.id.highscoreButton);
@@ -42,13 +39,8 @@ public class OnePlayerActivity extends Activity implements Constants {
         animation.setRepeatCount(Animation.INFINITE);
         animation.setRepeatMode(Animation.REVERSE);
 
-        gameTitle.setTypeface(team401);
-        onePlayerTitle.setTypeface(team401);
-		trainingButton.setTypeface(team401);
         trainingButton.startAnimation(animation);
-		aiButton.setTypeface(team401);
         aiButton.startAnimation(animation);
-		highscoreButton.setTypeface(team401);
         highscoreButton.startAnimation(animation);
 		
 	}

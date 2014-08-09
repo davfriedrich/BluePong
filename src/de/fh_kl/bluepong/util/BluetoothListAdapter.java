@@ -25,13 +25,13 @@ public class BluetoothListAdapter extends ArrayAdapter<BluetoothDevice> {
     List<BluetoothDevice> deviceList;
     Typeface typeface;
 
-    public BluetoothListAdapter(Context context, List<BluetoothDevice> deviceList, Typeface team401) {
+    public BluetoothListAdapter(Context context, List<BluetoothDevice> deviceList, Typeface typeface) {
         super(context, android.R.layout.simple_list_item_1, deviceList);
 
         this.context = context;
         this.deviceList = deviceList;
 
-        typeface = team401;
+        this.typeface = typeface;
     }
 
     @Override

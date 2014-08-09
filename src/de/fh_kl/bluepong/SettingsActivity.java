@@ -19,9 +19,5 @@ public class SettingsActivity extends PreferenceActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
         addPreferencesFromResource(R.xml.preferences);
-        
-        
-        
-        
     }
 }
