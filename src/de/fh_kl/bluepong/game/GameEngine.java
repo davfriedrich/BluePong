@@ -589,7 +589,7 @@ public class GameEngine implements OnTouchListener, Constants {
 				p1.goTo(px);
 			}
 
-            if (gameMode != TRAINING_MODE || gameMode != BLUETOOTH_MODE) {
+            if (gameMode != TRAINING_MODE && gameMode != BLUETOOTH_MODE) {
                 if (p2.touchInTouchbox(touch)) {
                     p2.goTo(px);
                 }
