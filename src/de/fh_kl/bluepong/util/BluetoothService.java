@@ -239,9 +239,9 @@ public class BluetoothService {
         return preferences;
     }
 
-    public void sendBallPosition(int x, int y) {
-        send(x);
-        send(y);
+    public void sendBallPosition(Point position) {
+        send(position.x);
+        send(position.y);
     }
 
     public Point getBallPosition() {

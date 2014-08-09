@@ -185,31 +185,47 @@ public class GameEngine implements OnTouchListener, Constants {
 	}
 
 	public void gameLogic() {
-
-
-
 		p1.move();
 
         switch (gameMode) {
+            case TRAINING_MODE:
+                ball.move(moveBall());
+                break;
             case SINGLE_MODE:
             case TOURNAMENT_MODE_AI:
                 aiMove(p2);
+                ball.move(moveBall());
                 break;
             case MULTITOUCH_MODE:
             case TOURNAMENT_MODE:
                 p2.move();
+                ball.move(moveBall());
                 break;
             case BLUETOOTH_MODE:
-                int p1Pos = p1.getXPosition();
-                bluetoothService.sendPosition(p1Pos);
-                int p2Pos = bluetoothService.getOpponentPosition();
-                p2.setXPosition((int) (totalWidth - p2Pos * widthRatio));
+                bluetoothService.sendPosition(p1.getXPosition());
+                p2.setXPosition((int) (totalWidth - bluetoothService.getOpponentPosition() * widthRatio));
+                if (bluetoothService.isServer()) {
+                    Point goTo = moveBall();
+                    bluetoothService.sendBallPosition(goTo);
+                    ball.move(goTo);
+                } else {
+                    boolean isOut = bluetoothService.receiveIsBallOut();
+                    if (isOut) {
+                        if (ball.getPosition().y > totalHeight / 2) {
+                            p2.incrementScore();
+                        } else {
+                            p1.incrementScore();
+                        }
+                    }
+                    Point goTo = bluetoothService.getBallPosition();
+                    goTo.x = (int) (totalWidth - goTo.x * widthRatio);
+                    goTo.y = (int) (totalHeight - goTo.y * heightRatio);
+                    ball.move(goTo);
+                }
                 break;
             default:
                 break;
         }
-
-		moveBall();
 	}
 
     private void aiMove(Paddle p2) {
@@ -217,7 +233,7 @@ public class GameEngine implements OnTouchListener, Constants {
         p2.move();
     }
 
-    private void moveBall() {
+    private Point moveBall() {
 
 		Point nextPosition = ball.nextPosition();
 		int x = nextPosition.x;
@@ -390,34 +406,29 @@ public class GameEngine implements OnTouchListener, Constants {
         }
 
         if (gameMode == BLUETOOTH_MODE) {
-            bluetoothService.sendIsBallOut(newRound);
 
-            boolean isOut = bluetoothService.receiveIsBallOut();
+//            boolean isOut = bluetoothService.receiveIsBallOut();
 
-            if (isOut && !newRound) {
-                if (ball.getPosition().y < totalHeight/2) {
-                    p2.incrementScore();
-                } else {
-                    p1.incrementScore();
-                }
-            }
+//            if (isOut && !newRound) {
+//                if (ball.getPosition().y < totalHeight / 2) {
+//                    p2.incrementScore();
+//                } else {
+//                    p1.incrementScore();
+//                }
+//            }
 
             if (bluetoothService.isServer()) {
-                ball.goTo(new Point(x, y));
-                bluetoothService.sendBallPosition(x, y);
+                Point newPos = new Point(x, y);
+                bluetoothService.sendIsBallOut(newRound);
+                return newPos;
             } else {
                 Point newPos = bluetoothService.getBallPosition();
                 newPos.x = (int) (totalWidth - newPos.x * widthRatio);
                 newPos.y = (int) (totalHeight - newPos.y * heightRatio);
-                ball.goTo(newPos);
+                return newPos;
             }
-
-
-        } else {
-            ball.goTo(new Point(x, y));
         }
-
-		ball.move();
+        return new Point(x, y);
 	}
 
 	public void draw() {

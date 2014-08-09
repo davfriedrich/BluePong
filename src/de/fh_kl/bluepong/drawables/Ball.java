@@ -57,6 +57,10 @@ public class Ball implements DrawableObject, Constants {
 	public void move() {
 		ball.offsetTo(goTo.x - size/2, goTo.y - size/2);
 	}
+
+    public void move(Point goTo) {
+        ball.offsetTo(goTo.x - size/2, goTo.y - size/2);
+    }
 	
 	@Override
 	public void draw(Canvas canvas) {
