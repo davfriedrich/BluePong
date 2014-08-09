@@ -1,37 +1,37 @@
 package de.fh_kl.bluepong.util;
 
 
-import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.os.IBinder;
 import android.util.Log;
 import de.fh_kl.bluepong.constants.Constants;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import static de.fh_kl.bluepong.constants.Constants.BALL_SPEED_SETTING;
 
 public class BluetoothService {
 
     private static BluetoothService instance;
 
     private int clientCount;
+    private boolean isServer;
 
     BluetoothAdapter adapter;
     BluetoothSocket socket;
     BluetoothServerSocket serverSocket;
     UUID uuid;
-    InputStream inputStream;
-    OutputStream outputStream;
+    DataInputStream dataInputStream;
+    DataOutputStream dataOutputStream;
+
 
     public static BluetoothService getInstance() {
 
@@ -55,6 +55,10 @@ public class BluetoothService {
         }
     }
 
+    public boolean isServer() {
+        return isServer;
+    }
+
     private BluetoothService () {
         adapter = BluetoothAdapter.getDefaultAdapter();
         uuid = UUID.fromString(Constants.BLUETOOTH_UUID);
@@ -68,6 +72,8 @@ public class BluetoothService {
     }
 
     public boolean startServer() {
+
+        isServer = true;
 
         if (serverSocket != null) {
             return true;
@@ -92,6 +98,8 @@ public class BluetoothService {
 
     public boolean connect(BluetoothDevice deviceToConnect) {
 
+        isServer = false;
+
         try {
             socket = deviceToConnect.createInsecureRfcommSocketToServiceRecord(uuid);
 
@@ -110,8 +118,8 @@ public class BluetoothService {
 
     private boolean openIOStream() {
         try {
-            inputStream = socket.getInputStream();
-            outputStream = socket.getOutputStream();
+            dataInputStream = new DataInputStream(socket.getInputStream());
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             closeIOStream();
             return false;
@@ -121,12 +129,12 @@ public class BluetoothService {
 
     private void closeIOStream() {
         try {
-            if (inputStream != null) {
-                inputStream.close();
+            if (dataInputStream != null) {
+                dataInputStream.close();
             }
 
-            if (outputStream != null) {
-                outputStream.close();
+            if (dataOutputStream != null) {
+                dataOutputStream.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -156,17 +164,26 @@ public class BluetoothService {
 
     public void send(int i) {
         try {
-            outputStream.write(i);
-            outputStream.flush();
+            dataOutputStream.writeShort(i);
+            dataOutputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public int receive() {
+    private void send(boolean b) {
         try {
-            return inputStream.read();
+            dataOutputStream.writeBoolean(b);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int receiveInt() {
+        try {
+            return dataInputStream.readShort();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -174,11 +191,70 @@ public class BluetoothService {
         return -1;
     }
 
+    public boolean receiveBoolean() {
+        try {
+            return dataInputStream.readBoolean();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
     public void sendPosition(int xPosition) {
         send(xPosition);
     }
 
     public int getOpponentPosition() {
-        return receive();
+        return receiveInt();
+    }
+
+    public double[] syncDisplaySize(int width, int height) {
+
+        send(width);
+        send(height);
+
+        double opponentWidth = receiveInt();
+        double opponentHeight = receiveInt();
+
+        return new double[] {width/opponentWidth, height/opponentHeight};
+    }
+
+    public SharedPreferences syncPreferences(SharedPreferences preferences) {
+        if (isServer()) {
+            send(preferences.getInt(Constants.BALL_SPEED_SETTING, 4));
+            send(preferences.getBoolean(Constants.BALL_SPEED_INCREASE_SETTING, true));
+            send(preferences.getInt(Constants.BALL_SIZE_SETTING, 4));
+            send(preferences.getInt(Constants.PADDLE_SPEED_SETTING, 4));
+            send(preferences.getInt(Constants.PADDLE_SIZE_SETTING, 4));
+        } else {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(Constants.BALL_SPEED_SETTING, receiveInt());
+            editor.putBoolean(Constants.BALL_SPEED_INCREASE_SETTING, receiveBoolean());
+            editor.putInt(Constants.BALL_SIZE_SETTING, receiveInt());
+            editor.putInt(Constants.PADDLE_SPEED_SETTING, receiveInt());
+            editor.putInt(Constants.PADDLE_SIZE_SETTING, receiveInt());
+            editor.apply();
+        }
+        return preferences;
+    }
+
+    public void sendBallPosition(int x, int y) {
+        send(x);
+        send(y);
+    }
+
+    public Point getBallPosition() {
+        int x = receiveInt();
+        int y = receiveInt();
+        return new Point(x, y);
+    }
+
+    public void sendIsBallOut(boolean newRound) {
+        send(newRound);
+    }
+
+    public boolean receiveIsBallOut() {
+        return receiveBoolean();
     }
 }

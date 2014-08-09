@@ -69,18 +69,22 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
             bluetoothService.stop();
         }
     }
+
     @Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		
-		if(gameMode >= TOURNAMENT_MODE){
-			gameEngine = new GameEngine(this, sv, preferences, gameMode, playerNames);
-		} else {
+
+        if (gameMode == BLUETOOTH_MODE) {
+            double displayRatio[] = bluetoothService.syncDisplaySize(sv.getWidth(), sv.getHeight());
+
+            bluetoothService.syncPreferences(preferences);
+
+            gameEngine = new GameEngine(this, sv, preferences, gameMode, displayRatio);
+        } else if (gameMode >= TOURNAMENT_MODE) {
+            gameEngine = new GameEngine(this, sv, preferences, gameMode, playerNames);
+        } else {
             gameEngine = new GameEngine(this, sv, preferences, gameMode);
         }
-
-
 		sv.setOnTouchListener(gameEngine);
-		
 	}
 	
 	public void endRound(int winner){

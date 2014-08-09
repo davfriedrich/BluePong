@@ -4,6 +4,7 @@ import java.util.concurrent.Semaphore;
 
 import android.content.SharedPreferences;
 import android.graphics.*;
+import android.util.Log;
 import de.fh_kl.bluepong.GameActivity;
 import de.fh_kl.bluepong.R;
 import de.fh_kl.bluepong.constants.Constants;
@@ -33,6 +34,9 @@ public class GameEngine implements OnTouchListener, Constants {
 
     private int totalWidth;
     private int totalHeight;
+
+    private double widthRatio;
+    private double heightRatio;
 
     private Paint paint;
 
@@ -87,6 +91,22 @@ public class GameEngine implements OnTouchListener, Constants {
 
         draw();
 	}
+
+    public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode, double[] displayRatio) {
+
+        widthRatio = displayRatio[0];
+        heightRatio = displayRatio[1];
+
+        init(gameActivity, view, preferences, gameMode);
+
+        bluetoothService = BluetoothService.getInstance();
+
+        initPaddles();
+
+        initBall();
+
+        draw();
+    }
 
     private void init(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode) {
         this.gameActivity = gameActivity;
@@ -165,6 +185,9 @@ public class GameEngine implements OnTouchListener, Constants {
 	}
 
 	public void gameLogic() {
+
+
+
 		p1.move();
 
         switch (gameMode) {
@@ -177,8 +200,10 @@ public class GameEngine implements OnTouchListener, Constants {
                 p2.move();
                 break;
             case BLUETOOTH_MODE:
-                bluetoothService.sendPosition(p1.getXPosition());
-                p2.setXPosition(bluetoothService.getOpponentPosition());
+                int p1Pos = p1.getXPosition();
+                bluetoothService.sendPosition(p1Pos);
+                int p2Pos = bluetoothService.getOpponentPosition();
+                p2.setXPosition((int) (totalWidth - p2Pos * widthRatio));
                 break;
             default:
                 break;
@@ -198,6 +223,7 @@ public class GameEngine implements OnTouchListener, Constants {
 		int x = nextPosition.x;
 		int y = nextPosition.y;
 
+        boolean newRound = false;
 
 		// collision with wall?
 		if (x - ball.getWidth()/2 < 0) {
@@ -283,6 +309,7 @@ public class GameEngine implements OnTouchListener, Constants {
                 p1.incrementScore();
 				running = false;
 				serve = 1;
+                newRound = true;
 			}
 		}
 
@@ -339,6 +366,7 @@ public class GameEngine implements OnTouchListener, Constants {
             }
 			running = false;
 			serve = 2;
+            newRound = true;
 		}
 
         // collision with wall directly after paddle collision?
@@ -361,7 +389,33 @@ public class GameEngine implements OnTouchListener, Constants {
             ball.setAngle((Math.PI - ball.getAngle()));
         }
 
-        ball.goTo(new Point(x, y));
+        if (gameMode == BLUETOOTH_MODE) {
+            bluetoothService.sendIsBallOut(newRound);
+
+            boolean isOut = bluetoothService.receiveIsBallOut();
+
+            if (isOut && !newRound) {
+                if (ball.getPosition().y < totalHeight/2) {
+                    p2.incrementScore();
+                } else {
+                    p1.incrementScore();
+                }
+            }
+
+            if (bluetoothService.isServer()) {
+                ball.goTo(new Point(x, y));
+                bluetoothService.sendBallPosition(x, y);
+            } else {
+                Point newPos = bluetoothService.getBallPosition();
+                newPos.x = (int) (totalWidth - newPos.x * widthRatio);
+                newPos.y = (int) (totalHeight - newPos.y * heightRatio);
+                ball.goTo(newPos);
+            }
+
+
+        } else {
+            ball.goTo(new Point(x, y));
+        }
 
 		ball.move();
 	}
@@ -571,7 +625,8 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		if(serve == 1 || serve == 2){
             ball.serve(serve);
-		} else {
+        } else {
+
             ball.randomAngle();
         }
 	}
