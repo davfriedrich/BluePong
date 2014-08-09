@@ -20,7 +20,7 @@
     <string name="lbl_gameplay_settings">Gameplay</string>
 
     <string name="lbl_ball_speed_setting">Ball speed</string>
-    <string name="lbl_ball_speed_increase">Ball speed increases over time</string>
+    <string name="lbl_ball_speed_increase">Speed up</string>
     <string name="lbl_ball_size_setting">Ball size</string>
 
     <string name="lbl_paddle_speed_setting">Paddle speed</string>
