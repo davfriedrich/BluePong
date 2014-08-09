@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 import de.fh_kl.bluepong.constants.Constants;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class BluetoothService {
     OutputStream outputStream;
 
     public static BluetoothService getInstance() {
+
         if (instance == null) {
             instance = new BluetoothService();
         }
@@ -40,10 +42,12 @@ public class BluetoothService {
 
     public void start() {
         clientCount++;
+        Log.v("bluetoothService", "start: " + clientCount);
     }
 
     public void stop() {
         clientCount--;
+        Log.v("bluetoothService", "stop: " + clientCount);
 
         if (clientCount == 0) {
             shutdown();
@@ -132,10 +136,12 @@ public class BluetoothService {
         try {
             if (serverSocket != null) {
                 serverSocket.close();
+                serverSocket = null;
             }
 
             if (socket != null) {
                 socket.close();
+                socket = null;
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -49,6 +49,7 @@ public interface Constants {
     final static String AI_HANDICAP_SETTING = "aiHandicapSetting";
 
 
+
     final static String BLUETOOTH_UUID = "39f75160-1fc7-11e4-8c21-0800200c9a66";
     final static String BLUETOOTH_SERVER_NAME = "BluePong Server";
 

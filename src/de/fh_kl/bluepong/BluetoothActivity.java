@@ -33,6 +33,7 @@ import de.fh_kl.bluepong.util.BluetoothService;
 public class BluetoothActivity extends Activity implements ListView.OnItemClickListener, Constants{
 
     private Typeface team401;
+    private AsyncTask asyncStartServer;
     private BluetoothService bluetoothService;
     protected BluetoothActivity self;
 
@@ -71,6 +72,40 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         joinGameButton.startAnimation(animation);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        bluetoothService.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        bluetoothService.stop();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (asyncStartServer != null) {
+            asyncStartServer.cancel(true);
+        }
+
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.v("back", requestCode + " " + resultCode);
+        if (requestCode == BLUETOOTH_MODE && resultCode == RESULT_OK) {
+            finish();
+        }
+    }
+
     public void hostGame(final View v) {
 
         setContentView(R.layout.activity_bluetooth_host_fragment);
@@ -78,11 +113,7 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         TextView wait = (TextView) findViewById(R.id.lbl_bluetooth_wait);
         wait.setTypeface(team401);
 
-        new StartServer().execute();
-    }
-
-    public boolean startServer() {
-        return bluetoothService.startServer();
+        asyncStartServer = new StartServer().execute();
     }
 
     public void joinGame(View v) {
@@ -100,25 +131,27 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        bluetoothService.start();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        bluetoothService.stop();
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
         BluetoothDevice deviceToConnect = (BluetoothDevice) adapterView.getItemAtPosition(i);
 
-        if (!bluetoothService.connect(deviceToConnect)) {
+        if (bluetoothService.connect(deviceToConnect)) {
+            AlertDialog winDialog = new AlertDialog.Builder(self).setMessage(R.string.bluetoothConnectionSuccess).create();
+            winDialog.setButton(DialogInterface.BUTTON_POSITIVE, getText(R.string.btn_bluetooth_startGame), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(self, GameActivity.class);
+                    intent.putExtra(GAME_MODE, BLUETOOTH_MODE);
+                    startActivityForResult(intent, BLUETOOTH_MODE);
+                }
+            });
+            winDialog.show();
+            TextView message = (TextView) winDialog.findViewById(android.R.id.message);
+            message.setTypeface(team401);
+            message.setGravity(Gravity.CENTER_HORIZONTAL);
+            message.setTextColor(Color.GREEN);
+        } else {
             AlertDialog failDialog = new AlertDialog.Builder(this).setMessage(R.string.bluetoothConnectionFailed).show();
             TextView message = (TextView) failDialog.findViewById(android.R.id.message);
             message.setTypeface(team401);
@@ -131,7 +164,7 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
 
         @Override
         protected Boolean doInBackground(Object[] objects) {
-            return startServer();
+            return bluetoothService.startServer();
         }
 
         @Override
@@ -139,14 +172,14 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
             super.onPostExecute(success);
 
             if (success) {
-                AlertDialog winDialog = new AlertDialog.Builder(self).setMessage("Connection established").create();                
+                AlertDialog winDialog = new AlertDialog.Builder(self).setMessage(R.string.bluetoothConnectionSuccess).create();
                 winDialog.setButton(DialogInterface.BUTTON_POSITIVE, getText(R.string.btn_bluetooth_startGame), new DialogInterface.OnClickListener() {
-					
+
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						Intent intent = new Intent(self, GameActivity.class);
 						intent.putExtra(GAME_MODE, BLUETOOTH_MODE);
-						startActivity(intent);
+						startActivityForResult(intent, BLUETOOTH_MODE);
 					}
 				});
                 winDialog.show();
@@ -155,7 +188,6 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
                 message.setGravity(Gravity.CENTER_HORIZONTAL);
                 message.setTextColor(Color.GREEN);
             } else {
-
                 self.setContentView(R.layout.activity_bluetooth);
 
                 AlertDialog failDialog = new AlertDialog.Builder(self).setMessage(R.string.bluetoothServerFailed).show();

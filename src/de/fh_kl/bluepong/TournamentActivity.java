@@ -93,9 +93,6 @@ public class TournamentActivity extends Activity implements Constants{
 				}
 				break;
 			case 2:
-//				Intent intent = new Intent(this,TournamentOverviewActivity.class);
-//				intent.putExtra(TOURNAMENT_PLAYER, player);
-//				startActivity(intent);
 				startTournamentOverview();
 				break;				
 		}
@@ -122,10 +119,6 @@ public class TournamentActivity extends Activity implements Constants{
 		playerTextView = (TextView) findViewById(R.id.tournamentOverviewNextPlayerTextView);
 		nextRoundTextView = (TextView) findViewById(R.id.tournamentOververviewNextGameTextView);
 		startGameButton = (Button) findViewById(R.id.tournamentOverviewStartGameButton);
-		
-		playerTextView.setTypeface(team401);
-		nextRoundTextView.setTypeface(team401);
-		startGameButton.setTypeface(team401);
 		
 		count = playerStringArray.length;
 		player = new TournamentPlayer();

@@ -51,6 +51,7 @@
     <string name="btn_bluetooth_startServer">Start server</string>
     <string name="lbl_bluetooth_wait">Waiting for opponent</string>
     <string name="bluetoothConnectionFailed">Connection failed</string>
+    <string name="bluetoothConnectionSuccess">Connection established</string>
     <string name="bluetoothServerFailed">Connection failed</string>
     <string name="btn_bluetooth_startGame">Start game</string>
 </resources>
