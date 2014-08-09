@@ -48,7 +48,7 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
 
         self = this;
 
-        bluetoothService = new BluetoothService();
+        bluetoothService = BluetoothService.getInstance();
 
         team401 = Typeface.createFromAsset(getAssets(), "fonts/Team401.ttf");
 
@@ -81,11 +81,6 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         new StartServer().execute();
     }
 
-    public void test() {
-                Log.v("asyncTask", "test");
-
-    }
-
     public boolean startServer() {
         return bluetoothService.startServer();
     }
@@ -102,6 +97,20 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         joinListview.setAdapter(adapter);
 
         joinListview.setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        bluetoothService.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        bluetoothService.stop();
     }
 
     @Override
@@ -136,7 +145,7 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						Intent intent = new Intent(self, GameActivity.class);
-//						intent.putExtra(BLUETOOTH_SERVICE, bluetoothService);
+						intent.putExtra(GAME_MODE, BLUETOOTH_MODE);
 						startActivity(intent);
 					}
 				});
