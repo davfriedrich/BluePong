@@ -2,19 +2,27 @@ package de.fh_kl.bluepong;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.Fragment;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.*;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.util.BluetoothListAdapter;
 import de.fh_kl.bluepong.util.BluetoothService;
 
@@ -22,7 +30,7 @@ import de.fh_kl.bluepong.util.BluetoothService;
  * User: #empty
  * Date: 08.08.14
  */
-public class BluetoothActivity extends Activity implements ListView.OnItemClickListener{
+public class BluetoothActivity extends Activity implements ListView.OnItemClickListener, Constants{
 
     private Typeface team401;
     private BluetoothService bluetoothService;
@@ -127,6 +135,15 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
                 message.setTypeface(team401);
                 message.setGravity(Gravity.CENTER_HORIZONTAL);
                 message.setTextColor(Color.GREEN);
+                winDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getText(R.string.btn_bluetooth_startGame), new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Intent intent = new Intent(self, GameActivity.class);
+//						intent.putExtra(BLUETOOTH_SERVICE, bluetoothService);
+						startActivity(intent);
+					}
+				});
             } else {
 
                 self.setContentView(R.layout.activity_bluetooth);

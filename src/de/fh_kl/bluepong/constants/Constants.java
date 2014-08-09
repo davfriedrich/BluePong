@@ -15,6 +15,7 @@ public interface Constants {
 	final static String TOURNAMENT_PLAYER = "TournamentPlayer";	
 	final static String PLAYER_NAMES = "PlayerNames";
 	final static String WINNER = "Winner";
+	final static String BLUETOOTH_SERVICE = "BluetoothService";
 
     final static int SCORE_LIMIT = 1;
 	
