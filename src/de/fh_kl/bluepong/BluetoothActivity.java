@@ -130,12 +130,8 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
             super.onPostExecute(success);
 
             if (success) {
-                AlertDialog winDialog = new AlertDialog.Builder(self).setMessage("Connection established").show();
-                TextView message = (TextView) winDialog.findViewById(android.R.id.message);
-                message.setTypeface(team401);
-                message.setGravity(Gravity.CENTER_HORIZONTAL);
-                message.setTextColor(Color.GREEN);
-                winDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getText(R.string.btn_bluetooth_startGame), new DialogInterface.OnClickListener() {
+                AlertDialog winDialog = new AlertDialog.Builder(self).setMessage("Connection established").create();                
+                winDialog.setButton(DialogInterface.BUTTON_POSITIVE, getText(R.string.btn_bluetooth_startGame), new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -144,6 +140,11 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
 						startActivity(intent);
 					}
 				});
+                winDialog.show();
+                TextView message = (TextView) winDialog.findViewById(android.R.id.message);
+                message.setTypeface(team401);
+                message.setGravity(Gravity.CENTER_HORIZONTAL);
+                message.setTextColor(Color.GREEN);
             } else {
 
                 self.setContentView(R.layout.activity_bluetooth);

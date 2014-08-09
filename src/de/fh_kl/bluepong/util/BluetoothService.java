@@ -46,7 +46,7 @@ public class BluetoothService {
         try {
             serverSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(Constants.BLUETOOTH_SERVER_NAME, uuid);
 
-            socket = serverSocket.accept(5000);
+            socket = serverSocket.accept(30000);
         } catch (IOException e) {
 
             serverSocket = null;
