@@ -40,17 +40,11 @@ public class TournamentActivity extends Activity implements Constants{
         
 		setContentView(R.layout.activity_tournament);
 		
-		team401 = Typeface.createFromAsset(getAssets(), "fonts/Team401.ttf");
-		
 		textView = (TextView) findViewById(R.id.tournamentViewTextView);
 		textField = (EditText) findViewById(R.id.tounamentViewTextField);
 		button= (Button) findViewById(R.id.tournamentViewButton);
 		
-		button.setTypeface(team401);
-		textView.setTypeface(team401);
-		textField.setTypeface(team401);
-		
-		button.setText(R.string.tournamentActivityButtonOkString);		
+		button.setText(R.string.tournamentActivityButtonOkString);
 		textView.setText(R.string.tournamentActivityPlayerNumberSetText);
 		textField.setInputType(InputType.TYPE_CLASS_PHONE);
 		

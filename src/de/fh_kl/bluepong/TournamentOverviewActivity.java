@@ -39,8 +39,6 @@ public class TournamentOverviewActivity extends Activity implements Constants{
         
 		setContentView(R.layout.activity_tournament_overview);
 		
-		team401 = Typeface.createFromAsset(getAssets(), "fonts/Team401.ttf");
-		
 		playerTextView = (TextView) findViewById(R.id.tournamentOverviewNextPlayerTextView);
 		nextRoundTextView = (TextView) findViewById(R.id.tournamentOververviewNextGameTextView);
 		startGameButton = (Button) findViewById(R.id.tournamentOverviewStartGameButton);

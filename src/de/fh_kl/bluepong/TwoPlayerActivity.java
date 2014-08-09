@@ -26,10 +26,6 @@ public class TwoPlayerActivity extends Activity implements Constants {
         
 		setContentView(R.layout.activity_two_player);
 		
-		Typeface team401 = Typeface.createFromAsset(getAssets(), "fonts/Team401.ttf");
-
-        TextView gameTitle = (TextView) findViewById(R.id.gameTitle);
-        TextView twoPlayerTitle = (TextView) findViewById(R.id.twoPlayerTitle);
 		Button multitouchButton = (Button) findViewById(R.id.multitouchButton);
 		Button bluetoothButton =(Button) findViewById(R.id.bluetoothButton);
 
@@ -39,11 +35,7 @@ public class TwoPlayerActivity extends Activity implements Constants {
         animation.setRepeatCount(Animation.INFINITE);
         animation.setRepeatMode(Animation.REVERSE);
 
-        gameTitle.setTypeface(team401);
-        twoPlayerTitle.setTypeface(team401);
-		multitouchButton.setTypeface(team401);
         multitouchButton.startAnimation(animation);
-		bluetoothButton.setTypeface(team401);
         bluetoothButton.startAnimation(animation);
 	}
 	
