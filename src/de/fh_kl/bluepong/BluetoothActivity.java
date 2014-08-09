@@ -62,7 +62,30 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
     }
 
     public void hostGame(View v) {
+        setContentView(R.layout.activity_bluetooth_host_fragment);
 
+        Button startServer = (Button) findViewById(R.id.btn_bluetooth_startServer);
+        startServer.setTypeface(team401);
+    }
+
+    public void startServer(View v) {
+
+        TextView wait = (TextView) findViewById(R.id.lbl_bluetooth_wait);
+        wait.setText(R.string.lbl_bluetooth_wait);
+
+        if (!bluetoothService.startServer()) {
+            AlertDialog failDialog = new AlertDialog.Builder(this).setMessage(R.string.bluetoothServerFailed).show();
+            TextView message = (TextView) failDialog.findViewById(android.R.id.message);
+            message.setTypeface(team401);
+            message.setGravity(Gravity.CENTER_HORIZONTAL);
+            message.setTextColor(Color.RED);
+        } else {
+            AlertDialog winDialog = new AlertDialog.Builder(this).setMessage("Connection established").show();
+            TextView message = (TextView) winDialog.findViewById(android.R.id.message);
+            message.setTypeface(team401);
+            message.setGravity(Gravity.CENTER_HORIZONTAL);
+            message.setTextColor(Color.GREEN);
+        }
     }
 
     public void joinGame(View v) {
@@ -77,8 +100,6 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         joinListview.setAdapter(adapter);
 
         joinListview.setOnItemClickListener(this);
-
-
     }
 
     @Override

@@ -45,4 +45,7 @@ public interface Constants {
 
     final static String AI_HANDICAP_SETTING = "aiHandicapSetting";
 
+
+    final static String BLUETOOTH_SERVER_NAME = "BluePong Server";
+
 }
