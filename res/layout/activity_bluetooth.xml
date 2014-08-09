@@ -29,13 +29,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_bluetooth_hostGame"
-            android:id="@id/btn_bluetooth_hostGame" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
-            android:textSize="@dimen/buttonText" android:onClick="hostGame"/>
+            android:id="@id/btn_bluetooth_hostGame" 
+            android:layout_centerVertical="true" 
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/buttonText" 
+            android:onClick="hostGame"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_bluetooth_joinGame"
-            android:id="@+id/btn_bluetooth_joinGame" android:layout_below="@id/btn_bluetooth_hostGame" android:layout_alignLeft="@id/btn_bluetooth_hostGame"
-            android:layout_marginTop="32dp" android:textSize="@dimen/buttonText" android:onClick="joinGame"/>
+            android:id="@+id/btn_bluetooth_joinGame" 
+            android:layout_below="@id/btn_bluetooth_hostGame" 
+            android:layout_alignLeft="@id/btn_bluetooth_hostGame"
+            android:layout_marginTop="32dp" 
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/buttonText" 
+            android:onClick="joinGame"/>
 
 </RelativeLayout>
