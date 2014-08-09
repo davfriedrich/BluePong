@@ -4,19 +4,11 @@
                  android:layout_height="match_parent">
 
 
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_bluetooth_startServer"
-            android:id="@+id/btn_bluetooth_startServer"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:textSize="@dimen/buttonText"
-            android:onClick="startServer"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/lbl_bluetooth_wait" android:layout_below="@+id/btn_bluetooth_startServer"
-            android:layout_centerHorizontal="true" android:layout_marginTop="32dp" android:textSize="@dimen/listText"/>
+            android:id="@+id/lbl_bluetooth_wait"
+            android:textSize="@dimen/listText"
+            android:layout_centerInParent="true" android:text="@string/lbl_bluetooth_wait"/>
 </RelativeLayout>
 

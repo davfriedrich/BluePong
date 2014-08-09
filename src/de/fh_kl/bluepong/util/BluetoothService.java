@@ -19,6 +19,7 @@ public class BluetoothService {
 
     BluetoothAdapter adapter;
     BluetoothSocket socket;
+    BluetoothServerSocket serverSocket;
     UUID uuid;
     InputStream inputStream;
     OutputStream outputStream;
@@ -38,11 +39,17 @@ public class BluetoothService {
 
     public boolean startServer() {
 
-        try {
-            BluetoothServerSocket serverSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(Constants.BLUETOOTH_SERVER_NAME, uuid);
+        if (serverSocket != null) {
+            return true;
+        }
 
-            socket = serverSocket.accept(30000);
+        try {
+            serverSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(Constants.BLUETOOTH_SERVER_NAME, uuid);
+
+            socket = serverSocket.accept(5000);
         } catch (IOException e) {
+
+            serverSocket = null;
             return false;
         }
 

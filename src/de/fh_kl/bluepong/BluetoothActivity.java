@@ -3,15 +3,14 @@ package de.fh_kl.bluepong;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.bluetooth.BluetoothDevice;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -26,7 +25,8 @@ import de.fh_kl.bluepong.util.BluetoothService;
 public class BluetoothActivity extends Activity implements ListView.OnItemClickListener{
 
     private Typeface team401;
-    BluetoothService bluetoothService;
+    private BluetoothService bluetoothService;
+    protected BluetoothActivity self;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,8 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_bluetooth);
+
+        self = this;
 
         bluetoothService = new BluetoothService();
 
@@ -61,31 +63,23 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         joinGameButton.startAnimation(animation);
     }
 
-    public void hostGame(View v) {
+    public void hostGame(final View v) {
+
         setContentView(R.layout.activity_bluetooth_host_fragment);
 
-        Button startServer = (Button) findViewById(R.id.btn_bluetooth_startServer);
-        startServer.setTypeface(team401);
+        TextView wait = (TextView) findViewById(R.id.lbl_bluetooth_wait);
+        wait.setTypeface(team401);
+
+        new StartServer().execute();
     }
 
-    public void startServer(View v) {
+    public void test() {
+                Log.v("asyncTask", "test");
 
-        TextView wait = (TextView) findViewById(R.id.lbl_bluetooth_wait);
-        wait.setText(R.string.lbl_bluetooth_wait);
+    }
 
-        if (!bluetoothService.startServer()) {
-            AlertDialog failDialog = new AlertDialog.Builder(this).setMessage(R.string.bluetoothServerFailed).show();
-            TextView message = (TextView) failDialog.findViewById(android.R.id.message);
-            message.setTypeface(team401);
-            message.setGravity(Gravity.CENTER_HORIZONTAL);
-            message.setTextColor(Color.RED);
-        } else {
-            AlertDialog winDialog = new AlertDialog.Builder(this).setMessage("Connection established").show();
-            TextView message = (TextView) winDialog.findViewById(android.R.id.message);
-            message.setTypeface(team401);
-            message.setGravity(Gravity.CENTER_HORIZONTAL);
-            message.setTextColor(Color.GREEN);
-        }
+    public boolean startServer() {
+        return bluetoothService.startServer();
     }
 
     public void joinGame(View v) {
@@ -113,6 +107,36 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
             message.setTypeface(team401);
             message.setGravity(Gravity.CENTER_HORIZONTAL);
             message.setTextColor(Color.RED);
+        }
+    }
+
+    private class StartServer extends AsyncTask<Object, Object, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Object[] objects) {
+            return startServer();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+
+            if (success) {
+                AlertDialog winDialog = new AlertDialog.Builder(self).setMessage("Connection established").show();
+                TextView message = (TextView) winDialog.findViewById(android.R.id.message);
+                message.setTypeface(team401);
+                message.setGravity(Gravity.CENTER_HORIZONTAL);
+                message.setTextColor(Color.GREEN);
+            } else {
+
+                self.setContentView(R.layout.activity_bluetooth);
+
+                AlertDialog failDialog = new AlertDialog.Builder(self).setMessage(R.string.bluetoothServerFailed).show();
+                TextView message = (TextView) failDialog.findViewById(android.R.id.message);
+                message.setTypeface(team401);
+                message.setGravity(Gravity.CENTER_HORIZONTAL);
+                message.setTextColor(Color.RED);
+            }
         }
     }
 }
