@@ -8,16 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import de.fh_kl.bluepong.R;
 
 import java.util.List;
 
 /**
- * User: #empty
- * Date: 08.08.14
+ * Custom list adapter to list {@link android.bluetooth.BluetoothDevice}s
  */
 public class BluetoothListAdapter extends ArrayAdapter<BluetoothDevice> {
 
@@ -25,6 +22,12 @@ public class BluetoothListAdapter extends ArrayAdapter<BluetoothDevice> {
     List<BluetoothDevice> deviceList;
     Typeface typeface;
 
+    /**
+     * Constructor
+     * @param context
+     * @param deviceList {@link android.bluetooth.BluetoothDevice} list
+     * @param typeface custom typeface
+     */
     public BluetoothListAdapter(Context context, List<BluetoothDevice> deviceList, Typeface typeface) {
         super(context, android.R.layout.simple_list_item_1, deviceList);
 

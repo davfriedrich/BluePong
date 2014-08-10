@@ -1,20 +1,32 @@
 package de.fh_kl.bluepong.game;
 
+import de.fh_kl.bluepong.constants.Constants;
+
 import java.util.concurrent.Semaphore;
 
+/**
+ * Game thread
+ */
 public class GameLoop extends Thread {
 	
-	GameEngine engine;
-	Semaphore pauseSemaphore;
+	private GameEngine engine;
+	private Semaphore pauseSemaphore;
     private Semaphore aliveSemaphore;
 
-    public GameLoop(GameEngine gameEngine, Semaphore semaphore, Semaphore aliveSemaphore) {
+    /**
+     * Constructor
+     * @param gameEngine the game engine
+     * @param pauseSemaphore semaphore to pause the thread
+     * @param aliveSemaphore semaphore to ensure thread is stopped
+     */
+    public GameLoop(GameEngine gameEngine, Semaphore pauseSemaphore, Semaphore aliveSemaphore) {
 		engine = gameEngine;
-        pauseSemaphore = semaphore;
+        this.pauseSemaphore = pauseSemaphore;
         this.aliveSemaphore = aliveSemaphore;
     }
 	
-	public void run(){
+	@Override
+    public void run(){
 
         try {
             aliveSemaphore.acquire();
@@ -37,16 +49,14 @@ public class GameLoop extends Thread {
 			
 			engine.draw();
 			
-			
-			long stopTime = System.currentTimeMillis();
-			
-			long dTime = stopTime - startTime;
-			
 			pauseSemaphore.release();
 
-			if (dTime < 33) {
+            // delay between two frames
+			long stopTime = System.currentTimeMillis();
+			long dTime = stopTime - startTime;
+			if (dTime < Constants.MSPF) {
 				try {
-					sleep(33 - dTime);
+					sleep(Constants.MSPF - dTime);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -54,8 +64,6 @@ public class GameLoop extends Thread {
 			
 			
 		}
-		
-//		engine.setDestroyed(true);
 
         aliveSemaphore.release();
 

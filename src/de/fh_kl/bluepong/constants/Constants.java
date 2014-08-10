@@ -35,8 +35,8 @@ public interface Constants {
 	static double MENU_TEXT_SIZE_RATIO = 0.1;
 	static double PLAYER_TEXT_SIZE_RATIO = 0.04;
 
-	
-	static int FPS = 30;
+    //MilliSecondsPerFrame
+	static int MSPF = 33;
 
 
     final static String BALL_SPEED_SETTING = "ballSpeedSetting";

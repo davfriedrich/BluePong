@@ -11,7 +11,6 @@ import de.fh_kl.bluepong.util.TournamentPlayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -163,7 +162,7 @@ public class TournamentActivity extends Activity implements Constants{
 	}
 	
 	public void prepareNextRound(){
-		player.setWinner(lastWinnerIndex);
+		player.markAsLoser(lastWinnerIndex);
 		if(playerCounter >= count){
 			count = count - player.clean();
 			playerCounter = 0;

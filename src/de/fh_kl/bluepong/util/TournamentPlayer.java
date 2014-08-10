@@ -1,7 +1,8 @@
 package de.fh_kl.bluepong.util;
 
-import java.util.Random;
-
+/**
+ * linked list to manage tournament players
+ */
 public class TournamentPlayer {
 	
 	TournamentPlayerNode root;
@@ -13,7 +14,12 @@ public class TournamentPlayer {
 		currentPlayer1 = null;
 		currentPlayer2 = null;
 	}
-	
+
+    /**
+     * insert player sorted by {@code value} descending
+     * @param player player to insert
+     * @param value value of the player
+     */
 	public void insert (String player, int value){
 		if (root == null){
 			root = new TournamentPlayerNode(player, value);
@@ -41,7 +47,11 @@ public class TournamentPlayer {
 		lastTmp.setNext(newNode);
 		tmp.setPrev(newNode);
 	}
-	
+
+    /**
+     * returns next two players
+     * @return next two players
+     */
 	public String[] getNext(){
 		if(currentPlayer1 == null){
 			currentPlayer1 = root;
@@ -55,7 +65,11 @@ public class TournamentPlayer {
 		return new String[]{currentPlayer1.getPlayer(), currentPlayer2.getPlayer()};
 	}
 
-	public void setWinner(int lastWinnerIndex) {
+    /**
+     * marks the loser as loser
+     * @param lastWinnerIndex index of the winner
+     */
+	public void markAsLoser(int lastWinnerIndex) {
 		if(lastWinnerIndex == 1){
 			currentPlayer1.setOutOfGame();
 		}else if(currentPlayer2 != null){
@@ -63,13 +77,17 @@ public class TournamentPlayer {
 		}
 	}
 
+    /**
+     * deletes losers from list
+     * @return number of removed players
+     */
 	public int clean() {
 		TournamentPlayerNode tmp = root;
 		TournamentPlayerNode tmp2 = null;
 		int count = 0;
 		while(tmp != null){
 			tmp2 = tmp.getNext();
-			if(!tmp.getInGame()){
+			if(!tmp.isInGame()){
 				remove(tmp);
 				count++;
 			}
@@ -79,7 +97,11 @@ public class TournamentPlayer {
 		currentPlayer2 = null;
 		return count;
 	}
-	
+
+    /**
+     * deletes player from list
+     * @param tmp player to remove
+     */
 	private void remove(TournamentPlayerNode tmp){
 		if(tmp == root){
 			root = tmp.getNext();
@@ -100,6 +122,10 @@ public class TournamentPlayer {
 		tmp.setNext(null);
 	}
 
+    /**
+     * return winner of tournament
+     * @return winner of tournament
+     */
 	public String getWinner() {
 		return root.getPlayer();
 	}

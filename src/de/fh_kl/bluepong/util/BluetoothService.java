@@ -16,11 +16,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Service class to handle bluetooth connections and transmissions
+ *
+ * implemented as Singleton
+ */
 public class BluetoothService {
 
     private static BluetoothService instance;
 
+    // keep track of the number of clients using this service
     private int clientCount;
+
     private boolean isServer;
 
     BluetoothAdapter adapter;
@@ -30,7 +37,10 @@ public class BluetoothService {
     DataInputStream dataInputStream;
     DataOutputStream dataOutputStream;
 
-
+    /**
+     * returns singleton-instance of BluetoothService
+     * @return singleton-instance of BluetoothService
+     */
     public static BluetoothService getInstance() {
 
         if (instance == null) {
@@ -39,29 +49,50 @@ public class BluetoothService {
         return instance;
     }
 
-    public void start() {
-        clientCount++;
-        Log.v("bluetoothService", "start: " + clientCount);
-    }
-
-    public void stop() {
-        clientCount--;
-        Log.v("bluetoothService", "stop: " + clientCount);
-
-        if (clientCount == 0) {
-            shutdown();
-        }
-    }
-
-    public boolean isServer() {
-        return isServer;
-    }
-
+    /**
+     * invisible constructor
+     */
     private BluetoothService () {
         adapter = BluetoothAdapter.getDefaultAdapter();
         uuid = UUID.fromString(Constants.BLUETOOTH_UUID);
     }
 
+
+    /**
+     * increments {@link de.fh_kl.bluepong.util.BluetoothService#clientCount}
+     *
+     * IMPORTANT! call this in every activity you use this service
+     */
+    public void start() {
+        clientCount++;
+    }
+
+    /**
+     * decrements {@link de.fh_kl.bluepong.util.BluetoothService#clientCount}
+     *
+     * shuts the service down if {@link de.fh_kl.bluepong.util.BluetoothService#clientCount} == 0
+     *
+     * IMPORTANT! call this in {@link android.app.Activity#onStop()} in every activity you use this service
+     */
+    public void stop() {
+        clientCount--;
+        if (clientCount == 0) {
+            shutdown();
+        }
+    }
+
+    /**
+     * returns whether the service acts as server or not
+     * @return whether the service acts as server or not
+     */
+    public boolean isServer() {
+        return isServer;
+    }
+
+    /**
+     * returns a list with all paired devices
+     * @return a list with all paired devices
+     */
     public List<BluetoothDevice> getPairedDevices() {
 
         Set<BluetoothDevice> deviceSet = adapter.getBondedDevices();
@@ -69,6 +100,10 @@ public class BluetoothService {
         return new ArrayList<BluetoothDevice>(deviceSet);
     }
 
+    /**
+     * starts a bluetooth server
+     * @return whether the start was successful or not
+     */
     public boolean startServer() {
 
         isServer = true;
@@ -94,6 +129,11 @@ public class BluetoothService {
         return true;
     }
 
+    /**
+     * connect to given bluetooth device}
+     * @param deviceToConnect  device to connect to
+     * @return whether connect was successful or not
+     */
     public boolean connect(BluetoothDevice deviceToConnect) {
 
         isServer = false;
@@ -114,6 +154,10 @@ public class BluetoothService {
         return true;
     }
 
+    /**
+     * opens an input and output stream
+     * @return whether both streams could be opened or not
+     */
     private boolean openIOStream() {
         try {
             dataInputStream = new DataInputStream(socket.getInputStream());
@@ -125,6 +169,9 @@ public class BluetoothService {
         return true;
     }
 
+    /**
+     * closes the input and output stream
+     */
     private void closeIOStream() {
         try {
             if (dataInputStream != null) {
@@ -139,6 +186,9 @@ public class BluetoothService {
         }
     }
 
+    /**
+     * closes the sockets
+     */
     private void closeSockets() {
         try {
             if (serverSocket != null) {
@@ -155,11 +205,19 @@ public class BluetoothService {
         }
     }
 
+    /**
+     * shuts the service down
+     */
     private void shutdown() {
         closeIOStream();
         closeSockets();
     }
 
+    /**
+     * send an int to connected device
+     * @param i
+     * @return returns whether transmission was successful or not
+     */
     public boolean send(int i) {
         try {
             dataOutputStream.writeShort(i);
@@ -172,6 +230,11 @@ public class BluetoothService {
 
     }
 
+    /**
+     * send an boolean to connected device
+     * @param b
+     * @return returns whether transmission was successful or not
+     */
     private boolean send(boolean b) {
         try {
             dataOutputStream.writeBoolean(b);
@@ -183,6 +246,10 @@ public class BluetoothService {
         }
     }
 
+    /**
+     * receive next int in queue
+     * @return next int in queue
+     */
     public int receiveInt() {
         try {
             return dataInputStream.readShort();
@@ -193,6 +260,10 @@ public class BluetoothService {
         return -1;
     }
 
+    /**
+     * receive next boolean in queue
+     * @return next boolean in queue
+     */
     public boolean receiveBoolean() {
         try {
             return dataInputStream.readBoolean();
@@ -211,6 +282,14 @@ public class BluetoothService {
         return receiveInt();
     }
 
+    /**
+     * get display ratio between own display and opponents display
+     * @param width own display width
+     * @param height own display height
+     * @return display ratio as array
+     *
+     * sends own display size to opponent and receives opponents display size
+     */
     public double[] syncDisplaySize(int width, int height) {
 
         send(width);
@@ -222,6 +301,12 @@ public class BluetoothService {
         return new double[] {width/opponentWidth, height/opponentHeight};
     }
 
+    /**
+     * sync settings with opponent. settings from host will be used
+     *
+     * @param preferences
+     * @return synced settings
+     */
     public SharedPreferences syncPreferences(SharedPreferences preferences) {
         if (isServer()) {
             send(preferences.getInt(Constants.BALL_SPEED_SETTING, 4));
