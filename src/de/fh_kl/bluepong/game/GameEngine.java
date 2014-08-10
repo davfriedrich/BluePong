@@ -307,7 +307,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 				winnable = false;
 
-				if (x - ball.getWidth()/2 < p2Paddle.right && x > p2Paddle.centerX()) {
+				if (x - ball.getWidth()/2 < p2Paddle.right && x > p2Paddle.centerX() && !(y + ball.getHeight()/2 < p2Paddle.top)) {
 
 					int dx = Math.abs(p2Paddle.right - (x - ball.getWidth()/2));
 
@@ -317,7 +317,7 @@ public class GameEngine implements OnTouchListener, Constants {
 				}
 
 
-				if (x + ball.getWidth()/2 > p2Paddle.left && x < p2Paddle.centerX()) {
+				if (x + ball.getWidth()/2 > p2Paddle.left && x < p2Paddle.centerX() && !(y + ball.getHeight()/2 < p2Paddle.top)) {
 
 					int dx = Math.abs(p2Paddle.left - (x + ball.getWidth()/2));
 
@@ -362,7 +362,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 			winnable = false;
 
-			if (x - ball.getWidth()/2 < p1Paddle.right && x > p1Paddle.centerX()) {
+			if (x - ball.getWidth()/2 < p1Paddle.right && x > p1Paddle.centerX() && !(y - ball.getHeight()/2 > p1Paddle.bottom)) {
 
 				int dx = Math.abs(p1Paddle.right - (x - ball.getWidth()/2));
 
@@ -372,7 +372,7 @@ public class GameEngine implements OnTouchListener, Constants {
 			}
 
 
-			if (x + ball.getWidth()/2 > p1Paddle.left && x < p1Paddle.centerX()) {
+			if (x + ball.getWidth()/2 > p1Paddle.left && x < p1Paddle.centerX() && !(y - ball.getHeight()/2 > p1Paddle.bottom)) {
 
 				int dx = Math.abs(p1Paddle.left - (x + ball.getWidth()/2));
 
@@ -603,6 +603,21 @@ public class GameEngine implements OnTouchListener, Constants {
         }
     }
 
+    public void pause() {
+        try {
+            pauseSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        paused = true;
+        draw();
+    }
+
+    public void resume() {
+        pauseSemaphore.release();
+        paused = false;
+    }
+
 	public boolean isRunning() {
 		return running;
 	}
@@ -685,17 +700,9 @@ public class GameEngine implements OnTouchListener, Constants {
 					if (!running && !destroyed) {
 						start();
 					} else if (running && !destroyed && !paused) {
-						try {
-							pauseSemaphore.acquire();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						paused = true;
-                        draw();
+                        pause();
 					} else if (running && !destroyed && paused) {
-						pauseSemaphore.release();
-						paused = false;
+						resume();
 					} else if (!running && !paused) {
                         gameActivity.endRound(checkForWinner());
                     } else if (!running && destroyed) {

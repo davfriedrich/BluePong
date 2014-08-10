@@ -117,4 +117,13 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
             finish();
         }
 	}
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (gameEngine != null) {
+            gameEngine.pause();
+        }
+    }
 }
