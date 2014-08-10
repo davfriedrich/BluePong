@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static de.fh_kl.bluepong.constants.Constants.BALL_SPEED_SETTING;
-
 public class BluetoothService {
 
     private static BluetoothService instance;
@@ -162,22 +160,26 @@ public class BluetoothService {
         closeSockets();
     }
 
-    public void send(int i) {
+    public boolean send(int i) {
         try {
             dataOutputStream.writeShort(i);
             dataOutputStream.flush();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
     }
 
-    private void send(boolean b) {
+    private boolean send(boolean b) {
         try {
             dataOutputStream.writeBoolean(b);
             dataOutputStream.flush();
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -201,8 +203,8 @@ public class BluetoothService {
         return true;
     }
 
-    public void sendPosition(int xPosition) {
-        send(xPosition);
+    public boolean sendPosition(int xPosition) {
+        return send(xPosition);
     }
 
     public int getOpponentPosition() {
@@ -239,9 +241,8 @@ public class BluetoothService {
         return preferences;
     }
 
-    public void sendBallPosition(Point position) {
-        send(position.x);
-        send(position.y);
+    public boolean sendBallPosition(Point position) {
+        return send(position.x) && send(position.y);
     }
 
     public Point getBallPosition() {
@@ -250,8 +251,8 @@ public class BluetoothService {
         return new Point(x, y);
     }
 
-    public void sendIsBallOut(boolean newRound) {
-        send(newRound);
+    public boolean sendIsBallOut(boolean newRound) {
+        return send(newRound);
     }
 
     public boolean receiveIsBallOut() {

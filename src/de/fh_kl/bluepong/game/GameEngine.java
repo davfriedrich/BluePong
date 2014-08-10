@@ -202,7 +202,14 @@ public class GameEngine implements OnTouchListener, Constants {
                 ball.move(moveBall());
                 break;
             case BLUETOOTH_MODE:
-                bluetoothService.sendPosition(p1.getXPosition());
+
+                if (!bluetoothService.sendPosition(p1.getXPosition())) {
+                    Log.e("btcon", "connection lost");
+                    drawConnectionLost();
+                    stop();
+                    break;
+                }
+
                 p2.setXPosition((int) (totalWidth - bluetoothService.getOpponentPosition() * widthRatio));
                 if (bluetoothService.isServer()) {
                     Point goTo = moveBall();
@@ -494,10 +501,13 @@ public class GameEngine implements OnTouchListener, Constants {
     }
 
     private void drawCenterText(Canvas canvas, String text, int textSize) {
-        paint.setColor(Color.GREEN);
+        drawCenterText(canvas, text, textSize, Color.GREEN);
+    }
+
+    private void drawCenterText(Canvas canvas, String text, int textSize, int color) {
+        paint.setColor(color);
         paint.setTextSize(textSize);
         paint.getTextBounds(text, 0, text.length(), textBoundingBox);
-        int height = Math.abs(textBoundingBox.bottom - textBoundingBox.top);
 
         int x = totalWidth/2;
         int y = totalHeight/2;
@@ -533,6 +543,24 @@ public class GameEngine implements OnTouchListener, Constants {
 		}
 	}
 
+    private void drawWinnerScreen(int winner) {
+        Canvas canvas = holder.lockCanvas();
+
+        String winningPlayer = (winner == 0 ? p1.getName() : p2.getName());
+
+        drawCenterText(canvas, winningPlayer + " " + gameActivity.getString(R.string.WinScreenString), sizeProvider.getPlayerNameSize());
+
+        holder.unlockCanvasAndPost(canvas);
+    }
+
+    private void drawConnectionLost(){
+        Canvas canvas = holder.lockCanvas();
+
+        drawCenterText(canvas, gameActivity.getString(R.string.bluetoothConnectionLost), sizeProvider.getPlayerNameSize(), Color.RED);
+
+        holder.unlockCanvasAndPost(canvas);
+    }
+
     private void drawScore(Canvas canvas) {
 
         int x = totalWidth/5 * 4;
@@ -564,6 +592,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
 	public void stop() {
 		running = false;
+        destroyed = true;
 
         pauseSemaphore.release();
 
@@ -607,16 +636,6 @@ public class GameEngine implements OnTouchListener, Constants {
 
         gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
         start();
-    }
-
-    private void drawWinnerScreen(int winner) {
-        Canvas canvas = holder.lockCanvas();
-
-        String winningPlayer = (winner == 0 ? p1.getName() : p2.getName());
-
-        drawCenterText(canvas, winningPlayer + " " + gameActivity.getString(R.string.WinScreenString), sizeProvider.getPlayerNameSize());
-
-        holder.unlockCanvasAndPost(canvas);
     }
 
     private int checkForWinner() {
@@ -679,6 +698,8 @@ public class GameEngine implements OnTouchListener, Constants {
 						paused = false;
 					} else if (!running && !paused) {
                         gameActivity.endRound(checkForWinner());
+                    } else if (!running && destroyed) {
+                        gameActivity.finish();
                     }
 				}
 			}
