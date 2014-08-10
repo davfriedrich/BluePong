@@ -1,0 +1,53 @@
+<resources>
+
+    <string name="PauseScreenString">Pause</string>
+    <string name="StartScreenString">Start</string>
+    <string name="WinScreenString">gewinnt</string>
+    <string name="aiButtonString">Spieler vs. KI</string>
+    <string name="app_name">BluePong</string>
+    <string name="aritifialIntelligence">KI</string>
+    <string name="bluetoothButtonString">Bluetooth</string>
+    <string name="bluetoothConnectionFailed">Verbindung fehlgeschlagen</string>
+    <string name="bluetoothConnectionLost">Verbindung verloren</string>
+    <string name="bluetoothConnectionSuccess">Verbindung hergestellt</string>
+    <string name="bluetoothServerFailed">Verbindung fehlgeschlagen</string>
+    <string name="bluetoothTitle">Bluetooth</string>
+    <string name="btn_bluetooth_hostGame">Spiel hosten</string>
+    <string name="btn_bluetooth_joinGame">Spiel beitreten</string>
+    <string name="btn_bluetooth_startGame">Spiel starten</string>
+    <string name="btn_bluetooth_startServer">Server starten</string>
+    <string name="btn_settings">Einstellungen</string>
+    <string name="hello_world">Hallo Welt!</string>
+    <string name="highscoreButtonString">Highscore</string>
+    <string name="lbl_ai_handicap">KI Handicap</string>
+    <string name="lbl_appearance_settings">Erscheinung</string>
+    <string name="lbl_ball_size_setting">Ballgroesse</string>
+    <string name="lbl_ball_speed_increase">Geschwindigkeit erhoehen</string>
+    <string name="lbl_ball_speed_setting">Ballgeschwindigkeit</string>
+    <string name="lbl_bluetooth_joinGame">Waehle ein Geraet zum Verbinden</string>
+    <string name="lbl_bluetooth_wait">Warten auf den Gegner</string>
+    <string name="lbl_gameplay_settings">Gameplay</string>
+    <string name="lbl_paddle_size_setting">Schlaegerbreite</string>
+    <string name="lbl_paddle_speed_setting">Schlaegergeschwindigkeit</string>
+    <string name="multitouchButtonString">Multitouch</string>
+    <string name="onePlayerButtonString">1 Spieler</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_one_player">1 Spieler</string>
+    <string name="title_activity_tournament">Turnier</string>
+    <string name="title_activity_tournament_overview">Turnieruebersicht</string>
+    <string name="title_activity_two_player">2 Spieler</string>
+    <string name="tournamentActivityButtonOkString">OK</string>
+    <string name="tournamentActivityPlayerNumberSetErrorText">Mindestens 2 Spieler benoetigt</string>
+    <string name="tournamentActivityPlayerNumberSetText">Anzahl der Spieler</string>
+    <string name="tournamentActivitySetPlayerNameText">Name von Spieler</string>
+    <string name="tournamentActivityStartTournamentButtonString">Starte das Turnier</string>
+    <string name="tournamentButtonSring">Turnier</string>
+    <string name="tournamentOverviewErrorGameEndText">Wegen eines Fehlers muss das letzte Spiel wiederholt werden</string>
+    <string name="tournamentOverviewNextGameString">Naechstes Match:</string>
+    <string name="tournamentOverviewStartGameButtonString">Start</string>
+    <string name="tournamentOverviewVersus">gegen</string>
+    <string name="tournamentOverviewWinnerText">Der Gewinner ist:</string>
+    <string name="trainingButtonString">Training</string>
+    <string name="twoPlayerButtonString">2 Spieler</string>
+
+</resources>
