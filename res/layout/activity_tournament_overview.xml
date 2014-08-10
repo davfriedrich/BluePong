@@ -13,7 +13,8 @@
         android:layout_marginBottom="76dp"
         android:background="@android:color/transparent"
         android:onClick="startGame"
-        android:text="@string/tournamentOverviewStartGameButtonString" />
+        android:text="@string/tournamentOverviewStartGameButtonString"
+        android:textSize="@dimen/buttonText"/>
 
     <TextView
         android:id="@+id/tournamentOverviewNextPlayerTextView"
@@ -21,7 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textSize="@dimen/buttonText"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/tournamentOververviewNextGameTextView"
@@ -30,6 +33,6 @@
         android:layout_above="@+id/tournamentOverviewNextPlayerTextView"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="96dp"
-        android:text="@string/tournamentOverviewNextGameString" />
+        android:text="@string/tournamentOverviewNextGameString" android:textColor="@color/bluepongBlue"/>
 
 </RelativeLayout>

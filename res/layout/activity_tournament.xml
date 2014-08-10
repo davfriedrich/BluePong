@@ -12,7 +12,7 @@
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
         android:onClick="click"
-        android:text="Button" />
+        android:text="Button" android:textSize="@dimen/buttonText"/>
 
     <EditText
         android:id="@+id/tounamentViewTextField"
@@ -22,7 +22,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="18dp"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/tournamentViewTextView"
@@ -31,6 +32,8 @@
         android:layout_above="@+id/tounamentViewTextField"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="53dp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="@color/bluepongBlue"
+        android:gravity="center"/>
 
 </RelativeLayout>

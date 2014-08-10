@@ -52,6 +52,6 @@
         android:layout_marginTop="100dp"
         android:text="@string/app_name"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/titleText" android:textColor="#ff31c2ff"/>
+        android:textSize="@dimen/titleText" android:textColor="@color/bluepongBlue"/>
 
 </RelativeLayout>

@@ -2,6 +2,10 @@ package de.fh_kl.bluepong;
 
 import java.util.Random;
 
+import android.text.Html;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.util.TournamentPlayer;
 import android.app.Activity;
@@ -10,7 +14,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,12 +27,11 @@ public class TournamentActivity extends Activity implements Constants{
 	TextView textView;
 	EditText textField;
 	Button button;
+    Animation animation;
 	int number, counter;
 	String playerStringArray[];
 	int state;
 	
-	Typeface team401;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,7 +45,13 @@ public class TournamentActivity extends Activity implements Constants{
 		textView = (TextView) findViewById(R.id.tournamentViewTextView);
 		textField = (EditText) findViewById(R.id.tounamentViewTextField);
 		button= (Button) findViewById(R.id.tournamentViewButton);
-		
+
+        animation = new AlphaAnimation(1, 0.33f);
+        animation.setDuration(500);
+        animation.setInterpolator(new LinearInterpolator());
+        animation.setRepeatCount(Animation.INFINITE);
+        animation.setRepeatMode(Animation.REVERSE);
+
 		button.setText(R.string.tournamentActivityButtonOkString);
 		textView.setText(R.string.tournamentActivityPlayerNumberSetText);
 		textField.setInputType(InputType.TYPE_CLASS_PHONE);
@@ -89,12 +97,14 @@ public class TournamentActivity extends Activity implements Constants{
 		                in.hideSoftInputFromWindow(textField.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
 		                
 						button.setText(R.string.tournamentActivityStartTournamentButtonString);
+                        button.startAnimation(animation);
 					}
 				}
 				break;
 			case 2:
 				startTournamentOverview();
-				break;				
+                button.clearAnimation();
+				break;
 		}
 		
 	}
@@ -119,6 +129,7 @@ public class TournamentActivity extends Activity implements Constants{
 		playerTextView = (TextView) findViewById(R.id.tournamentOverviewNextPlayerTextView);
 		nextRoundTextView = (TextView) findViewById(R.id.tournamentOververviewNextGameTextView);
 		startGameButton = (Button) findViewById(R.id.tournamentOverviewStartGameButton);
+        startGameButton.startAnimation(animation);
 		
 		count = playerStringArray.length;
 		player = new TournamentPlayer();
@@ -137,14 +148,17 @@ public class TournamentActivity extends Activity implements Constants{
 		String[] tmpPlayer = player.getNext();
 		currentPlayer1 = tmpPlayer[0];
 		currentPlayer2 = tmpPlayer[1];
+        String vs;
 		if(currentPlayer2 == null){
 			currentPlayer2 = "AI";
 			aiMode = true;
-			playerTextView.setText(currentPlayer1 + " vs AI");
-		}else{
-			aiMode = false;
-			playerTextView.setText(currentPlayer1 + " vs " + currentPlayer2);
+            vs = currentPlayer1 + "<br><font color='red'> " + getString(R.string.tournamentOverviewVersus) + " </font><br>" + getString(R.string.aritifialIntelligence);
+        }else{
+            aiMode = false;
+//            String vs = currentPlayer1 + "<font color='" + getResources().getColor(R.color.bluepongBlue) + "'> vs </font>" + currentPlayer2;
+            vs = currentPlayer1 + "<br><font color='red'> " + getString(R.string.tournamentOverviewVersus) + " </font><br>" + currentPlayer2;
 		}
+        playerTextView.setText(Html.fromHtml(vs), TextView.BufferType.SPANNABLE);
 		playerCounter += 2;
 	}
 	
@@ -157,12 +171,13 @@ public class TournamentActivity extends Activity implements Constants{
 		if(count == 1){
 			startGameButton.setVisibility(View.INVISIBLE);
 			nextRoundTextView.setText(R.string.tournamentOverviewWinnerText);
-			playerTextView.setText(player.getWinner() + "!!!");
+			playerTextView.setText(player.getWinner());
 		}
+
 		if(count == 0){
 			startGameButton.setVisibility(View.INVISIBLE);
 			nextRoundTextView.setText(R.string.tournamentOverviewWinnerText);
-			playerTextView.setText("AI!!!");
+			playerTextView.setText(getString(R.string.aritifialIntelligence));
 		}
 		if(count > 1){
 			getPlayer();
@@ -178,6 +193,7 @@ public class TournamentActivity extends Activity implements Constants{
 		}
 		gameIntent.putExtra(PLAYER_NAMES, new String[] {currentPlayer1, currentPlayer2});
 		startActivityForResult(gameIntent, 0);
+        startGameButton.clearAnimation();
 	}
 	
 	@Override

@@ -40,7 +40,7 @@ public class BluetoothListAdapter extends ArrayAdapter<BluetoothDevice> {
         View rowView = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
         TextView deviceName = (TextView) rowView.findViewById(android.R.id.text1);
         deviceName.setTypeface(typeface);
-        deviceName.setTextSize(7 * context.getResources().getDisplayMetrics().density);
+        deviceName.setTextSize(context.getResources().getDimension(R.dimen.listText));
         deviceName.setText(deviceList.get(position).getName());
 
         return  rowView;
