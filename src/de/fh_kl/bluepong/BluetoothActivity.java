@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -27,10 +26,9 @@ import de.fh_kl.bluepong.util.BluetoothListAdapter;
 import de.fh_kl.bluepong.util.BluetoothService;
 
 /**
- * User: #empty
- * Date: 08.08.14
+ * Activity for bluetooth mode
  */
-public class BluetoothActivity extends Activity implements ListView.OnItemClickListener, Constants{
+public class BluetoothActivity extends Activity implements ListView.OnItemClickListener{
 
     private Typeface team401;
     private AsyncTask asyncStartServer;
@@ -100,11 +98,14 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == BLUETOOTH_MODE) {
+        if (requestCode == Constants.BLUETOOTH_MODE) {
             finish();
         }
     }
 
+    /**
+     * onClick for btn_bluetooth_hostGame
+     */
     public void hostGame(final View v) {
 
         setContentView(R.layout.activity_bluetooth_host_fragment);
@@ -115,6 +116,9 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         asyncStartServer = new StartServer().execute();
     }
 
+    /**
+     * onClick for btn_bluetooth_joinGame
+     */
     public void joinGame(View v) {
         setContentView(R.layout.activity_bluetooth_join_fragment);
 
@@ -129,6 +133,9 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         joinListview.setOnItemClickListener(this);
     }
 
+    /**
+     * onItemClick for BluetoothDeviceList
+     */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -141,8 +148,8 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(self, GameActivity.class);
-                    intent.putExtra(GAME_MODE, BLUETOOTH_MODE);
-                    startActivityForResult(intent, BLUETOOTH_MODE);
+                    intent.putExtra(Constants.GAME_MODE, Constants.BLUETOOTH_MODE);
+                    startActivityForResult(intent, Constants.BLUETOOTH_MODE);
                 }
             });
             winDialog.show();
@@ -159,6 +166,10 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         }
     }
 
+
+    /**
+     * AsyncTask to start a bluetooth server
+     */
     private class StartServer extends AsyncTask<Object, Object, Boolean> {
 
         @Override
@@ -177,8 +188,8 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						Intent intent = new Intent(self, GameActivity.class);
-						intent.putExtra(GAME_MODE, BLUETOOTH_MODE);
-						startActivityForResult(intent, BLUETOOTH_MODE);
+						intent.putExtra(Constants.GAME_MODE, Constants.BLUETOOTH_MODE);
+						startActivityForResult(intent, Constants.BLUETOOTH_MODE);
 					}
 				});
                 winDialog.show();

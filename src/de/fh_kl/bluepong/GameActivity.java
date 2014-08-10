@@ -13,6 +13,9 @@ import de.fh_kl.bluepong.constants.Constants;
 import de.fh_kl.bluepong.game.GameEngine;
 import de.fh_kl.bluepong.util.BluetoothService;
 
+/**
+ * Activity the game is running in
+ */
 public class GameActivity extends Activity implements SurfaceHolder.Callback, Constants {
 	
 	SurfaceView sv;
@@ -86,7 +89,11 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
         }
 		sv.setOnTouchListener(gameEngine);
 	}
-	
+
+    /**
+     * callback for tournament mode
+     * @param winner winner of this game
+     */
 	public void endRound(int winner){
 		Intent endIntent = new Intent();
 		endIntent.putExtra(WINNER, winner);
@@ -97,14 +104,10 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

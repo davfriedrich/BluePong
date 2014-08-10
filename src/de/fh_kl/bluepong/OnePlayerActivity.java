@@ -1,20 +1,16 @@
 package de.fh_kl.bluepong;
 
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.widget.TextView;
-import de.fh_kl.bluepong.constants.Constants;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import de.fh_kl.bluepong.constants.Constants;
 
 public class OnePlayerActivity extends Activity implements Constants {
 

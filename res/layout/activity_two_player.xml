@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/title_activity_two_player"
-            android:id="@id/twoPlayerTitle"
+            android:id="@+id/twoPlayerTitle"
             android:textSize="@dimen/subTitleText"
             android:layout_below="@+id/gameTitle" android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"/>

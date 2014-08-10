@@ -11,7 +11,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
-        android:onClick="click"
+        android:onClick="proceed"
         android:text="Button" android:textSize="@dimen/buttonText"/>
 
     <EditText

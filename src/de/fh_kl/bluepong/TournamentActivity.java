@@ -21,7 +21,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class TournamentActivity extends Activity implements Constants{
+/**
+ *
+ */
+public class TournamentActivity extends Activity {
 	
 	TextView textView;
 	EditText textField;
@@ -57,9 +60,14 @@ public class TournamentActivity extends Activity implements Constants{
 		
 		state = 0;		
 	}
-	
-	public void click(View v){
+
+    /**
+     * onClick to accept user input
+     * @param v
+     */
+	public void proceed(View v){
 		switch(state){
+            // enter number of players
 			case 0:
 				try{
 					number = Integer.parseInt(textField.getText().toString());
@@ -79,6 +87,7 @@ public class TournamentActivity extends Activity implements Constants{
 					playerStringArray = new String[number];
 				}
 				break;
+            // enter player names
 			case 1:
 				String tmpName = textField.getText().toString();
 				if(!tmpName.equals("")){
@@ -100,6 +109,7 @@ public class TournamentActivity extends Activity implements Constants{
 					}
 				}
 				break;
+            // start tournament
 			case 2:
 				startTournamentOverview();
                 button.clearAnimation();
@@ -108,7 +118,8 @@ public class TournamentActivity extends Activity implements Constants{
 		
 	}
 	
-	
+
+    /*-----------------------------other fragment-----------------------------------*/
 	
 	
 	int count;
@@ -121,7 +132,10 @@ public class TournamentActivity extends Activity implements Constants{
 	
 	TextView playerTextView, nextRoundTextView;
 	Button startGameButton;
-	
+
+    /**
+     * shows tournament overview and generates {@link de.fh_kl.bluepong.util.TournamentPlayer}
+     */
 	private void startTournamentOverview() {
 		setContentView(R.layout.activity_tournament_overview);
 		
@@ -142,7 +156,10 @@ public class TournamentActivity extends Activity implements Constants{
 		
 		getPlayer();
 	}
-	
+
+    /**
+     * shows opponents of next match
+     */
 	public void getPlayer(){
 		String[] tmpPlayer = player.getNext();
 		currentPlayer1 = tmpPlayer[0];
@@ -154,13 +171,15 @@ public class TournamentActivity extends Activity implements Constants{
             vs = currentPlayer1 + "<br><font color='red'> " + getString(R.string.tournamentOverviewVersus) + " </font><br>" + getString(R.string.aritifialIntelligence);
         }else{
             aiMode = false;
-//            String vs = currentPlayer1 + "<font color='" + getResources().getColor(R.color.bluepongBlue) + "'> vs </font>" + currentPlayer2;
             vs = currentPlayer1 + "<br><font color='red'> " + getString(R.string.tournamentOverviewVersus) + " </font><br>" + currentPlayer2;
 		}
         playerTextView.setText(Html.fromHtml(vs), TextView.BufferType.SPANNABLE);
 		playerCounter += 2;
 	}
-	
+
+    /**
+     * eliminates losers and shows winner of tournament
+     */
 	public void prepareNextRound(){
 		player.markAsLoser(lastWinnerIndex);
 		if(playerCounter >= count){
@@ -182,23 +201,30 @@ public class TournamentActivity extends Activity implements Constants{
 			getPlayer();
 		}
 	}
-	
+
+    /**
+     * onClick for start match
+     * @param v
+     */
 	public void startGame(View v){
 		Intent gameIntent = new Intent(this,GameActivity.class);
 		if(aiMode){
-			gameIntent.putExtra(GAME_MODE, TOURNAMENT_MODE_AI);
+			gameIntent.putExtra(Constants.GAME_MODE, Constants.TOURNAMENT_MODE_AI);
 		}else{
-			gameIntent.putExtra(GAME_MODE, TOURNAMENT_MODE);
+			gameIntent.putExtra(Constants.GAME_MODE, Constants.TOURNAMENT_MODE);
 		}
-		gameIntent.putExtra(PLAYER_NAMES, new String[] {currentPlayer1, currentPlayer2});
+		gameIntent.putExtra(Constants.PLAYER_NAMES, new String[] {currentPlayer1, currentPlayer2});
 		startActivityForResult(gameIntent, 0);
         startGameButton.clearAnimation();
 	}
-	
+
+    /**
+     * receives winner from {@link de.fh_kl.bluepong.GameActivity}
+     */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		lastWinnerIndex = data.getIntExtra(WINNER, -1);
+		lastWinnerIndex = data.getIntExtra(Constants.WINNER, -1);
 		if(lastWinnerIndex == -1){
 			playerTextView.setText(R.string.tournamentOverviewErrorGameEndText);
 		}else{

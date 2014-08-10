@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/title_activity_one_player"
-            android:id="@id/onePlayerTitle"
+            android:id="@+id/onePlayerTitle"
             android:textSize="@dimen/subTitleText"
             android:layout_below="@+id/gameTitle" android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"/>

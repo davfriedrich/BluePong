@@ -7,10 +7,11 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.util.Log;
 import de.fh_kl.bluepong.constants.Constants;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -231,7 +232,7 @@ public class BluetoothService {
     }
 
     /**
-     * send an boolean to connected device
+     * send a boolean to connected device
      * @param b
      * @return returns whether transmission was successful or not
      */
