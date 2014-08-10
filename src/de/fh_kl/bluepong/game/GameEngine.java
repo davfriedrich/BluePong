@@ -476,10 +476,14 @@ public class GameEngine implements OnTouchListener, Constants {
         return new Point(x, y);
 	}
 
+
+    public void draw() {
+        draw(false);
+    }
     /**
      * method to draw the game
      */
-	public void draw() {
+	public void draw(boolean drawWinnerScreen) {
 		Canvas canvas = holder.lockCanvas();
 
 		// "clears" the screen
@@ -508,6 +512,10 @@ public class GameEngine implements OnTouchListener, Constants {
             drawPauseScreen(canvas);
         }
 
+        if(drawWinnerScreen) {
+            drawWinnerScreen(canvas);
+        }
+
 		holder.unlockCanvasAndPost(canvas);
 	}
 
@@ -520,7 +528,7 @@ public class GameEngine implements OnTouchListener, Constants {
         paint.setTextSize(sizeProvider.getPlayerNameSize());
         paint.setColor(Color.parseColor("#ff31c2ff"));
 
-        canvas.drawText(player1.getName(), totalWidth/2, totalHeight - paint.descent(), paint);
+        canvas.drawText(player1.getName(), totalWidth / 2, totalHeight - paint.descent(), paint);
 
         canvas.save();
         canvas.rotate(180, totalWidth/2, 0);
@@ -534,15 +542,6 @@ public class GameEngine implements OnTouchListener, Constants {
      */
     private void drawStartScreen(Canvas canvas) {
         drawCenterText(canvas, gameActivity.getString(R.string.StartScreenString));
-    }
-
-    /**
-     * draws the pause message
-     */
-    private void drawPauseScreen() {
-        Canvas canvas = holder.lockCanvas();
-        drawCenterText(canvas, gameActivity.getString(R.string.PauseScreenString));
-        holder.unlockCanvasAndPost(canvas);
     }
 
     /**
@@ -622,16 +621,12 @@ public class GameEngine implements OnTouchListener, Constants {
 
     /**
      * draws winner message
-     * @param winner the winner. 0 for player1. 1 for player2
      */
-    private void drawWinnerScreen(int winner) {
-        Canvas canvas = holder.lockCanvas();
+    private void drawWinnerScreen(Canvas canvas) {
 
-        String winningPlayer = (winner == 0 ? player1.getName() : player2.getName());
+        String winningPlayer = (checkForWinner() == 0 ? player1.getName() : player2.getName());
 
         drawCenterText(canvas, winningPlayer + " " + gameActivity.getString(R.string.WinScreenString), sizeProvider.getPlayerNameSize());
-
-        holder.unlockCanvasAndPost(canvas);
     }
 
     /**
@@ -684,16 +679,19 @@ public class GameEngine implements OnTouchListener, Constants {
     /**
      * stops the game thread
      */
-	public void stop() {
-		running = false;
-        destroyed = true;
+    public void stop() {
 
-        pauseSemaphore.release();
+        if (!destroyed) {
+            running = false;
+            destroyed = true;
 
-        try {
-            aliveSemaphore.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            pauseSemaphore.release();
+
+            try {
+                aliveSemaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -701,13 +699,16 @@ public class GameEngine implements OnTouchListener, Constants {
      * pauses the game
      */
     public void pause() {
-        try {
-            pauseSemaphore.acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        if (!destroyed) {
+            try {
+                pauseSemaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            paused = true;
+            draw();
         }
-        paused = true;
-        draw();
     }
 
     /**
@@ -745,7 +746,8 @@ public class GameEngine implements OnTouchListener, Constants {
             if (winner < 0) {
                 continueGame();
             } else {
-                drawWinnerScreen(winner);
+//                drawWinnerScreen(winner);
+                draw(true);
             }
         }else{
             continueGame();
@@ -771,7 +773,7 @@ public class GameEngine implements OnTouchListener, Constants {
      * check if a player has won
      * @return the player who won. 0 = player1. 1 = player2. -1 = no winner
      */
-    private int checkForWinner() {
+    public int checkForWinner() {
 
         if (player1.getScore() == SCORE_LIMIT) {
             return 0;

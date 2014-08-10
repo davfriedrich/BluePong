@@ -19,7 +19,7 @@ public interface Constants {
 	final static String WINNER = "Winner";
 	final static String BLUETOOTH_SERVICE = "BluetoothService";
 
-    final static int SCORE_LIMIT = 1;
+    final static int SCORE_LIMIT = 9;
 	
 	static double PADDLE_HEIGHT_RATIO = 0.03;
 	static double PADDLE_PADDING_RATIO = 0.08;
