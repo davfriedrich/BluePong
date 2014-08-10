@@ -19,11 +19,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+/**
+ * Class to handle the game process
+ */
 public class GameEngine implements OnTouchListener, Constants {
-
-    private String START;
-    private String PAUSE;
-    private Rect textBoundingBox;
 
     private GameActivity gameActivity;
 	private SurfaceView view;
@@ -40,15 +39,17 @@ public class GameEngine implements OnTouchListener, Constants {
 
     private Paint paint;
 
+    // the touchbox to start and pause the game
     private Rect controlTouchBox;
 
     private Rect topWall;
 
-    private Paddle p1;
-    private Paddle p2;
+    private Paddle player1;
+    private Paddle player2;
 
     private Ball ball;
 
+    // game state flags
 	private boolean running = false;
 	private boolean started = false;
 	private boolean paused = false;
@@ -58,6 +59,8 @@ public class GameEngine implements OnTouchListener, Constants {
 	private int serve;
 
     private GameLoop gameLoop;
+
+    // semaphores to synchronize with game thread
     private Semaphore pauseSemaphore;
     private Semaphore aliveSemaphore;
 
@@ -66,6 +69,13 @@ public class GameEngine implements OnTouchListener, Constants {
     private int aiHandicap;
     private boolean ballSpeedIncrease;
 
+    /**
+     * standard constructor
+     * @param gameActivity Activity from which the engine is called
+     * @param view view which display the game
+     * @param preferences game settings
+     * @param gameMode the game mode
+     */
     public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode) {
 
         init(gameActivity, view, preferences, gameMode);
@@ -81,6 +91,11 @@ public class GameEngine implements OnTouchListener, Constants {
         draw();
 	}
 
+    /**
+     * Constructor for tournament mode.
+     * see {@link de.fh_kl.bluepong.game.GameEngine#GameEngine(de.fh_kl.bluepong.GameActivity, android.view.SurfaceView, android.content.SharedPreferences, int)}
+     * @param playerNames player names as array
+     */
     public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode, String playerNames[]) {
 
     	init(gameActivity, view, preferences, gameMode);
@@ -92,6 +107,11 @@ public class GameEngine implements OnTouchListener, Constants {
         draw();
 	}
 
+    /**
+     * Constructor for bluetooth mode.
+     * see {@link de.fh_kl.bluepong.game.GameEngine#GameEngine(de.fh_kl.bluepong.GameActivity, android.view.SurfaceView, android.content.SharedPreferences, int)}
+     * @param displayRatio ratio between opponent screen size and own screen size as array for width and height
+     */
     public GameEngine(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode, double[] displayRatio) {
 
         widthRatio = displayRatio[0];
@@ -108,11 +128,11 @@ public class GameEngine implements OnTouchListener, Constants {
         draw();
     }
 
+    /**
+     * basic setup for the game
+     */
     private void init(GameActivity gameActivity, SurfaceView view, SharedPreferences preferences, int gameMode) {
         this.gameActivity = gameActivity;
-        START = gameActivity.getResources().getString(R.string.StartScreenString);
-        PAUSE = gameActivity.getResources().getString(R.string.PauseScreenString);
-        textBoundingBox = new Rect();
 
         this.gameMode = gameMode;
 
@@ -141,25 +161,34 @@ public class GameEngine implements OnTouchListener, Constants {
         gameLoop = new GameLoop(this, pauseSemaphore, aliveSemaphore);
     }
 
+    /**
+     * reads game settings
+     * */
     private void readPreferences() {
         ballSpeedIncrease = prefs.getBoolean(BALL_SPEED_INCREASE_SETTING, true);
         aiHandicap = prefs.getInt(AI_HANDICAP_SETTING, 4) + 1;
     }
 
+    /**
+     * initializes paddles with player names
+     * see {@link GameEngine#initPaddles()}
+     * @param playerNames player names as array
+     */
     private void initPaddles(String[] playerNames) {
         initPaddles();
-        p1.setName(playerNames[0]);
-        p2.setName(playerNames[1]);
+        player1.setName(playerNames[0]);
+        player2.setName(playerNames[1]);
     }
 
+    /**
+     *  initializes paddles depending on game mode and sets their position (top/bottom)
+     */
 	private void initPaddles(){
 
-		p1 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), sizeProvider.getPaddleSpeed());
+		player1 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), sizeProvider.getPaddleSpeed());
 		Point p1StartPosition = new Point(totalWidth/2, totalHeight - sizeProvider.getPaddleHeight()/2 - sizeProvider.getPaddlePadding());
-		p1.setPosition(p1StartPosition);
-		p1.setTouchBox(new Rect(0, totalHeight/4 * 3, totalWidth, totalHeight));
-
-
+		player1.setPosition(p1StartPosition);
+		player1.setTouchBox(new Rect(0, totalHeight / 4 * 3, totalWidth, totalHeight));
 
         if (gameMode != TRAINING_MODE) {
 
@@ -168,78 +197,99 @@ public class GameEngine implements OnTouchListener, Constants {
                 paddleSpeed /= aiHandicap;
             }
 
-			p2 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), paddleSpeed);
+			player2 = new Paddle(sizeProvider.getPaddleWidth(), sizeProvider.getPaddleHeight(), paddleSpeed);
 			Point p2StartPosition = new Point(totalWidth/2, sizeProvider.getPaddleHeight()/2 + sizeProvider.getPaddlePadding());
-			p2.setPosition(p2StartPosition);
+			player2.setPosition(p2StartPosition);
 
             if (gameMode != BLUETOOTH_MODE) {
-                p2.setTouchBox(new Rect(0, 0, totalWidth, totalHeight / 4));
+                player2.setTouchBox(new Rect(0, 0, totalWidth, totalHeight / 4));
             }
 		}
 	}
 
+    /**
+     * initializes ball and sets it to screen center
+     */
 	private void initBall() {
 
         ball = new Ball(sizeProvider.getBallSize(), sizeProvider.getBallSpeed());
 		ball.setPosition(sizeProvider.getCenterPoint());
 	}
 
+    /**
+     * method containing the steps executed per tick
+     */
 	public void gameLogic() {
-		p1.move();
+
+		player1.move();
 
         switch (gameMode) {
             case TRAINING_MODE:
-                ball.move(moveBall());
+                ball.setPosition(moveBall());
                 break;
             case SINGLE_MODE:
             case TOURNAMENT_MODE_AI:
-                aiMove(p2);
-                ball.move(moveBall());
+                aiMove(player2);
+                ball.setPosition(moveBall());
                 break;
             case MULTITOUCH_MODE:
             case TOURNAMENT_MODE:
-                p2.move();
-                ball.move(moveBall());
+                player2.move();
+                ball.setPosition(moveBall());
                 break;
             case BLUETOOTH_MODE:
 
-                if (!bluetoothService.sendPosition(p1.getXPosition())) {
-                    Log.e("btcon", "connection lost");
+                // checks if own position can be send to opponent
+                // if not: bluetooth connection is not established -> stop game
+                if (!bluetoothService.sendPosition(player1.getXPosition())) {
                     drawConnectionLost();
                     stop();
                     break;
                 }
 
-                p2.setXPosition((int) (totalWidth - bluetoothService.getOpponentPosition() * widthRatio));
+                // get position of opponent and draw it
+                player2.setXPosition((int) (totalWidth - bluetoothService.getOpponentPosition() * widthRatio));
+
+                // if we host the game we define the ball position and send it to the opponent
                 if (bluetoothService.isServer()) {
                     Point goTo = moveBall();
                     bluetoothService.sendBallPosition(goTo);
-                    ball.move(goTo);
+                    ball.setPosition(goTo);
                 } else {
+                // if we don't host the game synchronize with host to check if ball was out to set the scores
+                // then get the ball position from opponent
                     boolean isOut = bluetoothService.receiveIsBallOut();
                     if (isOut) {
                         if (ball.getPosition().y > totalHeight / 2) {
-                            p2.incrementScore();
+                            player2.incrementScore();
                         } else {
-                            p1.incrementScore();
+                            player1.incrementScore();
                         }
                     }
                     Point goTo = bluetoothService.getBallPosition();
                     goTo.x = (int) (totalWidth - goTo.x * widthRatio);
                     goTo.y = (int) (totalHeight - goTo.y * heightRatio);
-                    ball.move(goTo);
+                    ball.setPosition(goTo);
                 }
                 break;
-            default:
-                break;
         }
-	}
-
-    private void aiMove(Paddle p2) {
-        p2.goTo(ball.getPosition().x);
-        p2.move();
     }
 
+    /**
+     * ai to move a paddle
+     * @param p paddle to move
+     */
+    private void aiMove(Paddle p) {
+        p.goTo(ball.getPosition().x);
+        p.move();
+    }
+
+    /**
+     * method to determine the next position of the ball
+     * handles collisions with walls and paddles
+     *
+     * @return next position of the ball as {@link android.graphics.Point}
+     */
     private Point moveBall() {
 
 		Point nextPosition = ball.nextPosition();
@@ -248,7 +298,7 @@ public class GameEngine implements OnTouchListener, Constants {
 
         boolean newRound = false;
 
-		// collision with wall?
+		// collision with left wall
 		if (x - ball.getWidth()/2 < 0) {
 
 			int dx = Math.abs(x - ball.getWidth()/2);
@@ -258,7 +308,7 @@ public class GameEngine implements OnTouchListener, Constants {
 			ball.setAngle((Math.PI - ball.getAngle()));
 		}
 
-
+        // collision with right wall?
 		if (x + ball.getWidth()/2 > totalWidth) {
 
 			int dx = Math.abs(totalWidth - (x + ball.getWidth()/2));
@@ -271,7 +321,6 @@ public class GameEngine implements OnTouchListener, Constants {
 
 		if (gameMode == TRAINING_MODE) {
 			// collision with top wall?
-
 			if (y - ball.getHeight()/2 < topWall.bottom) {
 
 				int dy = Math.abs(topWall.bottom - (y - ball.getHeight()/2));
@@ -282,7 +331,7 @@ public class GameEngine implements OnTouchListener, Constants {
 			}
 		} else {
 			// collision with paddle 2?
-			Rect p2Paddle = p2.getPaddle();
+			Rect p2Paddle = player2.getPaddle();
 			if ((y - ball.getHeight()/2 < p2Paddle.bottom)
                     && (x + ball.getWidth()/2 >= p2Paddle.left)
                     && (x - ball.getWidth()/2 <= p2Paddle.right)
@@ -294,19 +343,21 @@ public class GameEngine implements OnTouchListener, Constants {
 
 				ball.setAngle((-1 * ball.getAngle()));
 
-                if (p2.getDirection() != 0) {
+                if (player2.getDirection() != 0) {
 
-                    ball.addSpin(p2.getDirection());
+                    ball.addSpin(player2.getDirection());
                 }
 
                 if (ballSpeedIncrease) {
                     ball.accelerate();
                 }
-
+            // if ball missed paddle handle collisions with side of paddle
 			} else if (y - ball.getHeight()/2 < p2Paddle.bottom){
 
+                // player2 can't win this round anymore
 				winnable = false;
 
+                // collision with right side of paddle?
 				if (x - ball.getWidth()/2 < p2Paddle.right && x > p2Paddle.centerX() && !(y + ball.getHeight()/2 < p2Paddle.top)) {
 
 					int dx = Math.abs(p2Paddle.right - (x - ball.getWidth()/2));
@@ -316,7 +367,7 @@ public class GameEngine implements OnTouchListener, Constants {
 					ball.setAngle((Math.PI - ball.getAngle()));
 				}
 
-
+                // collision with left side of paddle?
 				if (x + ball.getWidth()/2 > p2Paddle.left && x < p2Paddle.centerX() && !(y + ball.getHeight()/2 < p2Paddle.top)) {
 
 					int dx = Math.abs(p2Paddle.left - (x + ball.getWidth()/2));
@@ -326,10 +377,9 @@ public class GameEngine implements OnTouchListener, Constants {
 					ball.setAngle((Math.PI - ball.getAngle()));
 				}
 			}
-
+            // is ball out of game?
 			if (y + ball.getHeight()/2 < 0) {
-
-                p1.incrementScore();
+                player1.incrementScore();
 				running = false;
 				serve = 1;
                 newRound = true;
@@ -337,7 +387,7 @@ public class GameEngine implements OnTouchListener, Constants {
 		}
 
 		// collision with paddle 1?
-		Rect p1Paddle = p1.getPaddle();
+		Rect p1Paddle = player1.getPaddle();
 		if ((y + ball.getHeight()/2 > p1Paddle.top)
                 && (x + ball.getWidth()/2 >= p1Paddle.left)
                 && (x - ball.getWidth()/2 <= p1Paddle.right)
@@ -349,19 +399,21 @@ public class GameEngine implements OnTouchListener, Constants {
 
             ball.setAngle((-1 * ball.getAngle()));
 
-            if (p1.getDirection() != 0) {
+            if (player1.getDirection() != 0) {
 
-                ball.addSpin(-1*p1.getDirection());
+                ball.addSpin(-1* player1.getDirection());
             }
 
             if (ballSpeedIncrease) {
                 ball.accelerate();
             }
-
+        // if ball missed paddle handle collisions with side of paddle
 		} else if (y + ball.getHeight()/2 > p1Paddle.top){
 
+            // player1 can't win this round anymore
 			winnable = false;
 
+            // collision with right side of paddle?
 			if (x - ball.getWidth()/2 < p1Paddle.right && x > p1Paddle.centerX() && !(y - ball.getHeight()/2 > p1Paddle.bottom)) {
 
 				int dx = Math.abs(p1Paddle.right - (x - ball.getWidth()/2));
@@ -371,7 +423,7 @@ public class GameEngine implements OnTouchListener, Constants {
 				ball.setAngle((Math.PI - ball.getAngle()));
 			}
 
-
+            // collision with left side of paddle?
 			if (x + ball.getWidth()/2 > p1Paddle.left && x < p1Paddle.centerX() && !(y - ball.getHeight()/2 > p1Paddle.bottom)) {
 
 				int dx = Math.abs(p1Paddle.left - (x + ball.getWidth()/2));
@@ -382,10 +434,11 @@ public class GameEngine implements OnTouchListener, Constants {
 			}
 		}
 
-		if (y - ball.getHeight()/2 > totalHeight) {
+        // is ball out of game?
+        if (y - ball.getHeight()/2 > totalHeight) {
 
             if (gameMode != TRAINING_MODE) {
-                p2.incrementScore();
+                player2.incrementScore();
             }
 			running = false;
 			serve = 2;
@@ -393,42 +446,27 @@ public class GameEngine implements OnTouchListener, Constants {
 		}
 
         // collision with wall directly after paddle collision?
+        // left wall
         if (x - ball.getWidth()/2 < 0) {
-
             int dx = Math.abs(x - ball.getWidth()/2);
-
             x = dx + ball.getWidth()/2;
-
             ball.setAngle((Math.PI - ball.getAngle()));
         }
-
-
+        // right wall
         if (x + ball.getWidth()/2 > totalWidth) {
-
             int dx = Math.abs(totalWidth - (x + ball.getWidth()/2));
-
             x = totalWidth - (dx + ball.getWidth()/2);
-
             ball.setAngle((Math.PI - ball.getAngle()));
         }
 
         if (gameMode == BLUETOOTH_MODE) {
-
-//            boolean isOut = bluetoothService.receiveIsBallOut();
-
-//            if (isOut && !newRound) {
-//                if (ball.getPosition().y < totalHeight / 2) {
-//                    p2.incrementScore();
-//                } else {
-//                    p1.incrementScore();
-//                }
-//            }
-
+            // if we host the game send whether the ball is out or not
             if (bluetoothService.isServer()) {
                 Point newPos = new Point(x, y);
                 bluetoothService.sendIsBallOut(newRound);
                 return newPos;
             } else {
+            // if we don't host the game receive the ball position
                 Point newPos = bluetoothService.getBallPosition();
                 newPos.x = (int) (totalWidth - newPos.x * widthRatio);
                 newPos.y = (int) (totalHeight - newPos.y * heightRatio);
@@ -438,22 +476,21 @@ public class GameEngine implements OnTouchListener, Constants {
         return new Point(x, y);
 	}
 
+    /**
+     * method to draw the game
+     */
 	public void draw() {
 		Canvas canvas = holder.lockCanvas();
 
 		// "clears" the screen
 		canvas.drawColor(Color.BLACK);
 
-		// paddles
-		p1.draw(canvas);
+        drawPlayingField(canvas);
 
-		if (gameMode == TRAINING_MODE) {
-			// playfield
-			drawPlayingField(canvas, true);
-		} else {
+		player1.draw(canvas);
 
-			p2.draw(canvas);
-			drawPlayingField(canvas, false);
+		if (gameMode != TRAINING_MODE) {
+			player2.draw(canvas);
             drawScore(canvas);
 		}
 
@@ -461,7 +498,6 @@ public class GameEngine implements OnTouchListener, Constants {
             drawPlayerNames(canvas);
         }
 
-		// ball
 		ball.draw(canvas);
 
         if (!started) {
@@ -475,39 +511,77 @@ public class GameEngine implements OnTouchListener, Constants {
 		holder.unlockCanvasAndPost(canvas);
 	}
 
+    /**
+     * method to draw the player names
+     * @param canvas canvas to draw to
+     */
     private void drawPlayerNames(Canvas canvas) {
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(sizeProvider.getPlayerNameSize());
         paint.setColor(Color.parseColor("#ff31c2ff"));
 
-        canvas.drawText(p1.getName(), totalWidth/2, totalHeight - paint.descent(), paint);
+        canvas.drawText(player1.getName(), totalWidth/2, totalHeight - paint.descent(), paint);
 
         canvas.save();
         canvas.rotate(180, totalWidth/2, 0);
-        canvas.drawText(p2.getName(), totalWidth/2, - paint.descent(), paint);
+        canvas.drawText(player2.getName(), totalWidth/2, - paint.descent(), paint);
         canvas.restore();
     }
 
+    /**
+     * draws the start message
+     * @param canvas canvas to draw to
+     */
     private void drawStartScreen(Canvas canvas) {
-        drawCenterText(canvas, START);
+        drawCenterText(canvas, gameActivity.getString(R.string.StartScreenString));
     }
 
+    /**
+     * draws the pause message
+     */
+    private void drawPauseScreen() {
+        Canvas canvas = holder.lockCanvas();
+        drawCenterText(canvas, gameActivity.getString(R.string.PauseScreenString));
+        holder.unlockCanvasAndPost(canvas);
+    }
+
+    /**
+     * draws the pause message
+     * @param canvas canvas to draw to
+     */
     private void drawPauseScreen(Canvas canvas) {
-        drawCenterText(canvas, PAUSE);
+        drawCenterText(canvas, gameActivity.getString(R.string.PauseScreenString));
     }
 
+    /**
+     * draws text to the center of the screen
+     * @param canvas canvas to draw to
+     * @param text text to draw
+     */
     private void drawCenterText(Canvas canvas, String text) {
         drawCenterText(canvas, text, sizeProvider.getMenuSize());
     }
 
+    /**
+     * draws text to the center of the screen
+     * @param canvas to draw to
+     * @param text text to draw
+     * @param textSize text size of the {@code text}
+     */
     private void drawCenterText(Canvas canvas, String text, int textSize) {
         drawCenterText(canvas, text, textSize, Color.GREEN);
     }
 
+    /**
+     * draws text to the center of the screen
+     * @param canvas to draw to
+     * @param text text to draw
+     * @param textSize text size of the {@code text}
+     * @param color text color of the {@code text}
+     */
     private void drawCenterText(Canvas canvas, String text, int textSize, int color) {
         paint.setColor(color);
         paint.setTextSize(textSize);
-        paint.getTextBounds(text, 0, text.length(), textBoundingBox);
 
         int x = totalWidth/2;
         int y = totalHeight/2;
@@ -520,11 +594,15 @@ public class GameEngine implements OnTouchListener, Constants {
         canvas.restore();
     }
 
-    private void drawPlayingField(Canvas canvas, boolean training) {
+    /**
+     * draws the playing field
+     * @param canvas canvas to draw to
+     */
+    private void drawPlayingField(Canvas canvas) {
 
 		paint.setColor(Color.WHITE);
 
-		if (training) {
+		if (gameMode == TRAINING_MODE) {
 
             topWall = new Rect(0,
 							totalHeight/2 - sizeProvider.getWallThicknessTraining() - sizeProvider.getBallSize()/2,
@@ -532,7 +610,6 @@ public class GameEngine implements OnTouchListener, Constants {
 							totalHeight/2 - sizeProvider.getBallSize()/2);
 			canvas.drawRect(topWall, paint);
 		} else {
-
             // set special Paint settings for dashed middle-line
 			paint.setStyle(Style.STROKE);
 			paint.setPathEffect(new DashPathEffect(new float[] {10,10}, 5));
@@ -543,16 +620,23 @@ public class GameEngine implements OnTouchListener, Constants {
 		}
 	}
 
+    /**
+     * draws winner message
+     * @param winner the winner. 0 for player1. 1 for player2
+     */
     private void drawWinnerScreen(int winner) {
         Canvas canvas = holder.lockCanvas();
 
-        String winningPlayer = (winner == 0 ? p1.getName() : p2.getName());
+        String winningPlayer = (winner == 0 ? player1.getName() : player2.getName());
 
         drawCenterText(canvas, winningPlayer + " " + gameActivity.getString(R.string.WinScreenString), sizeProvider.getPlayerNameSize());
 
         holder.unlockCanvasAndPost(canvas);
     }
 
+    /**
+     * draws connection lost message
+     */
     private void drawConnectionLost(){
         Canvas canvas = holder.lockCanvas();
 
@@ -561,6 +645,10 @@ public class GameEngine implements OnTouchListener, Constants {
         holder.unlockCanvasAndPost(canvas);
     }
 
+    /**
+     * draws score
+     * @param canvas
+     */
     private void drawScore(Canvas canvas) {
 
         int x = totalWidth/5 * 4;
@@ -574,22 +662,28 @@ public class GameEngine implements OnTouchListener, Constants {
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.save();
         canvas.rotate(90, x, yp1);
-        canvas.drawText("" + p1.getScore(), x, yp1, paint);
+        canvas.drawText("" + player1.getScore(), x, yp1, paint);
         canvas.restore();
 
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.save();
         canvas.rotate(90, x, yp2);
-        canvas.drawText("" + p2.getScore(), x, yp2, paint);
+        canvas.drawText("" + player2.getScore(), x, yp2, paint);
         canvas.restore();
     }
 
+    /**
+     * starts the game thread
+     */
     public void start() {
         running = true;
         started = true;
         gameLoop.start();
     }
 
+    /**
+     * stops the game thread
+     */
 	public void stop() {
 		running = false;
         destroyed = true;
@@ -603,6 +697,9 @@ public class GameEngine implements OnTouchListener, Constants {
         }
     }
 
+    /**
+     * pauses the game
+     */
     public void pause() {
         try {
             pauseSemaphore.acquire();
@@ -613,19 +710,25 @@ public class GameEngine implements OnTouchListener, Constants {
         draw();
     }
 
+    /**
+     * resumes the game when paused
+     */
     public void resume() {
         pauseSemaphore.release();
         paused = false;
     }
 
+    /**
+     * return the {@code running} flag
+     * @return the {@code running} flag
+     */
 	public boolean isRunning() {
 		return running;
 	}
 
-	public void setDestroyed(boolean destroyed) {
-		this.destroyed = destroyed;
-	}
-
+    /**
+     * start a new round
+     */
 	public void newRound(){
 
         if (gameMode >= TOURNAMENT_MODE) {
@@ -641,6 +744,9 @@ public class GameEngine implements OnTouchListener, Constants {
         }
 	}
 
+    /**
+     * prepare and start new round
+     */
     private void continueGame() {
         resetBall();
         draw();
@@ -653,17 +759,24 @@ public class GameEngine implements OnTouchListener, Constants {
         start();
     }
 
+    /**
+     * check if a player has won
+     * @return the player who won. 0 = player1. 1 = player2. -1 = no winner
+     */
     private int checkForWinner() {
 
-        if (p1.getScore() == SCORE_LIMIT) {
+        if (player1.getScore() == SCORE_LIMIT) {
             return 0;
-        } else if (p2.getScore() == SCORE_LIMIT) {
+        } else if (player2.getScore() == SCORE_LIMIT) {
             return 1;
         } else {
             return -1;
         }
     }
 
+    /**
+     * resets the balls position and speed and sets the new angle
+     */
     public void resetBall(){
 		ball.setPosition(sizeProvider.getCenterPoint());
         ball.resetSpeed();
@@ -676,25 +789,33 @@ public class GameEngine implements OnTouchListener, Constants {
         }
 	}
 
+    /**
+     * onTouchListener
+     */
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 
+        // get all pointers and iterate over them
 		for (int i = 0; i < event.getPointerCount(); i++) {
 			int px = (int) event.getX(i);
 			int py = (int) event.getY(i);
 
 			Point touch = new Point(px, py);
 
-			if (p1.touchInTouchbox(touch)) {
-				p1.goTo(px);
+            // check if touchEvent is valid player1 command
+			if (player1.touchInTouchbox(touch)) {
+				player1.goTo(px);
 			}
 
+            // in multiplayer check if touchEvent is valid player2 command
             if (gameMode != TRAINING_MODE && gameMode != BLUETOOTH_MODE) {
-                if (p2.touchInTouchbox(touch)) {
-                    p2.goTo(px);
+                if (player2.touchInTouchbox(touch)) {
+                    player2.goTo(px);
                 }
             }
 
+            // handle touchEvents in controlTouchBox
+            // start, pause, resume the game
 			if(event.getAction() == MotionEvent.ACTION_DOWN){
 				if (controlTouchBox.contains(px, py)) {
 					if (!running && !destroyed) {
@@ -712,7 +833,6 @@ public class GameEngine implements OnTouchListener, Constants {
 			}
 
 		}
-
 		return true;
 	}
 

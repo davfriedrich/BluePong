@@ -1,5 +1,9 @@
 package de.fh_kl.bluepong.constants;
 
+
+/**
+ * interface to provide application-wide constants
+ */
 public interface Constants {
 	final static String GAME_MODE = "GameMode";
 	final static int TRAINING_MODE = 0;
@@ -15,7 +19,7 @@ public interface Constants {
 	final static String WINNER = "Winner";
 	final static String BLUETOOTH_SERVICE = "BluetoothService";
 
-    final static int SCORE_LIMIT = 1;
+    final static int SCORE_LIMIT = 9;
 	
 	static double PADDLE_HEIGHT_RATIO = 0.03;
 	static double PADDLE_PADDING_RATIO = 0.08;
@@ -33,8 +37,6 @@ public interface Constants {
 
 	
 	static int FPS = 30;
-
-
 
 
     final static String BALL_SPEED_SETTING = "ballSpeedSetting";
