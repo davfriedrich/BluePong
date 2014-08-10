@@ -113,11 +113,15 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		gameEngine.stop();
-
-        if (gameMode == BLUETOOTH_MODE) {
-            setResult(RESULT_OK);
+        if(gameMode > TOURNAMENT_MODE) {
             finish();
+        }else {
+            gameEngine.stop();
+
+            if (gameMode == BLUETOOTH_MODE) {
+                setResult(RESULT_OK);
+                finish();
+            }
         }
 	}
 

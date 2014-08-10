@@ -65,6 +65,8 @@ public class GameLoop extends Thread {
 			
 		}
 
+        engine.setDestroyed(true);
+
         aliveSemaphore.release();
 
 		engine.newRound();

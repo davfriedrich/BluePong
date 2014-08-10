@@ -727,6 +727,14 @@ public class GameEngine implements OnTouchListener, Constants {
 	}
 
     /**
+     * sets destroyed flag
+     * @param isDestroyed
+     */
+    public void setDestroyed(boolean isDestroyed) {
+        destroyed = isDestroyed;
+    }
+
+    /**
      * start a new round
      */
 	public void newRound(){

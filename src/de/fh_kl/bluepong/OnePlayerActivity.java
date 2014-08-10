@@ -27,7 +27,7 @@ public class OnePlayerActivity extends Activity implements Constants {
 
 		Button trainingButton = (Button) findViewById(R.id.trainingButton);
 		Button aiButton = (Button) findViewById(R.id.aiButton);
-		Button highscoreButton = (Button) findViewById(R.id.highscoreButton);
+//		Button highscoreButton = (Button) findViewById(R.id.highscoreButton);
 
         Animation animation = new AlphaAnimation(1, 0.33f);
         animation.setDuration(500);
@@ -37,7 +37,7 @@ public class OnePlayerActivity extends Activity implements Constants {
 
         trainingButton.startAnimation(animation);
         aiButton.startAnimation(animation);
-        highscoreButton.startAnimation(animation);
+//        highscoreButton.startAnimation(animation);
 		
 	}
 	
