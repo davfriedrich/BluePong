@@ -12,7 +12,8 @@
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
         android:onClick="proceed"
-        android:text="Button" android:textSize="@dimen/buttonText"/>
+        android:text="Button"
+        android:textSize="@dimen/buttonText"/>
 
     <EditText
         android:id="@+id/tounamentViewTextField"

@@ -33,6 +33,7 @@
         android:layout_above="@+id/tournamentOverviewNextPlayerTextView"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="96dp"
-        android:text="@string/tournamentOverviewNextGameString" android:textColor="@color/bluepongBlue"/>
+        android:text="@string/tournamentOverviewNextGameString"
+        android:textColor="@color/bluepongBlue"/>
 
 </RelativeLayout>

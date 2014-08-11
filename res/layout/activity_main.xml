@@ -11,8 +11,10 @@
         android:background="?android:selectableItemBackground"
         android:onClick="showSettings"
         android:text="@string/btn_settings"
-        android:layout_marginTop="32dp" android:layout_below="@+id/tournamentButton"
-        android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/tournamentButton"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/tournamentButton"
@@ -22,7 +24,9 @@
         android:onClick="tournamentMode"
         android:text="@string/tournamentButtonSring"
         android:layout_marginTop="32dp"
-        android:layout_below="@+id/twoPlayerButton" android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
+        android:layout_below="@+id/twoPlayerButton"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/twoPlayerButton"
@@ -31,8 +35,10 @@
         android:background="@android:color/transparent"
         android:onClick="twoPlayer"
         android:text="@string/twoPlayerButtonString"
-        android:layout_below="@+id/onePlayerButton" android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp" android:textSize="@dimen/buttonText"/>
+        android:layout_below="@+id/onePlayerButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/onePlayerButton"
@@ -40,8 +46,10 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:onClick="onePlayer"
-        android:text="@string/onePlayerButtonString" android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
+        android:text="@string/onePlayerButtonString"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/buttonText"/>
 
     <TextView
         android:id="@+id/gameTitle"
@@ -52,6 +60,7 @@
         android:layout_marginTop="100dp"
         android:text="@string/app_name"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/titleText" android:textColor="@color/bluepongBlue"/>
+        android:textSize="@dimen/titleText"
+        android:textColor="@color/bluepongBlue"/>
 
 </RelativeLayout>

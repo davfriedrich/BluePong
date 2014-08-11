@@ -18,7 +18,6 @@
     <string name="btn_bluetooth_startServer">Server starten</string>
     <string name="btn_settings">Einstellungen</string>
     <string name="hello_world">Hallo Welt!</string>
-    <string name="highscoreButtonString">Highscore</string>
     <string name="lbl_ai_handicap">KI Handicap</string>
     <string name="lbl_appearance_settings">Erscheinung</string>
     <string name="lbl_ball_size_setting">Ballgroesse</string>

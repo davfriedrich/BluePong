@@ -13,7 +13,9 @@
         android:background="@android:color/transparent"
         android:onClick="startTraining"
         android:text="@string/trainingButtonString"
-        android:layout_centerVertical="true" android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/buttonText"/>
 
     <Button
         android:id="@+id/aiButton"
@@ -23,8 +25,10 @@
         android:background="@android:color/transparent"
         android:onClick="startAiMatch"
         android:text="@string/aiButtonString"
-        android:layout_below="@+id/trainingButton" android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp" android:textSize="@dimen/buttonText"/>
+        android:layout_below="@+id/trainingButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:textSize="@dimen/buttonText"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -33,7 +37,8 @@
             android:text="@string/title_activity_one_player"
             android:id="@+id/onePlayerTitle"
             android:textSize="@dimen/subTitleText"
-            android:layout_below="@+id/gameTitle" android:layout_centerHorizontal="true"
+            android:layout_below="@+id/gameTitle"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"/>
 
     <TextView
@@ -45,6 +50,7 @@
             android:layout_marginTop="100dp"
             android:text="@string/app_name"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="@dimen/titleText" android:textColor="@color/bluepongBlue"/>
+            android:textSize="@dimen/titleText"
+            android:textColor="@color/bluepongBlue"/>
 
 </RelativeLayout>

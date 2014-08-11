@@ -13,7 +13,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:background="@android:color/transparent"
-        android:text="@string/bluetoothButtonString" android:textSize="@dimen/buttonText"
+        android:text="@string/bluetoothButtonString"
+        android:textSize="@dimen/buttonText"
         android:onClick="startBluetoothGame"/>
 
     <Button
@@ -23,8 +24,10 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:onClick="startMultitouchGame"
-        android:text="@string/multitouchButtonString" android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" android:textSize="@dimen/buttonText"/>
+        android:text="@string/multitouchButtonString"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/buttonText"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -33,7 +36,8 @@
             android:text="@string/title_activity_two_player"
             android:id="@+id/twoPlayerTitle"
             android:textSize="@dimen/subTitleText"
-            android:layout_below="@+id/gameTitle" android:layout_centerHorizontal="true"
+            android:layout_below="@+id/gameTitle"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"/>
 
     <TextView
@@ -45,6 +49,7 @@
             android:layout_marginTop="100dp"
             android:text="@string/app_name"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="@dimen/titleText" android:textColor="@color/bluepongBlue"/>
+            android:textSize="@dimen/titleText"
+            android:textColor="@color/bluepongBlue"/>
 
 </RelativeLayout>

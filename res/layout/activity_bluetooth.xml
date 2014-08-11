@@ -12,7 +12,8 @@
             android:text="@string/bluetoothTitle"
             android:id="@+id/bluetoothTitle"
             android:textSize="@dimen/subTitleText"
-            android:layout_below="@+id/gameTitle" android:layout_centerHorizontal="true"
+            android:layout_below="@+id/gameTitle"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"/>
 
     <TextView
@@ -24,7 +25,8 @@
             android:layout_marginTop="100dp"
             android:text="@string/app_name"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="@dimen/titleText" android:textColor="@color/bluepongBlue"/>
+            android:textSize="@dimen/titleText"
+            android:textColor="@color/bluepongBlue"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,12 +41,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_bluetooth_joinGame"
-            android:id="@+id/btn_bluetooth_joinGame" 
-            android:layout_below="@id/btn_bluetooth_hostGame" 
-            android:layout_alignLeft="@id/btn_bluetooth_hostGame"
-            android:layout_marginTop="32dp" 
+            android:id="@+id/btn_bluetooth_joinGame"
+            android:layout_marginTop="32dp"
             android:background="@android:color/transparent"
             android:textSize="@dimen/buttonText" 
-            android:onClick="joinGame"/>
+            android:onClick="joinGame"
+            android:layout_below="@+id/btn_bluetooth_hostGame"
+            android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
