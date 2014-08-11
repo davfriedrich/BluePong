@@ -56,4 +56,5 @@
     <string name="bluetoothServerFailed">Connection failed</string>
     <string name="btn_bluetooth_startGame">Start game</string>
     <string name="bluetoothConnectionLost">Connection lost</string>
+    <string name="bluetoothNoBluetooth">It appears your device does not have bluetooth</string>
 </resources>

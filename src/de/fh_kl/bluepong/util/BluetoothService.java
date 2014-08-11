@@ -89,6 +89,17 @@ public class BluetoothService {
     public boolean isServer() {
         return isServer;
     }
+    
+    public boolean hasAdapter(){
+    	if(adapter == null){
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public boolean isBluetoothEnabled(){
+    	return adapter.isEnabled();
+    }
 
     /**
      * returns a list with all paired devices

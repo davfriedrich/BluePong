@@ -296,184 +296,184 @@ public class GameEngine implements OnTouchListener, Constants {
 		int x = nextPosition.x;
 		int y = nextPosition.y;
 
-        boolean newRound = false;
+		boolean newRound = false;
 
 		// collision with left wall
-		if (x - ball.getWidth()/2 < 0) {
+		if (x - ball.getWidth() / 2 < 0) {
 
-			int dx = Math.abs(x - ball.getWidth()/2);
+			int dx = Math.abs(x - ball.getWidth() / 2);
 
-			x = dx + ball.getWidth()/2;
-
-			ball.setAngle((Math.PI - ball.getAngle()));
-		}
-
-        // collision with right wall?
-		if (x + ball.getWidth()/2 > totalWidth) {
-
-			int dx = Math.abs(totalWidth - (x + ball.getWidth()/2));
-
-			x = totalWidth - (dx + ball.getWidth()/2);
+			x = dx + ball.getWidth() / 2;
 
 			ball.setAngle((Math.PI - ball.getAngle()));
 		}
 
+		// collision with right wall?
+		if (x + ball.getWidth() / 2 > totalWidth) {
+
+			int dx = Math.abs(totalWidth - (x + ball.getWidth() / 2));
+
+			x = totalWidth - (dx + ball.getWidth() / 2);
+
+			ball.setAngle((Math.PI - ball.getAngle()));
+		}
 
 		if (gameMode == TRAINING_MODE) {
 			// collision with top wall?
-			if (y - ball.getHeight()/2 < topWall.bottom) {
+			if (y - ball.getHeight() / 2 < topWall.bottom) {
 
-				int dy = Math.abs(topWall.bottom - (y - ball.getHeight()/2));
+				int dy = Math.abs(topWall.bottom - (y - ball.getHeight() / 2));
 
-				y = topWall.bottom + dy + ball.getHeight()/2;
+				y = topWall.bottom + dy + ball.getHeight() / 2;
 
 				ball.setAngle((-1 * ball.getAngle()));
 			}
 		} else {
 			// collision with paddle 2?
 			Rect p2Paddle = player2.getPaddle();
-			if ((y - ball.getHeight()/2 < p2Paddle.bottom)
-                    && (x + ball.getWidth()/2 >= p2Paddle.left)
-                    && (x - ball.getWidth()/2 <= p2Paddle.right)
-                    && winnable) {
+			if ((y - ball.getHeight() / 2 < p2Paddle.bottom)
+					&& (x + ball.getWidth() / 2 >= p2Paddle.left)
+					&& (x - ball.getWidth() / 2 <= p2Paddle.right) && winnable) {
 
-				int dy = Math.abs(p2Paddle.bottom - (y - ball.getHeight()/2));
+				int dy = Math.abs(p2Paddle.bottom - (y - ball.getHeight() / 2));
 
-				y = p2Paddle.bottom + (dy + ball.getHeight()/2);
+				y = p2Paddle.bottom + (dy + ball.getHeight() / 2);
 
 				ball.setAngle((-1 * ball.getAngle()));
 
-                if (player2.getDirection() != 0) {
+				if (player2.getDirection() != 0) {
 
-                    ball.addSpin(player2.getDirection());
-                }
+					ball.addSpin(player2.getDirection());
+				}
 
-                if (ballSpeedIncrease) {
-                    ball.accelerate();
-                }
-            // if ball missed paddle handle collisions with side of paddle
-			} else if (y - ball.getHeight()/2 < p2Paddle.bottom){
+				if (ballSpeedIncrease) {
+					ball.accelerate();
+				}
+				// if ball missed paddle handle collisions with side of paddle
+			} else if (y - ball.getHeight() / 2 < p2Paddle.bottom) {
 
-                // player2 can't win this round anymore
+				// player2 can't win this round anymore
 				winnable = false;
 
-                // collision with right side of paddle?
-				if (x - ball.getWidth()/2 < p2Paddle.right && x > p2Paddle.centerX() && !(y + ball.getHeight()/2 < p2Paddle.top)) {
+				// collision with right side of paddle?
+				if (x - ball.getWidth() / 2 < p2Paddle.right
+						&& x > p2Paddle.centerX()
+						&& !(y + ball.getHeight() / 2 < p2Paddle.top)) {
 
-					int dx = Math.abs(p2Paddle.right - (x - ball.getWidth()/2));
+					int dx = Math.abs(p2Paddle.right
+							- (x - ball.getWidth() / 2));
 
-					x = p2Paddle.right + dx + ball.getWidth()/2;
+					x = p2Paddle.right + dx + ball.getWidth() / 2;
 
 					ball.setAngle((Math.PI - ball.getAngle()));
 				}
 
-                // collision with left side of paddle?
-				if (x + ball.getWidth()/2 > p2Paddle.left && x < p2Paddle.centerX() && !(y + ball.getHeight()/2 < p2Paddle.top)) {
+				// collision with left side of paddle?
+				if (x + ball.getWidth() / 2 > p2Paddle.left
+						&& x < p2Paddle.centerX()
+						&& !(y + ball.getHeight() / 2 < p2Paddle.top)) {
 
-					int dx = Math.abs(p2Paddle.left - (x + ball.getWidth()/2));
+					int dx = Math
+							.abs(p2Paddle.left - (x + ball.getWidth() / 2));
 
-					x = p2Paddle.left - (dx + ball.getWidth()/2);
+					x = p2Paddle.left - (dx + ball.getWidth() / 2);
 
 					ball.setAngle((Math.PI - ball.getAngle()));
 				}
 			}
-            // is ball out of game?
-			if (y + ball.getHeight()/2 < 0) {
-                player1.incrementScore();
+			// is ball out of game?
+			if (y + ball.getHeight() / 2 < 0) {
+				player1.incrementScore();
 				running = false;
 				serve = 1;
-                newRound = true;
+				newRound = true;
 			}
 		}
 
 		// collision with paddle 1?
 		Rect p1Paddle = player1.getPaddle();
-		if ((y + ball.getHeight()/2 > p1Paddle.top)
-                && (x + ball.getWidth()/2 >= p1Paddle.left)
-                && (x - ball.getWidth()/2 <= p1Paddle.right)
-                && winnable) {
+		if ((y + ball.getHeight() / 2 > p1Paddle.top)
+				&& (x + ball.getWidth() / 2 >= p1Paddle.left)
+				&& (x - ball.getWidth() / 2 <= p1Paddle.right) && winnable) {
 
-			int dy = Math.abs(p1Paddle.top - (y + ball.getHeight()/2));
+			int dy = Math.abs(p1Paddle.top - (y + ball.getHeight() / 2));
 
-			y = p1Paddle.top - (dy + ball.getHeight()/2);
+			y = p1Paddle.top - (dy + ball.getHeight() / 2);
 
-            ball.setAngle((-1 * ball.getAngle()));
+			ball.setAngle((-1 * ball.getAngle()));
 
-            if (player1.getDirection() != 0) {
+			if (player1.getDirection() != 0) {
 
-                ball.addSpin(-1* player1.getDirection());
-            }
+				ball.addSpin(-1 * player1.getDirection());
+			}
 
-            if (ballSpeedIncrease) {
-                ball.accelerate();
-            }
-        // if ball missed paddle handle collisions with side of paddle
-		} else if (y + ball.getHeight()/2 > p1Paddle.top){
+			if (ballSpeedIncrease) {
+				ball.accelerate();
+			}
+			// if ball missed paddle handle collisions with side of paddle
+		} else if (y + ball.getHeight() / 2 > p1Paddle.top) {
 
-            // player1 can't win this round anymore
+			// player1 can't win this round anymore
 			winnable = false;
 
-            // collision with right side of paddle?
-			if (x - ball.getWidth()/2 < p1Paddle.right && x > p1Paddle.centerX() && !(y - ball.getHeight()/2 > p1Paddle.bottom)) {
+			// collision with right side of paddle?
+			if (x - ball.getWidth() / 2 < p1Paddle.right
+					&& x > p1Paddle.centerX()
+					&& !(y - ball.getHeight() / 2 > p1Paddle.bottom)) {
 
-				int dx = Math.abs(p1Paddle.right - (x - ball.getWidth()/2));
+				int dx = Math.abs(p1Paddle.right - (x - ball.getWidth() / 2));
 
-				x = p1Paddle.right + dx + ball.getWidth()/2;
+				x = p1Paddle.right + dx + ball.getWidth() / 2;
 
 				ball.setAngle((Math.PI - ball.getAngle()));
 			}
 
-            // collision with left side of paddle?
-			if (x + ball.getWidth()/2 > p1Paddle.left && x < p1Paddle.centerX() && !(y - ball.getHeight()/2 > p1Paddle.bottom)) {
+			// collision with left side of paddle?
+			if (x + ball.getWidth() / 2 > p1Paddle.left
+					&& x < p1Paddle.centerX()
+					&& !(y - ball.getHeight() / 2 > p1Paddle.bottom)) {
 
-				int dx = Math.abs(p1Paddle.left - (x + ball.getWidth()/2));
+				int dx = Math.abs(p1Paddle.left - (x + ball.getWidth() / 2));
 
-				x = p1Paddle.left - (dx + ball.getWidth()/2);
+				x = p1Paddle.left - (dx + ball.getWidth() / 2);
 
 				ball.setAngle((Math.PI - ball.getAngle()));
 			}
 		}
 
-        // is ball out of game?
-        if (y - ball.getHeight()/2 > totalHeight) {
+		// is ball out of game?
+		if (y - ball.getHeight() / 2 > totalHeight) {
 
-            if (gameMode != TRAINING_MODE) {
-                player2.incrementScore();
-            }
+			if (gameMode != TRAINING_MODE) {
+				player2.incrementScore();
+			}
 			running = false;
 			serve = 2;
-            newRound = true;
+			newRound = true;
 		}
 
-        // collision with wall directly after paddle collision?
-        // left wall
-        if (x - ball.getWidth()/2 < 0) {
-            int dx = Math.abs(x - ball.getWidth()/2);
-            x = dx + ball.getWidth()/2;
-            ball.setAngle((Math.PI - ball.getAngle()));
-        }
-        // right wall
-        if (x + ball.getWidth()/2 > totalWidth) {
-            int dx = Math.abs(totalWidth - (x + ball.getWidth()/2));
-            x = totalWidth - (dx + ball.getWidth()/2);
-            ball.setAngle((Math.PI - ball.getAngle()));
-        }
+		// collision with wall directly after paddle collision?
+		// left wall
+		if (x - ball.getWidth() / 2 < 0) {
+			int dx = Math.abs(x - ball.getWidth() / 2);
+			x = dx + ball.getWidth() / 2;
+			ball.setAngle((Math.PI - ball.getAngle()));
+		}
+		// right wall
+		if (x + ball.getWidth() / 2 > totalWidth) {
+			int dx = Math.abs(totalWidth - (x + ball.getWidth() / 2));
+			x = totalWidth - (dx + ball.getWidth() / 2);
+			ball.setAngle((Math.PI - ball.getAngle()));
+		}
 
-        if (gameMode == BLUETOOTH_MODE) {
-            // if we host the game send whether the ball is out or not
-            if (bluetoothService.isServer()) {
-                Point newPos = new Point(x, y);
-                bluetoothService.sendIsBallOut(newRound);
-                return newPos;
-            } else {
-            // if we don't host the game receive the ball position
-                Point newPos = bluetoothService.getBallPosition();
-                newPos.x = (int) (totalWidth - newPos.x * widthRatio);
-                newPos.y = (int) (totalHeight - newPos.y * heightRatio);
-                return newPos;
-            }
-        }
-        return new Point(x, y);
+		if (gameMode == BLUETOOTH_MODE && bluetoothService.isServer()) {
+			// if we host the game send whether the ball is out or not
+			Point newPos = new Point(x, y);
+			bluetoothService.sendIsBallOut(newRound);
+			return newPos;
+		}
+
+		return new Point(x, y);
 	}
 
 

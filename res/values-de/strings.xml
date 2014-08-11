@@ -48,5 +48,6 @@
     <string name="tournamentOverviewWinnerText">Der Gewinner ist:</string>
     <string name="trainingButtonString">Training</string>
     <string name="twoPlayerButtonString">2 Spieler</string>
+    <string name="bluetoothNoBluetooth">Es scheint dein Geraet hat kein Bluetooth</string>
 
 </resources>

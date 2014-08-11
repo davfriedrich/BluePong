@@ -2,6 +2,7 @@ package de.fh_kl.bluepong;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -68,6 +69,22 @@ public class BluetoothActivity extends Activity implements ListView.OnItemClickL
         hostGameButton.startAnimation(animation);
         joinGameButton.setTypeface(team401);
         joinGameButton.startAnimation(animation);
+        
+        if(!bluetoothService.hasAdapter()){
+        	hostGameButton.setClickable(false);
+        	joinGameButton.setClickable(false);
+        	
+        	AlertDialog failDialog = new AlertDialog.Builder(this).setMessage(R.string.bluetoothNoBluetooth).show();
+        	TextView message = (TextView) failDialog.findViewById(android.R.id.message);
+        	message.setTypeface(team401);
+        	message.setGravity(Gravity.CENTER_HORIZONTAL);
+        	message.setTextColor(Color.RED);
+        }else{
+        	if (!bluetoothService.isBluetoothEnabled()) {
+        	    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        	    startActivityForResult(enableBtIntent, 1);
+        	}
+        }
     }
 
     @Override
