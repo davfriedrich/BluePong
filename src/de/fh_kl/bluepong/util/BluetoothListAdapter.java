@@ -1,6 +1,5 @@
 package de.fh_kl.bluepong.util;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.graphics.Typeface;

@@ -73,6 +73,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback, Co
         }
     }
 
+    // wait until view is created to start game engine
     @Override
 	public void surfaceCreated(SurfaceHolder holder) {
 

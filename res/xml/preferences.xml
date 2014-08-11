@@ -2,8 +2,6 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--<PreferenceCategory android:title="@string/lbl_gameplay_settings">-->
-
         <SeekBarPreference
                 android:defaultValue="4"
                 android:title="@string/lbl_ball_speed_setting"
@@ -44,12 +42,5 @@
                 android:key="aiHandicapSetting"
                 android:max="19">
         </SeekBarPreference>
-
-    <!--</PreferenceCategory>-->
-
-    <!--<PreferenceCategory android:title="@string/lbl_appearance_settings">
-
-
-    </PreferenceCategory>-->
 
 </PreferenceScreen>

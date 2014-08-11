@@ -11,7 +11,6 @@
     <string name="title_activity_tournament">Tournament</string>
     <string name="trainingButtonString">Training</string>
     <string name="aiButtonString">Player VS. AI</string>
-    <string name="highscoreButtonString">Highscore</string>
     <string name="multitouchButtonString">Multitouch</string>
     <string name="bluetoothButtonString">Bluetooth</string>
     <string name="title_activity_game">GameActivity</string>

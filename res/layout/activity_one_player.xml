@@ -26,16 +26,6 @@
         android:layout_below="@+id/trainingButton" android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp" android:textSize="@dimen/buttonText"/>
 
-    <!--<Button-->
-        <!--android:id="@+id/highscoreButton"-->
-        <!--style="?android:attr/buttonStyleSmall"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@android:color/transparent"-->
-        <!--android:text="@string/highscoreButtonString"-->
-        <!--android:layout_below="@+id/aiButton" android:layout_centerHorizontal="true" android:layout_marginTop="32dp"-->
-        <!--android:textSize="@dimen/buttonText"/>-->
-
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
